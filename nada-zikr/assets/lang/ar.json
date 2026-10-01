@@ -1,4 +1,4 @@
-{
+ {
   "appTitle": "نَدَى",
   "appTagline": "القرآن وذكر الله",
   "appFullTitle": "ندا: القرآن وذكر الله",
@@ -67,5 +67,13 @@
   "prayerNotificationTitle": "وقت الصلاة",
   "prayerNotificationBody": "{prayer} - {location}",
   "zikrReminderTitle": "تذكير الذكر",
-  "zikrReminderBody": "خذ لحظة للذكر والتأمل"
+  "zikrReminderBody": "خذ لحظة للذكر والتأمل",
+  "page": "صفحة",
+  "pages": "صفحات",
+  "searchAyahOrPage": "البحث عن آية أو صفحة",
+  "jumpToAyah": "الانتقال إلى الآية",
+  "jumpToPage": "الانتقال إلى الصفحة",
+  "ayahNumber": "رقم الآية",
+  "pageNumber": "رقم الصفحة",
+  "juz": "الجزء"
 }

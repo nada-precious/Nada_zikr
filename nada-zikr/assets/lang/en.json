@@ -67,5 +67,13 @@
   "prayerNotificationTitle": "Prayer time",
   "prayerNotificationBody": "{prayer} - {location}",
   "zikrReminderTitle": "Zikr reminder",
-  "zikrReminderBody": "Take a moment for remembrance"
+  "zikrReminderBody": "Take a moment for remembrance",
+  "page": "Page",
+  "pages": "Pages",
+  "searchAyahOrPage": "Search ayah or page",
+  "jumpToAyah": "Go to Ayah",
+  "jumpToPage": "Go to Page",
+  "ayahNumber": "Ayah number",
+  "pageNumber": "Page number",
+  "juz": "Juz"
 }

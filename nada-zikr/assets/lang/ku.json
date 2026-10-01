@@ -67,5 +67,13 @@
   "prayerNotificationTitle": "کاتی پەرستگار",
   "prayerNotificationBody": "{prayer} - {location}",
   "zikrReminderTitle": "ئاگادارکردنەوەی زیکر",
-  "zikrReminderBody": "کاتێک بۆ بیرکردنەوەی نامەوە"
+  "zikrReminderBody": "کاتێک بۆ بیرکردنەوەی نامەوە",
+  "page": "لاپەڕە",
+  "pages": "لاپەڕە",
+  "searchAyahOrPage": "گەڕان بەدوای ئایەت یان لاپەڕە",
+  "jumpToAyah": "بڕۆ بۆ ئایەت",
+  "jumpToPage": "بڕۆ بۆ لاپەڕە",
+  "ayahNumber": "ژمارەی ئایەت",
+  "pageNumber": "ژمارەی لاپەڕە",
+  "juz": "جوزء"
 }

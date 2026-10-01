@@ -362,6 +362,9 @@ class AppTheme {
       color: color ?? AppColors.cream,
       height: height,
       letterSpacing: 0,
+      fontFeatures: const [
+        FontFeature('cv72', 1),
+      ],
     );
   }
 

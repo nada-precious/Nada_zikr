@@ -653,22 +653,20 @@ class _SettingsScreenState extends State<SettingsScreen>
                       child: Column(
                         children: [
                           Container(
-                            width: 68,
-                            height: 68,
+                            width: 72,
+                            height: 72,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.gold.withValues(alpha: 0.25),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 6),
+                                  color: AppColors.gold.withValues(alpha: 0.22),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 4),
                                 ),
                               ],
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(18),
-                              child: Image.asset('assets/icon/app_icon.png',
-                                  fit: BoxFit.cover),
+                            child: Image.asset(
+                              'assets/icon/nada_app_icon_squircle.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -1294,24 +1292,20 @@ class _SettingsScreenState extends State<SettingsScreen>
                   child: Column(
                     children: [
                       Container(
+                        width: 84,
+                        height: 84,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.gold.withValues(alpha: 0.25),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
+                              blurRadius: 22,
+                              offset: const Offset(0, 6),
                             ),
                           ],
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Image.asset(
-                            'assets/icon/nada_app_icon_squircle.png',
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
+                        child: Image.asset(
+                          'assets/icon/nada_app_icon_squircle.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -1615,132 +1609,134 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(24),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(24),
-          onTap: () => _showEditNameDialog(context, profile, isKurdish, lang),
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            AppColors.gold.withValues(alpha: 0.25),
-                            AppColors.gold.withValues(alpha: 0.08),
-                          ],
-                        ),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.gold.withValues(alpha: 0.5),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Center(
-                        child: hasCustomName
-                            ? Text(
-                                initialLetter,
-                                style: AppTheme.englishTitle(
-                                  fontSize: 24,
-                                  color: AppColors.gold,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            : Icon(
-                                Icons.person_rounded,
-                                size: 30,
-                                color: AppColors.gold,
-                              ),
-                      ),
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.gold.withValues(alpha: 0.25),
+                        AppColors.gold.withValues(alpha: 0.08),
+                      ],
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  displayName,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: isKurdish
-                                      ? AppTheme.kurdishTitle(
-                                          fontSize: 18, color: AppColors.cream)
-                                      : (lang == 'ar'
-                                          ? AppTheme.arabicTitle(
-                                              fontSize: 18,
-                                              color: AppColors.cream)
-                                          : AppTheme.englishTitle(
-                                              fontSize: 18,
-                                              color: AppColors.cream)),
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Icon(
-                                Icons.edit_rounded,
-                                size: 14,
-                                color: AppColors.gold.withValues(alpha: 0.7),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 3),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: honorificColor.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: honorificColor.withValues(alpha: 0.35),
-                                width: 0.8,
-                              ),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.gold.withValues(alpha: 0.5),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Center(
+                    child: hasCustomName
+                        ? Text(
+                            initialLetter,
+                            style: AppTheme.englishTitle(
+                              fontSize: 24,
+                              color: AppColors.gold,
+                              fontWeight: FontWeight.bold,
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(honorificIcon,
-                                    size: 13, color: honorificColor),
-                                const SizedBox(width: 4),
-                                Text(
-                                  honorificTitle,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: honorificColor,
-                                    fontWeight: FontWeight.bold,
+                          )
+                        : Icon(
+                            Icons.person_rounded,
+                            size: 30,
+                            color: AppColors.gold,
+                          ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              displayName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: isKurdish
+                                  ? AppTheme.kurdishTitle(
+                                      fontSize: 18, color: AppColors.cream)
+                                  : (lang == 'ar'
+                                      ? AppTheme.arabicTitle(
+                                          fontSize: 18,
+                                          color: AppColors.cream)
+                                      : AppTheme.englishTitle(
+                                          fontSize: 18,
+                                          color: AppColors.cream)),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Tooltip(
+                            message: isKurdish
+                                ? 'گۆڕینی ناو'
+                                : (lang == 'ar' ? 'تعديل الاسم' : 'Edit Name'),
+                            child: GestureDetector(
+                              onTap: () => _showEditNameDialog(
+                                  context, profile, isKurdish, lang),
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.gold.withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: AppColors.gold.withValues(alpha: 0.28),
+                                    width: 0.8,
                                   ),
                                 ),
-                              ],
+                                child: Icon(
+                                  Icons.edit_rounded,
+                                  size: 13,
+                                  color: AppColors.gold,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.gold.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(12),
+                      const SizedBox(height: 3),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: honorificColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: honorificColor.withValues(alpha: 0.35),
+                            width: 0.8,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(honorificIcon,
+                                size: 13, color: honorificColor),
+                            const SizedBox(width: 4),
+                            Text(
+                              honorificTitle,
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: honorificColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Icon(
-                        Icons.drive_file_rename_outline_rounded,
-                        size: 18,
-                        color: AppColors.gold,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+              ],
+            ),
                 const SizedBox(height: 14),
                 Row(
                   children: [
@@ -1824,10 +1820,8 @@ class _SettingsScreenState extends State<SettingsScreen>
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
+        );
+      }
 
   void _showEditNameDialog(
       BuildContext context, UserProfile profile, bool isKurdish, String lang) {

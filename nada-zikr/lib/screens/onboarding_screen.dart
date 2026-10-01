@@ -270,24 +270,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     bottom: 8,
                   ),
                   child: Container(
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.gold.withValues(alpha: 0.25),
-                          blurRadius: 24,
+                          color: AppColors.gold.withValues(alpha: 0.28),
+                          blurRadius: 28,
                           offset: const Offset(0, 8),
                         ),
                       ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(28),
-                      child: Image.asset(
-                        'assets/icon/nada_app_icon_squircle.png',
-                        width: 96,
-                        height: 96,
-                        fit: BoxFit.cover,
-                      ),
+                    child: Image.asset(
+                      'assets/icon/nada_app_icon_squircle.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),

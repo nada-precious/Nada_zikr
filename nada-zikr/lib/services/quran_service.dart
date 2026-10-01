@@ -9,6 +9,10 @@ class QuranSurahMeta {
   final String englishNameTranslation;
   final int numberOfAyahs;
   final String revelationType;
+  final int startPage;
+  final int endPage;
+  final String place;
+  final String juz;
 
   QuranSurahMeta({
     required this.number,
@@ -18,6 +22,10 @@ class QuranSurahMeta {
     required this.englishNameTranslation,
     required this.numberOfAyahs,
     required this.revelationType,
+    this.startPage = 1,
+    this.endPage = 1,
+    this.place = '',
+    this.juz = '',
   });
 
   factory QuranSurahMeta.fromJson(Map<String, dynamic> json) {
@@ -29,6 +37,10 @@ class QuranSurahMeta {
       englishNameTranslation: json['englishNameTranslation'] as String? ?? '',
       numberOfAyahs: json['numberOfAyahs'] as int? ?? 0,
       revelationType: json['revelationType'] as String? ?? '',
+      startPage: json['startPage'] as int? ?? 1,
+      endPage: json['endPage'] as int? ?? (json['startPage'] as int? ?? 1),
+      place: json['place'] as String? ?? '',
+      juz: json['juz'] as String? ?? '',
     );
   }
 }
@@ -37,8 +49,16 @@ class QuranAyah {
   final int surah;
   final int ayah;
   final String text;
+  final int page;
+  final int juz;
 
-  const QuranAyah({required this.surah, required this.ayah, required this.text});
+  const QuranAyah({
+    required this.surah,
+    required this.ayah,
+    required this.text,
+    this.page = 1,
+    this.juz = 1,
+  });
 }
 
 class TafsirOption {
@@ -98,6 +118,15 @@ String _cleanTafsirText(String t) {
   return t;
 }
 
+/// Normalizes KFGQPC / Tanzil legacy non-standard characters to standard Unicode diacritics.
+String normalizeQuranText(String raw) {
+  if (raw.isEmpty) return raw;
+  return raw
+      .replaceAll('\u065E', '\u064C') // KFGQPC sequential dammatan -> standard dammatan (ٌ)
+      .replaceAll('\u0657', '\u064B') // KFGQPC sequential fathatan -> standard fathatan (ً)
+      .replaceAll('\u0656', '\u064D'); // KFGQPC sequential kasratan -> standard kasratan (ٍ)
+}
+
 class QuranService {
   QuranService._();
   static final QuranService instance = QuranService._();
@@ -124,10 +153,13 @@ class QuranService {
     final grouped = <int, List<QuranAyah>>{};
     for (final dynamic a in ayahsJson) {
       final map = a as Map<String, dynamic>;
+      final rawText = map['text'] as String? ?? '';
       final ayah = QuranAyah(
         surah: map['surah'] as int,
         ayah: map['ayah'] as int,
-        text: map['text'] as String? ?? '',
+        text: normalizeQuranText(rawText),
+        page: map['page'] as int? ?? 1,
+        juz: map['juz'] as int? ?? 1,
       );
       (grouped[ayah.surah] ??= []).add(ayah);
     }
@@ -145,6 +177,28 @@ class QuranService {
   Future<List<QuranAyah>> loadAyahsForSurah(int surahNumber) async {
     await _ensureQuranLoaded();
     return _ayahsBySurah![surahNumber] ?? const [];
+  }
+
+  Future<QuranAyah?> getAyah(int surahNumber, int ayahNumber) async {
+    await _ensureQuranLoaded();
+    final surahAyahs = _ayahsBySurah![surahNumber];
+    if (surahAyahs == null) return null;
+    try {
+      return surahAyahs.firstWhere((a) => a.ayah == ayahNumber);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<QuranSurahMeta?> getSurahForPage(int pageNumber) async {
+    final surahs = await loadSurahs();
+    try {
+      return surahs.firstWhere(
+        (s) => pageNumber >= s.startPage && pageNumber <= s.endPage,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<Map<int, String>?> _loadTafsirIndexForSurah(String tafsirId, int surahNumber) async {

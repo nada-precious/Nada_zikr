@@ -535,21 +535,22 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                         children: [
                           _buildPermissionNoticeBanner(isKurdish, lang),
 
-                          // HERO NEXT PRAYER CARD WITH COUNTDOWN
+                          // HERO NEXT PRAYER CARD WITH COUNTDOWN (Prominent Hero, Trimmed Height)
                           Container(
                             width: double.infinity,
-                            padding: const EdgeInsets.all(22),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 15),
                             decoration: BoxDecoration(
                               color: AppColors.panelColor,
-                              borderRadius: BorderRadius.circular(28),
+                              borderRadius: BorderRadius.circular(24),
                               border: Border.all(
                                   color: AppColors.gold.withValues(alpha: 0.4),
                                   width: 1.5),
                               boxShadow: [
                                 BoxShadow(
                                   color: AppColors.gold.withValues(alpha: 0.12),
-                                  blurRadius: 25,
-                                  spreadRadius: 2,
+                                  blurRadius: 20,
+                                  spreadRadius: 1,
                                 ),
                               ],
                             ),
@@ -561,16 +562,18 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 4),
+                                          horizontal: 10, vertical: 3.5),
                                       decoration: BoxDecoration(
                                         color: AppColors.gold
                                             .withValues(alpha: 0.16),
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
                                         isKurdish
                                             ? 'نوێژی داهاتوو'
-                                            : 'NEXT PRAYER',
+                                            : (lang == 'ar'
+                                                ? 'الصلاة القادمة'
+                                                : 'NEXT PRAYER'),
                                         style: AppTheme.englishText(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
@@ -578,53 +581,50 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                         ),
                                       ),
                                     ),
+                                    Text(
+                                      nextItem.formattedTime(),
+                                      style: AppTheme.englishText(
+                                          fontSize: 13,
+                                          color: AppColors.faintText),
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 8),
 
                                 // Next Prayer Name
                                 Text(
                                   nextItem.localizedName(lang),
                                   style: isKurdish
                                       ? AppTheme.kurdishTitle(
-                                          fontSize: 28, color: AppColors.gold)
+                                          fontSize: 25, color: AppColors.gold)
                                       : AppTheme.englishTitle(
-                                          fontSize: 28, color: AppColors.gold),
+                                          fontSize: 25, color: AppColors.gold),
                                 ),
-                                const SizedBox(height: 6),
+                                const SizedBox(height: 4),
 
                                 // Live Countdown Timer (HH:MM:SS)
                                 Text(
                                   _formatDuration(_timeUntilNext),
                                   style: AppTheme.englishTitle(
-                                    fontSize: 38,
+                                    fontSize: 34,
                                     color: AppColors.cream,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                const SizedBox(height: 6),
-
-                                Text(
-                                  nextItem.formattedTime(),
-                                  style: AppTheme.englishText(
-                                      fontSize: 14, color: AppColors.faintText),
                                 ),
                               ],
                             ),
                           ),
 
-                          const SizedBox(height: 16),
-
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 12),
 
                           // DATE BAR WITH WEEKDAY, GREGORIAN & HIJRI
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                                horizontal: 12, vertical: 7),
                             decoration: BoxDecoration(
                               color:
                                   AppColors.panelColor.withValues(alpha: 0.8),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(16),
                               border:
                                   Border.all(color: AppColors.panelBorderColor),
                             ),
@@ -632,8 +632,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
                                   icon: Icon(Icons.chevron_left_rounded,
-                                      color: AppColors.gold),
+                                      color: AppColors.gold, size: 22),
                                   onPressed: () {
                                     setState(() {
                                       _selectedDate = _selectedDate
@@ -648,33 +650,29 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                       _getWeekdayName(_selectedDate.weekday, lang),
                                       style: isKurdish
                                           ? AppTheme.kurdishTitle(
-                                              fontSize: 14,
+                                              fontSize: 13,
                                               color: AppColors.gold,
                                               fontWeight: FontWeight.bold,
                                             )
                                           : AppTheme.englishTitle(
-                                              fontSize: 14,
+                                              fontSize: 13,
                                               color: AppColors.gold,
                                               fontWeight: FontWeight.bold,
                                             ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      '${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}',
-                                      style: AppTheme.englishTitle(
-                                          fontSize: 15, color: AppColors.cream),
-                                    ),
                                     const SizedBox(height: 2),
                                     Text(
-                                      hijriDate.formatted(lang),
-                                      style: AppTheme.kurdishText(
-                                          fontSize: 12, color: AppColors.gold),
+                                      '${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}  ·  ${hijriDate.formatted(lang)}',
+                                      style: AppTheme.englishText(
+                                          fontSize: 12, color: AppColors.cream),
                                     ),
                                   ],
                                 ),
                                 IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
                                   icon: Icon(Icons.chevron_right_rounded,
-                                      color: AppColors.gold),
+                                      color: AppColors.gold, size: 22),
                                   onPressed: () {
                                     setState(() {
                                       _selectedDate = _selectedDate
@@ -687,7 +685,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                             ),
                           ),
 
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 10),
 
                           // DAILY PRAYER CARDS LIST
                           Column(
@@ -695,14 +693,14 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                               final isNext = item.id == nextId &&
                                   _selectedDate.day == DateTime.now().day;
                               return Container(
-                                margin: const EdgeInsets.only(bottom: 10),
+                                margin: const EdgeInsets.only(bottom: 7),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 18, vertical: 14),
+                                    horizontal: 16, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: isNext
                                       ? AppColors.gold.withValues(alpha: 0.16)
                                       : AppColors.panelColor,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
                                     color: isNext
                                         ? AppColors.gold
