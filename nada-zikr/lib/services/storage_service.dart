@@ -40,6 +40,11 @@ class StorageService {
     await box.put('bestStreak', profile.bestStreak);
     await box.put('totalSessions', profile.totalSessions);
     await box.put('lastSessionDate', profile.lastSessionDate.toIso8601String());
+    if (profile.profilePicturePath != null && profile.profilePicturePath!.isNotEmpty) {
+      await box.put('profilePicturePath', profile.profilePicturePath);
+    } else {
+      await box.delete('profilePicturePath');
+    }
   }
 
   static Future<UserProfile> getUserProfile() async {
@@ -48,6 +53,7 @@ class StorageService {
     final name = (rawName == null || rawName == 'Beloved' || rawName == 'موسڵمان')
         ? ''
         : rawName;
+    final profilePicturePath = box.get('profilePicturePath') as String?;
 
     return UserProfile(
       name: name,
@@ -59,6 +65,7 @@ class StorageService {
         box.get('lastSessionDate',
             defaultValue: DateTime.now().toIso8601String()),
       ),
+      profilePicturePath: profilePicturePath,
     );
   }
 

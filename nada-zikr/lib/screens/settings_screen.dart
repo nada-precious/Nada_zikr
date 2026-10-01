@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../app_localizations.dart';
 import '../models/azkar_model.dart';
@@ -1547,6 +1550,9 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget _buildUserProfileCard(
       UserProfile profile, bool isKurdish, String lang) {
     final hasCustomName = profile.name.trim().isNotEmpty;
+    final hasCustomPicture = profile.profilePicturePath != null &&
+        profile.profilePicturePath!.trim().isNotEmpty &&
+        File(profile.profilePicturePath!).existsSync();
     final displayName = hasCustomName
         ? profile.name.trim()
         : (isKurdish
@@ -1616,39 +1622,120 @@ class _SettingsScreenState extends State<SettingsScreen>
           children: [
             Row(
               children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.gold.withValues(alpha: 0.25),
-                        AppColors.gold.withValues(alpha: 0.08),
+                Tooltip(
+                  message: isKurdish
+                      ? 'گۆڕینی وێنەی پرۆفایل'
+                      : (lang == 'ar'
+                          ? 'تعديل الصورة الشخصية'
+                          : 'Change Profile Photo'),
+                  child: GestureDetector(
+                    onTap: () => _showProfilePictureSheet(
+                        context, profile, isKurdish, lang),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                AppColors.gold.withValues(alpha: 0.25),
+                                AppColors.gold.withValues(alpha: 0.08),
+                              ],
+                            ),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.gold.withValues(alpha: 0.55),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.25),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: hasCustomPicture
+                                ? Image.file(
+                                    File(profile.profilePicturePath!),
+                                    width: 56,
+                                    height: 56,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Center(
+                                      child: hasCustomName
+                                          ? Text(
+                                              initialLetter,
+                                              style: AppTheme.englishTitle(
+                                                fontSize: 24,
+                                                color: AppColors.gold,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.person_rounded,
+                                              size: 30,
+                                              color: AppColors.gold,
+                                            ),
+                                    ),
+                                  )
+                                : Center(
+                                    child: hasCustomName
+                                        ? Text(
+                                            initialLetter,
+                                            style: AppTheme.englishTitle(
+                                              fontSize: 24,
+                                              color: AppColors.gold,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        : Icon(
+                                            Icons.person_rounded,
+                                            size: 30,
+                                            color: AppColors.gold,
+                                          ),
+                                  ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: -2,
+                          right: isKurdish || lang == 'ar' ? null : -2,
+                          left: isKurdish || lang == 'ar' ? -2 : null,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: AppColors.gold,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.darkPanel,
+                                width: 1.5,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.4),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.camera_alt_rounded,
+                                size: 11,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.gold.withValues(alpha: 0.5),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: Center(
-                    child: hasCustomName
-                        ? Text(
-                            initialLetter,
-                            style: AppTheme.englishTitle(
-                              fontSize: 24,
-                              color: AppColors.gold,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Icon(
-                            Icons.person_rounded,
-                            size: 30,
-                            color: AppColors.gold,
-                          ),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -1822,6 +1909,289 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         );
       }
+
+  void _showProfilePictureSheet(
+      BuildContext context, UserProfile profile, bool isKurdish, String lang) {
+    AppHaptics.selectionClick();
+    final hasPicture = profile.profilePicturePath != null &&
+        profile.profilePicturePath!.trim().isNotEmpty &&
+        File(profile.profilePicturePath!).existsSync();
+
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (sheetCtx) {
+        return Container(
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          decoration: BoxDecoration(
+            color: AppColors.darkPanel,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(
+              color: AppColors.gold.withValues(alpha: 0.35),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.faintText.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.gold.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.add_a_photo_rounded,
+                          color: AppColors.gold,
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isKurdish
+                                  ? 'وێنەی پرۆفایل'
+                                  : (lang == 'ar'
+                                      ? 'الصورة الشخصية'
+                                      : 'Profile Photo'),
+                              style: isKurdish
+                                  ? AppTheme.kurdishTitle(
+                                      fontSize: 17, color: AppColors.cream)
+                                  : AppTheme.englishTitle(
+                                      fontSize: 17, color: AppColors.cream),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              isKurdish
+                                  ? 'وێنەیەک بۆ پرۆفایلی خۆت هەڵبژێرە'
+                                  : (lang == 'ar'
+                                      ? 'اختر صورة لملفك الشخصي'
+                                      : 'Select a photo for your profile'),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppColors.faintText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _buildPictureActionTile(
+                    icon: Icons.photo_library_rounded,
+                    title: isKurdish
+                        ? 'هەڵبژاردن لە گەلەری'
+                        : (lang == 'ar'
+                            ? 'اختيار من المعرض'
+                            : 'Choose from Gallery'),
+                    color: AppColors.gold,
+                    onTap: () async {
+                      Navigator.pop(sheetCtx);
+                      await _pickAndSaveProfilePicture(
+                          profile, ImageSource.gallery);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  _buildPictureActionTile(
+                    icon: Icons.camera_alt_rounded,
+                    title: isKurdish
+                        ? 'گرتنی وێنە بە کامێرا'
+                        : (lang == 'ar'
+                            ? 'التقاط صورة بالكاميرا'
+                            : 'Take Photo with Camera'),
+                    color: AppColors.gold,
+                    onTap: () async {
+                      Navigator.pop(sheetCtx);
+                      await _pickAndSaveProfilePicture(
+                          profile, ImageSource.camera);
+                    },
+                  ),
+                  if (hasPicture) ...[
+                    const SizedBox(height: 10),
+                    _buildPictureActionTile(
+                      icon: Icons.delete_outline_rounded,
+                      title: isKurdish
+                          ? 'سڕینەوەی وێنە'
+                          : (lang == 'ar'
+                              ? 'حذف الصورة الشخصية'
+                              : 'Remove Photo'),
+                      color: const Color(0xFFFF5252),
+                      isDestructive: true,
+                      onTap: () async {
+                        Navigator.pop(sheetCtx);
+                        await _removeProfilePicture(profile);
+                      },
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPictureActionTile({
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          AppHaptics.selectionClick();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: isDestructive
+                ? color.withValues(alpha: 0.1)
+                : AppColors.panelColor.withValues(alpha: 0.7),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: color.withValues(alpha: 0.25),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: isDestructive ? color : AppColors.cream,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14,
+                color: color.withValues(alpha: 0.6),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickAndSaveProfilePicture(
+      UserProfile profile, ImageSource source) async {
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: source,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 88,
+      );
+
+      if (picked == null) return;
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final ext = picked.path.contains('.')
+          ? picked.path.substring(picked.path.lastIndexOf('.'))
+          : '.jpg';
+      final fileName =
+          'profile_avatar_${DateTime.now().millisecondsSinceEpoch}$ext';
+      final targetPath = '${appDir.path}/$fileName';
+
+      if (profile.profilePicturePath != null &&
+          profile.profilePicturePath!.isNotEmpty) {
+        try {
+          final oldFile = File(profile.profilePicturePath!);
+          if (await oldFile.exists()) {
+            await oldFile.delete();
+          }
+        } catch (_) {}
+      }
+
+      final savedFile = await File(picked.path).copy(targetPath);
+      final updated = profile.copyWith(profilePicturePath: savedFile.path);
+      await StorageService.saveUserProfile(updated);
+      AppHaptics.selectionClick();
+
+      if (mounted) {
+        setState(() {
+          _profileFuture = StorageService.getUserProfile();
+        });
+      }
+    } catch (e) {
+      debugPrint('Error picking profile picture: $e');
+    }
+  }
+
+  Future<void> _removeProfilePicture(UserProfile profile) async {
+    try {
+      if (profile.profilePicturePath != null &&
+          profile.profilePicturePath!.isNotEmpty) {
+        try {
+          final oldFile = File(profile.profilePicturePath!);
+          if (await oldFile.exists()) {
+            await oldFile.delete();
+          }
+        } catch (_) {}
+      }
+
+      final updated = profile.copyWith(clearProfilePicture: true);
+      await StorageService.saveUserProfile(updated);
+      AppHaptics.selectionClick();
+
+      if (mounted) {
+        setState(() {
+          _profileFuture = StorageService.getUserProfile();
+        });
+      }
+    } catch (e) {
+      debugPrint('Error removing profile picture: $e');
+    }
+  }
 
   void _showEditNameDialog(
       BuildContext context, UserProfile profile, bool isKurdish, String lang) {

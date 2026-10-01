@@ -168,6 +168,7 @@ class UserProfile {
   final int bestStreak;
   final int totalSessions;
   final DateTime lastSessionDate;
+  final String? profilePicturePath;
 
   UserProfile({
     required this.name,
@@ -176,6 +177,7 @@ class UserProfile {
     required this.bestStreak,
     required this.totalSessions,
     required this.lastSessionDate,
+    this.profilePicturePath,
   });
 
   UserProfile copyWith({
@@ -185,6 +187,8 @@ class UserProfile {
     int? bestStreak,
     int? totalSessions,
     DateTime? lastSessionDate,
+    String? profilePicturePath,
+    bool clearProfilePicture = false,
   }) {
     return UserProfile(
       name: name ?? this.name,
@@ -193,6 +197,9 @@ class UserProfile {
       bestStreak: bestStreak ?? this.bestStreak,
       totalSessions: totalSessions ?? this.totalSessions,
       lastSessionDate: lastSessionDate ?? this.lastSessionDate,
+      profilePicturePath: clearProfilePicture
+          ? null
+          : (profilePicturePath ?? this.profilePicturePath),
     );
   }
 }

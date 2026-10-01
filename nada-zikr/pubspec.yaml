@@ -12,7 +12,7 @@ dependencies:
   # State & data persistence
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  path_provider: ^2.0.11
+  path_provider: ^2.1.6
   
   # Notifications & audio
   flutter_local_notifications: ^22.0.1
@@ -36,6 +36,7 @@ dependencies:
   http: ^1.2.0
   home_widget: ^0.9.3
   url_launcher: ^6.3.2
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:
