@@ -1,0 +1,377 @@
+name: Build Android APK & iOS IPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      flutter_channel:
+        description: 'Flutter release channel'
+        required: false
+        default: 'stable'
+        type: choice
+        options:
+          - 'stable'
+          - 'beta'
+      build_target:
+        description: 'Platforms to build'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - 'both'
+          - 'android'
+          - 'ios'
+      create_release:
+        description: 'Publish builds directly to GitHub Releases'
+        required: false
+        default: true
+        type: boolean
+      tag_name:
+        description: 'Custom release tag name (e.g. v1.0.0). Leave blank to auto-generate from pubspec'
+        required: false
+        default: ''
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-all-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ═════════════════════════════════════════════════════════════════════════════
+  # 1. BUILD ANDROID APK
+  # ═════════════════════════════════════════════════════════════════════════════
+  build-android:
+    name: Build Android APK
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.build_target == 'both' || github.event.inputs.build_target == 'android' }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: nada-zikr
+
+    outputs:
+      version_name: ${{ steps.meta.outputs.version_name }}
+      build_num: ${{ steps.meta.outputs.build_num }}
+      release_tag: ${{ steps.meta.outputs.release_tag }}
+      apk_name: ${{ steps.meta.outputs.apk_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve App Version & Metadata
+        id: meta
+        run: |
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //g' | tr -d '[:space:]')
+          VERSION_NAME=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f1)
+          BUILD_NUM=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f2)
+
+          INPUT_TAG="${{ github.event.inputs.tag_name }}"
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="v${VERSION_NAME}+${BUILD_NUM}"
+          fi
+
+          APK_NAME="Nada-Zikr-v${VERSION_NAME}.apk"
+
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "build_num=$BUILD_NUM" >> $GITHUB_OUTPUT
+          echo "release_tag=$TAG" >> $GITHUB_OUTPUT
+          echo "apk_name=$APK_NAME" >> $GITHUB_OUTPUT
+
+          echo "=================================================="
+          echo " App Version: $VERSION_NAME (Build $BUILD_NUM)"
+          echo " Release Tag: $TAG"
+          echo " Output APK:  $APK_NAME"
+          echo "=================================================="
+
+      - name: Setup Java (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ github.event.inputs.flutter_channel || 'stable' }}
+          cache: true
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Decode Keystore (Optional)
+        if: ${{ env.KEYSTORE_BASE64 != '' }}
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+          cat <<EOF > android/key.properties
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          storeFile=keystore.jks
+          EOF
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      - name: Build Android Universal APK
+        run: flutter build apk --release
+
+      - name: Package & Checksum APK
+        run: |
+          set -e
+          APK_SOURCE="build/app/outputs/flutter-apk/app-release.apk"
+          APK_TARGET="${{ steps.meta.outputs.apk_name }}"
+
+          cp "$APK_SOURCE" "$APK_TARGET"
+          APK_SIZE=$(ls -lh "$APK_TARGET" | awk '{print $5}')
+          APK_SHA=$(shasum -a 256 "$APK_TARGET" | awk '{print $1}')
+
+          echo "apk_size=$APK_SIZE" >> $GITHUB_ENV
+          echo "apk_sha=$APK_SHA" >> $GITHUB_ENV
+
+          echo "=================================================="
+          echo " Android APK: $APK_TARGET"
+          echo " Size:        $APK_SIZE"
+          echo " SHA256:      $APK_SHA"
+          echo "=================================================="
+
+      - name: Upload Android APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nada-Zikr-Android-APK
+          path: nada-zikr/${{ steps.meta.outputs.apk_name }}
+          retention-days: 30
+          if-no-files-found: error
+
+  # ═════════════════════════════════════════════════════════════════════════════
+  # 2. BUILD IOS IPAS (SIDESTORE & FULL)
+  # ═════════════════════════════════════════════════════════════════════════════
+  build-ios-ipa:
+    name: Build iOS IPA (SideStore & Full)
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.build_target == 'both' || github.event.inputs.build_target == 'ios' }}
+    runs-on: macos-14
+
+    defaults:
+      run:
+        working-directory: nada-zikr
+
+    outputs:
+      version_name: ${{ steps.meta.outputs.version_name }}
+      build_num: ${{ steps.meta.outputs.build_num }}
+      release_tag: ${{ steps.meta.outputs.release_tag }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve App Version & Metadata
+        id: meta
+        run: |
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //g' | tr -d '[:space:]')
+          VERSION_NAME=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f1)
+          BUILD_NUM=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f2)
+
+          INPUT_TAG="${{ github.event.inputs.tag_name }}"
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="v${VERSION_NAME}+${BUILD_NUM}"
+          fi
+
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "build_num=$BUILD_NUM" >> $GITHUB_OUTPUT
+          echo "release_tag=$TAG" >> $GITHUB_OUTPUT
+
+          echo "=================================================="
+          echo " App Version: $VERSION_NAME (Build $BUILD_NUM)"
+          echo " Release Tag: $TAG"
+          echo "=================================================="
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ github.event.inputs.flutter_channel || 'stable' }}
+          cache: true
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install --repo-update
+          cd ..
+
+      - name: Build Flutter iOS (--no-codesign)
+        run: |
+          flutter build ios \
+            --release \
+            --no-codesign
+
+      - name: Package Sideload-Optimized IPAs
+        run: |
+          set -e
+          APP_SOURCE="build/ios/iphoneos/Runner.app"
+
+          rm -rf ipa_work
+          mkdir -p ipa_work/Payload
+          cp -R "$APP_SOURCE" ipa_work/Payload/Runner.app
+
+          # Strip code signature remnants to avoid resign collisions in SideStore / AltStore
+          find ipa_work/Payload/Runner.app -name "_CodeSignature" -exec rm -rf {} + 2>/dev/null || true
+          find ipa_work/Payload/Runner.app -name "embedded.mobileprovision" -exec rm -rf {} + 2>/dev/null || true
+          find ipa_work/Payload/Runner.app -name ".DS_Store" -exec rm -rf {} + 2>/dev/null || true
+          chmod -R 755 ipa_work/Payload
+
+          # 1. Full IPA (With Widget Extension) - Best for TrollStore, paid certs, Scarlet
+          cd ipa_work
+          zip -qry -9 ../Nada-Zikr-Full.ipa Payload
+          cd ..
+
+          # 2. SideStore / iLoader IPA (Stripped of .appex PlugIns for Free 7-day Apple IDs)
+          rm -rf ipa_work/Payload/Runner.app/PlugIns
+          cd ipa_work
+          zip -qry -9 ../Nada-Zikr-SideStore.ipa Payload
+          cd ..
+
+          rm -rf ipa_work
+
+          SIDESTORE_SIZE=$(ls -lh Nada-Zikr-SideStore.ipa | awk '{print $5}')
+          FULL_SIZE=$(ls -lh Nada-Zikr-Full.ipa | awk '{print $5}')
+          SIDESTORE_SHA=$(shasum -a 256 Nada-Zikr-SideStore.ipa | awk '{print $1}')
+          FULL_SHA=$(shasum -a 256 Nada-Zikr-Full.ipa | awk '{print $1}')
+
+          echo "=================================================="
+          echo " SideStore IPA: $SIDESTORE_SIZE ($SIDESTORE_SHA)"
+          echo " Full IPA:      $FULL_SIZE ($FULL_SHA)"
+          echo "=================================================="
+
+      - name: Upload iOS IPAs Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nada-Zikr-iOS-IPA
+          path: |
+            nada-zikr/Nada-Zikr-SideStore.ipa
+            nada-zikr/Nada-Zikr-Full.ipa
+          retention-days: 30
+          if-no-files-found: error
+
+  # ═════════════════════════════════════════════════════════════════════════════
+  # 3. PUBLISH GITHUB RELEASE
+  # ═════════════════════════════════════════════════════════════════════════════
+  publish-release:
+    name: Publish Release (APK & IPA)
+    needs: [build-android, build-ios-ipa]
+    if: always() && !cancelled() && ((needs.build-android.result == 'success') || (needs.build-ios-ipa.result == 'success')) && ((github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true') || github.ref_type == 'tag')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Prepare Release Assets & Checksums
+        id: prep
+        run: |
+          cd release-assets
+          ls -lah
+
+          # Generate checksum file
+          shasum -a 256 * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+          TAG="${{ needs.build-android.outputs.release_tag }}"
+          if [ -z "$TAG" ]; then
+            TAG="${{ needs.build-ios-ipa.outputs.release_tag }}"
+          fi
+          if [ -z "$TAG" ]; then
+            TAG="v1.0.0"
+          fi
+          echo "release_tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.prep.outputs.release_tag }}
+          name: "Nada Dhikr Release (${{ steps.prep.outputs.release_tag }})"
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: false
+          files: |
+            release-assets/*
+          body: |
+            # 🌙 Nada Dhikr (${{ steps.prep.outputs.release_tag }})
+
+            Automated cross-platform build for **Android** and **iOS**!
+
+            ---
+
+            ## 📦 Download Packages
+
+            | Platform | File | Recommended For |
+            | :--- | :--- | :--- |
+            | 🤖 **Android** | `Nada-Zikr-v*.apk` | All Android phones & tablets (Universal APK) |
+            | 🍎 **iOS (SideStore / iLoader)** | `Nada-Zikr-SideStore.ipa` | **SideStore, iLoader, AltStore** (Free 7-day Apple ID friendly, no extension errors) |
+            | 🍎 **iOS (TrollStore / Full)** | `Nada-Zikr-Full.ipa` | **TrollStore, Paid Apple Certs, Scarlet, ESign** (Includes Prayer Times Widget) |
+            | 🔑 **Checksums** | `SHA256SUMS.txt` | Verify download integrity (SHA-256) |
+
+            ---
+
+            ## 🚀 Installation Instructions
+
+            ### 🤖 Android (APK)
+            1. Download the `.apk` file directly to your phone.
+            2. Open the file from your notifications or Downloads folder.
+            3. If prompted, allow "Install from Unknown Sources".
+            4. Tap **Install** and open the app!
+
+            ### 📲 iOS via SideStore (Direct on iPhone)
+            1. Download `Nada-Zikr-SideStore.ipa` in Safari.
+            2. Turn on your **WireGuard SideStore VPN**.
+            3. Open **SideStore** -> tap the **+** (Plus) icon -> select `Nada-Zikr-SideStore.ipa`.
+            4. Wait for installation to complete.
+
+            ### 💻 iOS via iLoader / AltStore / Sideloadly (PC or Mac)
+            1. Download `Nada-Zikr-SideStore.ipa` to your computer.
+            2. Connect your iPhone via USB.
+            3. Open **iLoader**, **Sideloadly**, or **AltServer**.
+            4. Drag `Nada-Zikr-SideStore.ipa` and enter your Apple ID to sign and install.
+            5. On iPhone, go to **Settings > General > VPN & Device Management** and trust your certificate.
+
+            ### ⚡ iOS via TrollStore (Permanent)
+            1. Download `Nada-Zikr-Full.ipa` in Safari.
+            2. Tap Share -> **Open in TrollStore**.
+            3. Permanent installation with Widget extension and no expiration!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Actions Summary
+        run: |
+          cat << 'EOF' >> $GITHUB_STEP_SUMMARY
+          # 🎉 Build & Release Complete!
+
+          Both Android APK and iOS IPAs have been built and uploaded.
+
+          ### 📦 Published Assets:
+          Check the Release section or Artifacts tab above to download:
+          - **Android Universal APK** (`.apk`)
+          - **SideStore / iLoader IPA** (`Nada-Zikr-SideStore.ipa`)
+          - **Full IPA with Widgets** (`Nada-Zikr-Full.ipa`)
+          - **Checksums** (`SHA256SUMS.txt`)
+          EOF
