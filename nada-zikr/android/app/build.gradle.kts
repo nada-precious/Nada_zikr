@@ -81,3 +81,9 @@ dependencies {
 flutter {
     source = "../.."
 }
+
+// Ensure asset merging runs before pre-bundle packaging to satisfy Gradle 9 input directory validation
+tasks.matching { it.name.contains("PreBundle") }.configureEach {
+    dependsOn(tasks.matching { it.name.contains("Assets") })
+}
+
