@@ -303,6 +303,19 @@ void main() {
       expect(london.isKurdistanOfficial, isFalse);
       expect(makkah.isKurdistanOfficial, isFalse);
     });
+
+    test('Hawler early morning nextId is fajr and not passed before fajr time', () async {
+      await StorageService.savePrayerSelectedCity('Hawler');
+      final sched = await PrayerRepository.getPrayerScheduleForDate(date: DateTime.now());
+      final now = DateTime.now();
+      final items = sched['items'] as List<PrayerTimeItem>;
+      final fajrItem = items.firstWhere((it) => it.id == 'fajr');
+      if (now.isBefore(fajrItem.time)) {
+        expect(sched['nextId'], equals('fajr'));
+        expect(fajrItem.isPassed, isFalse);
+        expect(fajrItem.isNext, isTrue);
+      }
+    });
   });
 }
 

@@ -12,7 +12,7 @@ void main() {
 
   group('Worldwide Countries Islamic Prayer & Qibla Real Data Tests', () {
     test('All 87 worldwide country groups exist and have valid configuration', () {
-      final groups = WorldCitiesCatalog.countryGroups;
+      const groups = WorldCitiesCatalog.countryGroups;
       expect(groups.length, greaterThanOrEqualTo(80));
 
       final expectedCountryIds = [

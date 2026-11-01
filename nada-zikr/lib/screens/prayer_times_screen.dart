@@ -365,7 +365,15 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
               final HijriDateInfo hijriDate = data['hijriDate'];
 
               final targetUtcOffset = (data['targetUtcOffset'] as num?)?.toDouble() ?? 3.0;
-              final targetCityNow = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+              final targetCityUtc = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+              final targetCityNow = DateTime(
+                targetCityUtc.year,
+                targetCityUtc.month,
+                targetCityUtc.day,
+                targetCityUtc.hour,
+                targetCityUtc.minute,
+                targetCityUtc.second,
+              );
 
               if (nextTime != null) {
                 _timeUntilNext = nextTime.difference(targetCityNow);

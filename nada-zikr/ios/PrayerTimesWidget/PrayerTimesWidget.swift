@@ -398,12 +398,15 @@ struct PrayerTimelineProvider: TimelineProvider {
         return nil
     }
 
-    private func parseTimeToDate(_ timeStr: String?, for baseDate: Date, isPMDefault: Bool = false) -> Date? {
+    private func parseTimeToDate(_ timeStr: String?, for baseDate: Date, isPMDefault: Bool = false, timeZone: TimeZone? = nil) -> Date? {
         guard let raw = timeStr?.trimmingCharacters(in: .whitespacesAndNewlines),
               !raw.isEmpty, raw != "--:--" else {
             return nil
         }
-        let cal = Calendar.current
+        var cal = Calendar.current
+        if let tz = timeZone {
+            cal.timeZone = tz
+        }
         let parts = raw.components(separatedBy: " ")
         let timePart = parts.first ?? raw
         let periodPart = parts.count > 1 ? parts[1].uppercased() : nil
@@ -441,6 +444,10 @@ struct PrayerTimelineProvider: TimelineProvider {
         let standardPrefs = UserDefaults.standard
         let allPrefs = [appGroupPrefs, standardPrefs]
 
+        let cityTzId = readString(allPrefs, keys: ["city_timezone_id"])
+        let cityUtcOffset = readDouble(allPrefs, keys: ["city_utc_offset"])
+        let cityTimeZone: TimeZone? = (cityTzId != nil ? TimeZone(identifier: cityTzId!) : nil) ?? (cityUtcOffset != nil ? TimeZone(secondsFromGMT: Int(cityUtcOffset! * 3600)) : nil)
+
         // Build exact transition dates for today using timestamps or parsed full times
         let fajrTimestamp    = readDouble(allPrefs, keys: ["fajr_timestamp", "fajr_timestamp_str"]) ?? 0
         let sunriseTimestamp = readDouble(allPrefs, keys: ["sunrise_timestamp", "sunrise_timestamp_str"]) ?? 0
@@ -459,12 +466,12 @@ struct PrayerTimelineProvider: TimelineProvider {
                 Date(timeIntervalSince1970: maghribTimestamp),
                 Date(timeIntervalSince1970: ishaTimestamp)
             ]
-        } else if let pFajr = parseTimeToDate(readString(allPrefs, keys: ["fajr_full_time", "fajr_time"]), for: now, isPMDefault: false),
-                  let pSunrise = parseTimeToDate(readString(allPrefs, keys: ["sunrise_full_time", "sunrise_time"]), for: now, isPMDefault: false),
-                  let pDhuhr = parseTimeToDate(readString(allPrefs, keys: ["dhuhr_full_time", "dhuhr_time"]), for: now, isPMDefault: false),
-                  let pAsr = parseTimeToDate(readString(allPrefs, keys: ["asr_full_time", "asr_time"]), for: now, isPMDefault: true),
-                  let pMaghrib = parseTimeToDate(readString(allPrefs, keys: ["maghrib_full_time", "maghrib_time"]), for: now, isPMDefault: true),
-                  let pIsha = parseTimeToDate(readString(allPrefs, keys: ["isha_full_time", "isha_time"]), for: now, isPMDefault: true) {
+        } else if let pFajr = parseTimeToDate(readString(allPrefs, keys: ["fajr_full_time", "fajr_time"]), for: now, isPMDefault: false, timeZone: cityTimeZone),
+                  let pSunrise = parseTimeToDate(readString(allPrefs, keys: ["sunrise_full_time", "sunrise_time"]), for: now, isPMDefault: false, timeZone: cityTimeZone),
+                  let pDhuhr = parseTimeToDate(readString(allPrefs, keys: ["dhuhr_full_time", "dhuhr_time"]), for: now, isPMDefault: false, timeZone: cityTimeZone),
+                  let pAsr = parseTimeToDate(readString(allPrefs, keys: ["asr_full_time", "asr_time"]), for: now, isPMDefault: true, timeZone: cityTimeZone),
+                  let pMaghrib = parseTimeToDate(readString(allPrefs, keys: ["maghrib_full_time", "maghrib_time"]), for: now, isPMDefault: true, timeZone: cityTimeZone),
+                  let pIsha = parseTimeToDate(readString(allPrefs, keys: ["isha_full_time", "isha_time"]), for: now, isPMDefault: true, timeZone: cityTimeZone) {
             transitionDates = [pFajr, pSunrise, pDhuhr, pAsr, pMaghrib, pIsha]
         } else {
             let lat = readDouble(allPrefs, keys: ["city_lat", "city_lat_str"]) ?? 36.1911
@@ -524,6 +531,10 @@ struct PrayerTimelineProvider: TimelineProvider {
         let maghribTimestamp = readDouble(allPrefs, keys: ["maghrib_timestamp", "maghrib_timestamp_str"]) ?? 0
         let ishaTimestamp    = readDouble(allPrefs, keys: ["isha_timestamp", "isha_timestamp_str"]) ?? 0
 
+        let cityTzId = readString(allPrefs, keys: ["city_timezone_id"])
+        let cityUtcOffset = readDouble(allPrefs, keys: ["city_utc_offset"])
+        let cityTimeZone: TimeZone? = (cityTzId != nil ? TimeZone(identifier: cityTzId!) : nil) ?? (cityUtcOffset != nil ? TimeZone(secondsFromGMT: Int(cityUtcOffset! * 3600)) : nil)
+
         let hasTimestamps = fajrTimestamp > 0 && sunriseTimestamp > 0 && dhuhrTimestamp > 0 &&
                             asrTimestamp > 0 && maghribTimestamp > 0 && ishaTimestamp > 0
 
@@ -555,12 +566,12 @@ struct PrayerTimelineProvider: TimelineProvider {
             asrStr     = sharedAsr ?? NativePrayerCalculator.formatCleanTime(asrDate)
             maghribStr = sharedMaghrib ?? NativePrayerCalculator.formatCleanTime(maghribDate)
             ishaStr    = sharedIsha ?? NativePrayerCalculator.formatCleanTime(ishaDate)
-        } else if let pFajr = parseTimeToDate(readString(allPrefs, keys: ["fajr_full_time", "fajr_time"]), for: targetDate, isPMDefault: false),
-                  let pSunrise = parseTimeToDate(readString(allPrefs, keys: ["sunrise_full_time", "sunrise_time"]), for: targetDate, isPMDefault: false),
-                  let pDhuhr = parseTimeToDate(readString(allPrefs, keys: ["dhuhr_full_time", "dhuhr_time"]), for: targetDate, isPMDefault: false),
-                  let pAsr = parseTimeToDate(readString(allPrefs, keys: ["asr_full_time", "asr_time"]), for: targetDate, isPMDefault: true),
-                  let pMaghrib = parseTimeToDate(readString(allPrefs, keys: ["maghrib_full_time", "maghrib_time"]), for: targetDate, isPMDefault: true),
-                  let pIsha = parseTimeToDate(readString(allPrefs, keys: ["isha_full_time", "isha_time"]), for: targetDate, isPMDefault: true) {
+        } else if let pFajr = parseTimeToDate(readString(allPrefs, keys: ["fajr_full_time", "fajr_time"]), for: targetDate, isPMDefault: false, timeZone: cityTimeZone),
+                  let pSunrise = parseTimeToDate(readString(allPrefs, keys: ["sunrise_full_time", "sunrise_time"]), for: targetDate, isPMDefault: false, timeZone: cityTimeZone),
+                  let pDhuhr = parseTimeToDate(readString(allPrefs, keys: ["dhuhr_full_time", "dhuhr_time"]), for: targetDate, isPMDefault: false, timeZone: cityTimeZone),
+                  let pAsr = parseTimeToDate(readString(allPrefs, keys: ["asr_full_time", "asr_time"]), for: targetDate, isPMDefault: true, timeZone: cityTimeZone),
+                  let pMaghrib = parseTimeToDate(readString(allPrefs, keys: ["maghrib_full_time", "maghrib_time"]), for: targetDate, isPMDefault: true, timeZone: cityTimeZone),
+                  let pIsha = parseTimeToDate(readString(allPrefs, keys: ["isha_full_time", "isha_time"]), for: targetDate, isPMDefault: true, timeZone: cityTimeZone) {
             fajrDate    = pFajr
             sunriseDate = pSunrise
             dhuhrDate   = pDhuhr

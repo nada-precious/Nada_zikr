@@ -27,7 +27,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initialTabIndex;
+    _selectedIndex = widget.tabNotifier?.value ?? widget.initialTabIndex;
     widget.tabNotifier?.addListener(_onTabNotifierChanged);
   }
 

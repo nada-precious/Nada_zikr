@@ -195,6 +195,13 @@ class NotificationService {
     final prayerModes = StorageService.getPrayerNotificationModes();
     final now = DateTime.now();
 
+    // Resolve target city current calendar date so dayOffset=0 aligns with the city's current day
+    final cityId = StorageService.getPrayerSelectedCity();
+    final currentCity = WorldCitiesCatalog.byId(cityId);
+    final targetUtcOffset = currentCity.resolveUtcOffset(now);
+    final targetCityUtc = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+    final baseDate = DateTime(targetCityUtc.year, targetCityUtc.month, targetCityUtc.day);
+
     // Check exact alarm permission once per batch for efficiency
     final canExact = await canScheduleExactNotifications();
 
@@ -211,7 +218,7 @@ class NotificationService {
     final daysToSchedule = preAzanMinutes > 0 ? 5 : 7;
 
     for (var dayOffset = 0; dayOffset < daysToSchedule; dayOffset++) {
-      final date = DateTime(now.year, now.month, now.day + dayOffset);
+      final date = DateTime(baseDate.year, baseDate.month, baseDate.day + dayOffset);
       try {
         final schedule = await PrayerRepository.getPrayerScheduleForDate(
           date: date,

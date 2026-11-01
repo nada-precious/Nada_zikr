@@ -2350,8 +2350,19 @@ class PrayerRepository {
       minuteOffsets: offsets,
     ).toMap();
 
-    // Current wall-clock time in the target city's timezone
-    final targetCityNow = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+    // Current wall-clock time in the target city's timezone.
+    // Construct a local DateTime holding target city's wall-clock components
+    // so comparisons with [timesMap] (which holds wall-clock DateTime) are 100% consistent.
+    final targetCityUtc = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+    final targetCityNow = DateTime(
+      targetCityUtc.year,
+      targetCityUtc.month,
+      targetCityUtc.day,
+      targetCityUtc.hour,
+      targetCityUtc.minute,
+      targetCityUtc.second,
+      targetCityUtc.millisecond,
+    );
 
     const prayerNames = [
       {'id': 'fajr', 'en': 'Fajr', 'ar': 'الفجر', 'ku': 'بەیانی'},
