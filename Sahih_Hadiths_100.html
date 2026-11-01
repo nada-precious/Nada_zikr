@@ -1,0 +1,3423 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>١٠٠ فەرموودەی صەحیحی پێغەمبەری خودا (ﷺ) بە وردەکاری پلەی فەرموودە</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 1.2cm 1.2cm 1.5cm 1.2cm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: 'Noto Naskh Arabic', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    margin: 0;
+    padding: 24px;
+    line-height: 1.7;
+  }
+
+  .cover-header {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #065f46 100%);
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 36px 24px;
+    text-align: center;
+    margin-bottom: 28px;
+    box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.3);
+    border: 2px solid #d97706;
+  }
+
+  .bismillah {
+    font-family: 'Amiri', serif;
+    font-size: 28px;
+    color: #fef08a;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  .main-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+  }
+
+  .subtitle {
+    font-size: 16.5px;
+    color: #d1fae5;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .meta-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .meta-badge {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 13px;
+    color: #fef9c3;
+  }
+
+  .stats-summary {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+
+  .stat-item .num {
+    font-size: 26px;
+    font-weight: 700;
+    color: #047857;
+  }
+
+  .stat-item .label {
+    font-size: 13.5px;
+    color: #64748b;
+  }
+
+  .hadith-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border-right: 5px solid #059669;
+    position: relative;
+  }
+
+  .hadith-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 10px;
+  }
+
+  .hadith-id-chapter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hadith-num {
+    background: #047857;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13.5px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .chapter-pill {
+    background: #ecfdf5;
+    color: #065f46;
+    font-weight: 600;
+    font-size: 13.5px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid #a7f3d0;
+  }
+
+  .grade-badge {
+    background: #fef3c7;
+    color: #92400e;
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #fde68a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .grade-badge.muttafaq {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+  }
+
+  .grade-badge.hasan {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
+  }
+
+  .narrator {
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .arabic-text {
+    font-family: 'Amiri', 'Traditional Arabic', serif;
+    font-size: 21.5px;
+    font-weight: 700;
+    color: #064e3b;
+    line-height: 2.1;
+    text-align: justify;
+    background: #f0fdf4;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border-right: 4px solid #10b981;
+  }
+
+  .kurdish-section {
+    margin-bottom: 10px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #059669;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .kurdish-text {
+    font-size: 15.5px;
+    color: #1e293b;
+    line-height: 1.8;
+    text-align: justify;
+  }
+
+  .english-section {
+    direction: ltr;
+    text-align: left;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .english-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .english-text {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13.5px;
+    color: #334155;
+    line-height: 1.6;
+    margin-top: 2px;
+  }
+
+  .hadith-footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  .source-tag {
+    font-weight: 600;
+    color: #047857;
+  }
+
+  .footer-note {
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 35px;
+    padding: 18px;
+    border-top: 1px solid #cbd5e1;
+  }
+
+  @media print {
+    body {
+      background-color: #ffffff;
+      padding: 0;
+    }
+    .hadith-card {
+      box-shadow: none;
+      border: 1px solid #cbd5e1;
+      margin-bottom: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover-header">
+  <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <h1 class="main-title">کۆکراوەی ١٠٠ فەرموودەی مەقبوول (صەحیح و حەسەن)ـی پێغەمبەر ﷺ</h1>
+  <div class="subtitle">بە دەستنیشانکردنی دەقیقی پلەی زانستی هەر فەرموودەیەک: صحيح متفق عليه، صحيح البخاري، صحيح مسلم، حسن صحيح</div>
+  <div class="meta-badges">
+    <span class="meta-badge">✓ ٨٩ فەرموودە: پلەی سەحیحی ڕەها (متفق عليه / بخاري / مسلم)</span>
+    <span class="meta-badge">✓ ١١ فەرموودە: پلەی حەسەنی دروست (حسن صحيح / حسن بشواهده)</span>
+    <span class="meta-badge">✓ هیچ فەرموودەیەکی لاواز (ضعيف) یان هەڵبەستراوی تێدا نییە</span>
+  </div>
+</div>
+
+<div class="stats-summary">
+  <div class="stat-item">
+    <div class="num">٤٥</div>
+    <div class="label">مُتَّفَقٌ عَلَيْهِ (بوخاری و موسلیم)</div>
+  </div>
+  <div class="stat-item">
+    <div class="num">٣٥</div>
+    <div class="label">صحیح بە تەنها (بوخاری یان موسلیم)</div>
+  </div>
+  <div class="stat-item">
+    <div class="num">١١</div>
+    <div class="label">حسن صحیح (سونەنەکان)</div>
+  </div>
+  <div class="stat-item">
+    <div class="num">٩</div>
+    <div class="label">صحيح بشواهده / لغيره</div>
+  </div>
+</div>
+
+<div class="hadiths-container">
+  
+  <div class="hadith-card" id="hadith-1">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">1</div>
+        <div class="chapter-pill">نییەت و دڵسۆزی • Intentions & Sincerity</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَمِيرِ الْمُؤْمِنِينَ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى دُنْيَا يُصِيبُهَا، أَوْ إِلَى امْرَأَةٍ يَنْكِحُهَا، فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی کردەوەکان بە پێی نییەتەکانن، و بۆ هەموو مرۆڤێک ئەوە هەیە کە نییەتی بۆ هێناوە، جا هەر کەسێک کۆچەکەی بۆ بەدەستهێنانی دونیا بێت، یان بۆ ئافرەتێک بێت بیخوازێت، ئەوا کۆچەکەی بۆ ئەو مەبەستەیە کە کۆچی بۆ کردووە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Actions are judged by motives and intentions, and every person will have what he intended. So whoever migrated for worldly gain or to marry a woman, his migration is for what he migrated for.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (1)، ومسلم (1907)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-2">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">2</div>
+        <div class="chapter-pill">پایەکانی ئیسلام • Pillars of Islam</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عُمَرَ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">بُنِيَ الإِسْلامُ عَلَى خَمْسٍ: شَهَادَةِ أَنْ لا إِلَهَ إِلاَّ اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، وَإِقَامِ الصَّلاةِ، وَإِيتَاءِ الزَّكَاةِ، وَالْحَجِّ، وَصَوْمِ رَمَضَانَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئیسلام لەسەر پێنج پایە دامەزراوە: شایەتیدان بەوەی هیچ پەرستراوێک بە حەق نییە جگە لە خوای گەورە و محەممەد پێغەمبەری خوایە، و ئەنجامدانی نوێژەکان، و دانی زەکات، و حەجکردنی ماڵی خودا، و بەڕۆژووبوونی مانگی ڕەمەزان.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Islam is built upon five pillars: testifying that there is no deity worthy of worship except Allah and that Muhammad is the Messenger of Allah, establishing the prayer, paying Zakat, performing Hajj, and fasting Ramadan.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (8)، ومسلم (16)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-3">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">3</div>
+        <div class="chapter-pill">باوەڕ و برایەتی • Faith & Brotherhood</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَنَسِ بْنِ مَالِكٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هیچ یەکێکتان باوەڕی کامڵ و تەواو نابێت هەتا ئەوەی بۆ خۆی پێی خۆشە بۆ براکەیشی پێی خۆش نەبێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">None of you truly believes until he loves for his brother what he loves for himself.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (13)، ومسلم (45)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-4">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">4</div>
+        <div class="chapter-pill">ئاداب و پاراستنی زمان • Speech & Good Manners</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ، وَمَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيُكْرِمْ جَارَهُ، وَمَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيُكْرِمْ ضَيْفَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک باوەڕی بە خودا و ڕۆژی دوایی هەیە با وتەی چاک بڵێت یاخود بێدەنگ بێت، و هەر کەسێک باوەڕی بە خودا و ڕۆژی دوایی هەیە با ڕێز لە دراوسێکەی بگرێت، و هەر کەسێک باوەڕی بە خودا و ڕۆژی دوایی هەیە با ڕێز لە میوانەکەی بگرێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever believes in Allah and the Last Day should speak good or remain silent; whoever believes in Allah and the Last Day should honor his neighbor; and whoever believes in Allah and the Last Day should honor his guest.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (6018)، ومسلم (47)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-5">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">5</div>
+        <div class="chapter-pill">خۆڕاگری و نەهێشتنی تووڕەیی • Controlling Anger</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَنَّ رَجُلاً قَالَ لِلنَّبِيِّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ: أَوْصِنِي، قَالَ: «لا تَغْضَبْ»، فَرَدَّدَ مِرَارًا، قَالَ: «لا تَغْضَبْ».</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پیاوێک بە پێغەمبەری خودای فەرموو (ﷺ): ئامۆژگاریم بکە، فەرمووی: «تووڕە مەبە»، ئەو پیاوە چەند جارێک داواکەی دووبارە کردەوە، پێغەمبەر (ﷺ) لە هەموویاندا فەرمووی: «تووڕە مەبە».</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">A man said to the Prophet (ﷺ): 'Advise me.' He said: 'Do not become angry.' The man repeated his request several times, and each time he replied: 'Do not become angry.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (6116)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-6">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">6</div>
+        <div class="chapter-pill">سیفەتەکانی موسڵمان • Characteristics of a Muslim</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ، وَالْمُهَاجِرُ مَنْ هَجَرَ مَا نَهَى اللَّهُ عَنْهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">موسڵمانی ڕاستەقینە ئەو کەسەیە کە موسڵمانان لە دەست و زمانی پارێزراو و بێوەی بن، و کۆچبەری ڕاستەقینەش ئەو کەسەیە کە واز لە هەموو ئەو شتانە بهێنێت کە خودا نەهی لێکردووە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The true Muslim is the one from whose tongue and hand Muslims are safe, and the true emigrant is the one who abandons what Allah has forbidden.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (10)، ومسلم (40)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-7">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">7</div>
+        <div class="chapter-pill">فەزڵی زانست • Virtue of Knowledge</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا، سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک ڕێگایەک بگرێتە بەر بۆ فێربوونی زانست، خوای گەورە بەهۆیەوە ڕێگایەکی بەرەو بەهەشت بۆ ئاسان دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever treads a path seeking knowledge, Allah will ease for him by it a path to Paradise.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2699)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-8">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">8</div>
+        <div class="chapter-pill">تەقوا و ڕەوشتبەرزی • Piety & Good Character</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي ذَرٍّ جُنْدُبِ بْنِ جُنَادَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ، وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا، وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">لە هەر شوێنێک بوویت لە خودا بترسە و پارێزگار بە، و بەدوای هەر هەڵە و تاوانێکدا چاکەیەک بکە تا بیسڕێتەوە، و لەگەڵ خەڵکیدا بە ڕەوشتێکی جوان و بەڕێزانە مامەڵە بکە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Fear Allah wherever you are, follow up a bad deed with a good deed and it will wipe it out, and treat people with good character.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (1987) وقال: حديث حسن صحيح</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-9">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">9</div>
+        <div class="chapter-pill">فەزڵی قورئانی پیرۆز • Virtue of the Holy Quran</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عُثْمَانَ بْنِ عَفَّانَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">باشترین و چاکترینی ئێوە ئەو کەسەیە کە قورئان فێردەبێت و فێری خەڵکی تریشی دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The best among you are those who learn the Quran and teach it.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (5027)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-10">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">10</div>
+        <div class="chapter-pill">ئامۆژگاری و دڵسۆزی • Sincere Counsel</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ تَمِيمٍ الدَّارِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَنَّ النَّبِيَّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ قَالَ: «الدِّينُ النَّصِيحَةُ»، قُلْنَا: لِمَنْ؟ قَالَ: «لِلَّهِ وَلِكِتَابِهِ وَلِرَسُولِهِ وَلأَئِمَّةِ الْمُسْلِمِينَ وَعَامَّتِهِمْ».</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پێغەمبەری خودا (ﷺ) فەرمووی: «ئایین بریتییە لە دڵسۆزی و ئامۆژگاری»، وتمان: بۆ کێ؟ فەرمووی: «بۆ خودا، و بۆ پەڕتووکەکەی، و بۆ پێغەمبەرەکەی، و بۆ پێشەوایانی موسڵمانان، و بۆ سەرجەم خەڵکی موسڵمان».</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The Prophet (ﷺ) said: 'Religion is sincere counsel.' We said: 'To whom?' He replied: 'To Allah, His Book, His Messenger, the leaders of the Muslims, and their common folk.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (55)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-11">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">11</div>
+        <div class="chapter-pill">بانگەواز بۆ ڕێگای حەق • Calling to Guidance</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ دَعَا إِلَى هُدًى كَانَ لَهُ مِنَ الأَجْرِ مِثْلُ أُجُورِ مَنْ تَبِعَهُ، لا يَنْقُصُ ذَلِكَ مِنْ أُجُورِهِمْ شَيْئًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک بانگەواز بکات بۆ هیدایەت و چاکە، هاوشێوەی پاداشتی هەموو ئەو کەسانەی بۆ دەنووسرێت کە شوێنی دەکەون، بەبێ ئەوەی لە پاداشتی ئەوان هیچ شتێک کەم ببێتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever calls others to guidance will have a reward like the rewards of those who follow him, without that detracting from their rewards in the slightest.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2674)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-12">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">12</div>
+        <div class="chapter-pill">زیکر و ستایشی پەروەردگار • Dhikr & Praise of Allah</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">دوو وشە هەن لەسەر زمان زۆر سووک و ئاسانن، بەڵام لە تەرازووی کردەوەکاندا زۆر قورسن، و لەلای خوای میهرەبان زۆر خۆشەویستن: (سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ).</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Two phrases are light on the tongue, heavy on the scales, and beloved to the Most Merciful: 'Subhan Allahi wa bihamdih, Subhan Allahil-'Azeem'.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (6406)، ومسلم (2694)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-13">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">13</div>
+        <div class="chapter-pill">پاکوخاوێنی و تەرازووی چاکە • Purification & Faith</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي مَالِكٍ الأَشْعَرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الطُّهُورُ شَطْرُ الإِيمَانِ، وَالْحَمْدُ لِلَّهِ تَمْلأُ الْمِيزَانَ، وَسُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ تَمْلآنِ - أَوْ تَمْلأُ - مَا بَيْنَ السَّمَاوَاتِ وَالأَرْضِ، وَالصَّلاةُ نُورٌ، وَالصَّدَقَةُ بُرْهَانٌ، وَالصَّبْرُ ضِيَاءٌ، وَالْقُرْآنُ حُجَّةٌ لَكَ أَوْ عَلَيْكَ، كُلُّ النَّاسِ يَغْدُو فَبَايِعٌ نَفْسَهُ فَمُعْتِقُهَا أَوْ مُوبِقُهَا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پاکوخاوێنی نیوەی باوەڕە، و (الحمد لله) تەرازووی چاکە پڕ دەکاتەوە، و (سبحان الله والحمد لله) نێوانی ئاسمانەکان و زەوی پڕ دەکەن لە خێر، و نوێژ ڕووناکییە، و خێر و سەدەقە بەڵگەی باوەڕە، و ئارامگری چرایەکی ڕووناکە، و قورئان بەڵگەیە لە قازانجت یان لە زەرەرت، هەموو خەڵکی بەرەبەیان دەست بە تێکۆشان دەکەن، هەیانە نەفسی خۆی لە سزا ئازاد دەکات، و هەیانە لەناوی دەبات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Purity is half of faith. Al-hamdu lillah fills the scale, and Subhan Allah and Al-hamdu lillah fill what is between heaven and earth. Prayer is light, charity is proof, patience is illumination, and the Quran is an argument for or against you. Every person goes out in the morning, selling his soul—either freeing it or destroying it.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (223)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-14">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">14</div>
+        <div class="chapter-pill">پاراستنی سنوورەکانی خودا و پشت بەستن پێی • Preserving Allah's Bounds & Reliance</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَبَّاسٍ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">يَا غُلامُ! إِنِّي أُعَلِّمُكَ كَلِمَاتٍ: احْفَظِ اللَّهَ يَحْفَظْكَ، احْفَظِ اللَّهَ تَجِدْهُ تُجَاهَكَ، إِذَا سَأَلْتَ فَاسْأَلِ اللَّهَ، وَإِذَا اسْتَعَنْتَ فَاسْتَعِنْ بِاللَّهِ، وَاعْلَمْ أَنَّ الأُمَّةَ لَوِ اجْتَمَعَتْ عَلَى أَنْ يَنْفَعُوكَ بِشَيْءٍ لَمْ يَنْفَعُوكَ إِلاَّ بِشَيْءٍ قَدْ كَتَبَهُ اللَّهُ لَكَ، وَلَوِ اجْتَمَعُوا عَلَى أَنْ يَضُرُّوكَ بِشَيْءٍ لَمْ يَضُرُّوكَ إِلاَّ بِشَيْءٍ قَدْ كَتَبَهُ اللَّهُ عَلَيْكَ، رُفِعَتِ الأَقْلامُ وَجَفَّتِ الصُّحُفُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەی کوڕم! من چەند وشەیەکت فێردەکەم: سنوور و فەرمانەکانی خودا بپارێزە خوداش تۆ دەپارێزێت، سنوری خودا بپارێزە خودا لە بەردەمتدا دەبینیتەوە، هەرکات داوایەکت کرد تەنها لە خودا داوا بکە، و هەرکات داوای یارمەتیت کرد تەنها لە خودا یارمەتی بخوازە، و بزانە ئەگەر سەرجەم خەڵکی کۆببنەوە بۆ سوود پێگەیاندنت هیچ سوودێکت پێ ناگەیەنن مەگەر ئەوەی خودا بۆی نووسیوی، و ئەگەر هەمووان کۆببنەوە بۆ زیان پێگەیاندنت ناتوانن زیانت پێ بگەیەنن مەگەر بەوەی خودا لەسەری نووسیوی، پێنووسەکان هەڵگیراون و پەڕەکان وشک بوونەتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">O young man! Preserve Allah's commands and He will preserve you. Preserve Allah's commands and you will find Him facing you. If you ask, ask of Allah; if you seek help, seek help from Allah. Know that if the whole nation gathered to benefit you, they could only benefit you with what Allah has written for you...</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2516) وقال: حديث حسن صحيح</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-15">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">15</div>
+        <div class="chapter-pill">پاکێتی لە بژێوی و بەخشیندا • Purity of Sustenance & Acceptance</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِنَّ اللَّهَ تَعَالَى طَيِّبٌ لا يَقْبَلُ إِلاَّ طَيِّبًا، وَإِنَّ اللَّهَ أَمَرَ الْمُؤْمِنِينَ بِمَا أَمَرَ بِهِ الْمُرْسَلِينَ، فَقَالَ: {يَا أَيُّهَا الرُّسُلُ كُلُوا مِنَ الطَّيِّبَاتِ وَاعْمَلُوا صَالِحًا}، وَقَالَ: {يَا أَيُّهَا الَّذِينَ آمَنُوا كُلُوا مِنْ طَيِّبَاتِ مَا رَزَقْنَاكُمْ}.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی خوای گەورە پاک و بێگەردە و جگە لە پاکی هیچ شتێک قبووڵ ناکات، و فەرمانی بە باوەڕداران کردووە بە هەمان ئەو فەرمانەی بە پێغەمبەرانی کردووە، کاتێک دەفەرموێت: {ئەی پێغەمبەران لە پاک و حەڵاڵەکان بخۆن و کردەوەی چاکە بکەن}، و دەفەرموێت: {ئەی ئەوانەی باوەڕتان هێناوە لەو ڕزقە پاکانە بخۆن کە پێمان بەخشیون}.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Indeed Allah the Exalted is pure and accepts only what is pure. And Allah has commanded the believers with that which He commanded the Messengers...</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (1015)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-16">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">16</div>
+        <div class="chapter-pill">دوورکەوتنەوە لە کاری بێسوود • Leaving What Does Not Concern You</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح بشواهده (ابن عبد البر والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مِنْ حُسْنِ إِسْلامِ الْمَرْءِ تَرْكُهُ مَا لا يَعْنِيهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">لە جوانی و کامڵبوونی ئیسلامەتی مرۆڤ ئەوەیە کە واز لە هەموو ئەو شتانە بهێنێت کە پەیوەندی پێوە نییە و سوودی بۆی نییە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Part of the perfection of one's Islam is leaving alone that which does not concern him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2317) وابن ماجه (3976) وصححه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-17">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">17</div>
+        <div class="chapter-pill">نەفرەت لە لووتبەرزی و فیز • Warning Against Arrogance</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ مَسْعُودٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا يَدْخُلُ الْجَنَّةَ مَنْ كَانَ فِي قَلْبِهِ مِثْقَالُ ذَرَّةٍ مِنْ كِبْرٍ، قَالَ رَجُلٌ: إِنَّ الرَّجُلَ يُحِبُّ أَنْ يَكُونَ ثَوْبُهُ حَسَنًا وَنَعْلُهُ حَسَنَةً؟ قَالَ: إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ، الْكِبْرُ: بَطَرُ الْحَقِّ، وَغَمْطُ النَّاسِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەو کەسەی تۆزقاڵێک لووتبەرزی لە دڵیدا بێت ناچێتە بەهەشت، پیاوێک وتی: مرۆڤ حەز دەکات جل و پێڵاوەکەی جوان بن؟ پێغەمبەر (ﷺ) فەرمووی: «خوای گەورە جوانە و جوانی خۆش دەوێت، لووتبەرزی بریتییە لە: ڕەتکردنەوەی حەق و چەوساندنەوە و بە کەمزانینی خەڵکی».</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">No one who has an atom's weight of pride in his heart will enter Paradise. A man said: 'A man likes his clothes and shoes to look good.' He said: 'Allah is beautiful and loves beauty. Pride is denying the truth and despising people.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (91)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-18">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">18</div>
+        <div class="chapter-pill">بەزەیی پێداهاتنەوە بە دروستکراوان • Mercy to All Creation</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أبو داود والترمذي)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ، ارْحَمُوا مَنْ فِي الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەوانەی بەبەزەیین خوای میهرەبان بەزەیی پێیاندا دەهێنێتەوە، بەزەییتان بە هەموو ئەوانەدا بێتەوە کە لەسەر زەوین تا ئەوەی لە ئاسمانە بەزەیی پێتاندا بێتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The merciful will be shown mercy by the Most Merciful. Be merciful to those on the earth and He who is in the heavens will have mercy upon you.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه أبو داود (4941) والترمذي (1924) وصححه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-19">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">19</div>
+        <div class="chapter-pill">یارمەتیدانی هەژار و بێوەژن • Caring for Widows & Needy</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">السَّاعِي عَلَى الأَرْمَلَةِ وَالْمِسْكِينِ كَالْمُجَاهِدِ فِي سَبِيلِ اللَّهِ، أَوْ كَالَّذِي يَصُومُ النَّهَارَ وَيَقُومُ اللَّيْلَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەو کەسەی هەوڵ دەدات بۆ بەخێوکردن و بەهاناوەچوونی بێوەژن و هەژاران، وەک کەسێک وایە لە پێناوی خودا جیهاد بکات، یاخود وەک کەسێک وایە ڕۆژان بەڕۆژوو بێت و شەوان بە شەونوێژەوە بەسەرببات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">One who strives to help the widow and the poor is like one who strives in the way of Allah, or like one who fasts the day and prays all night.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (5353)، ومسلم (2982)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-20">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">20</div>
+        <div class="chapter-pill">فەزڵی بەخێوکردنی هەتیو • Virtue of Sponsoring Orphans</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ سَهْلِ بْنِ سَعْدٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَنَا وَكَافِلُ الْيَتِيمِ فِي الْجَنَّةِ هَكَذَا، وَأَشَارَ بِالسَّبَّابَةِ وَالْوُسْطَى، وَفَرَّجَ بَيْنَهُمَا شَيْئًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">من و ئەو کەسەی کە بەخێوکردنی هەتیوێک دەگرێتە ئەستۆ لە بەهەشتدا ئاوا هاوشانی یەکترین، و ئاماژەی بە پەنجەی دۆشاومژە و پەنجەی ناوەڕاستی کرد و کەمێک نێوانیانی لێک جیاکردەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">I and the sponsor of an orphan will be in Paradise like this—and he signaled with his index and middle fingers, separating them slightly.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (5304)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-21">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">21</div>
+        <div class="chapter-pill">ڕاستگۆیی و حەرامێتی درۆ • Truthfulness & Prohibition of Lies</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ مَسْعُودٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">عَلَيْكُمْ بِالصِّدْقِ، فَإِنَّ الصِّدْقَ يَهْدِي إِلَى الْبِرِّ، وَإِنَّ الْبِرَّ يَهْدِي إِلَى الْجَنَّةِ، وَمَا يَزَالُ الرَّجُلُ يَصْدُقُ وَيَتَحَرَّى الصِّدْقَ حَتَّى يُكْتَبَ عِنْدَ اللَّهِ صِدِّيقًا، وَإِيَّاكُمْ وَالْكَذِبَ، فَإِنَّ الْكَذِبَ يَهْدِي إِلَى الْفُجُورِ، وَإِنَّ الْفُجُورَ يَهْدِي إِلَى النَّارِ، وَمَا يَزَالُ الرَّجُلُ يَكْذِبُ وَيَتَحَرَّى الْكَذِبَ حَتَّى يُكْتَبَ عِنْدَ اللَّهِ كَذَّابًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">دەست بگرن بە ڕاستگۆییەوە، چونکە ڕاستگۆیی ڕێگاتان بەرەو چاکە دەبات، و چاکەش بەرەو بەهەشت ڕێنموویتان دەکات، و بەندە بەردەوام ڕاست دەڵێت تا لەلای خودا بە ڕاستگۆ تۆمار دەکرێت. و لە درۆکردن دووربکەونەوە چونکە درۆ بەرەو بەدڕەوشتی دەبات و بەدڕەوشتیش بەرەو ئاگر، و بەندە هێندە درۆ دەکات تا لەلای خودا بە زۆر درۆزن تۆمار دەکرێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Hold fast to truthfulness, for truthfulness leads to righteousness, and righteousness leads to Paradise... And beware of lying, for lying leads to wickedness, and wickedness leads to Hellfire...</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (6094)، ومسلم (2607)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-22">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">22</div>
+        <div class="chapter-pill">حەرامێتی بەدگومانی و سیخوڕی • Prohibition of Suspicion & Spying</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِيَّاكُمْ وَالظَّنَّ، فَإِنَّ الظَّنَّ أَكْذَبُ الْحَدِيثِ، وَلا تَحَسَّسُوا، وَلا تَجَسَّسُوا، وَلا تَنَافَسُوا، وَلا تَحَاسَدُوا، وَلا تَبَاغَضُوا، وَلا تَدَابَرُوا، وَكُونُوا عِبَادَ اللَّهِ إِخْوَانًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">وریابن لە بەدگومانی، چونکە بەدگومانی درۆترین وتەیە، و بەدوای عەیب و کەموکوڕیدا مەگەڕێن، و سیخوڕی مەکەن، و چاوچنۆکی و حەسوودی بە یەکتر مەبەن، و ڕقتان لە یەکتر نەبێت، و پشت لە یەکتر مەکەن، و ببنە بەندەی خودا و برای یەکتری.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Beware of suspicion, for suspicion is the falsest of speech. Do not seek out faults, do not spy, do not compete maliciously, do not envy one another, do not hate one another, do not turn away from one another, and be servants of Allah, brothers.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (5143)، ومسلم (2563)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-23">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">23</div>
+        <div class="chapter-pill">ئاسانکاری و داپۆشینی عەیب • Easing Hardship & Concealing Faults</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ نَفَّسَ عَنْ مُؤْمِنٍ كُرْبَةً مِنْ كُرَبِ الدُّنْيَا، نَفَّسَ اللَّهُ عَنْهُ كُرْبَةً مِنْ كُرَبِ يَوْمِ الْقِيَامَةِ، وَمَنْ يَسَّرَ عَلَى مُعْسِرٍ، يَسَّرَ اللَّهُ عَلَيْهِ فِي الدُّنْيَا وَالآخِرَةِ، وَمَنْ سَتَرَ مُسْلِمًا، سَتَرَهُ اللَّهُ فِي الدُّنْيَا وَالآخِرَةِ، وَاللَّهُ فِي عَوْنِ الْعَبْدِ مَا كَانَ الْعَبْدُ فِي عَوْنِ أَخِيهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک تەنگانەیەک لەسەر باوەڕدارێک لابدات لە دنیا، خوای گەورە تەنگانەیەکی ڕۆژی قیامەتی لەسەر لادەدات، و هەر کەسێک ئاسانکاری بۆ قەرزدار و لێقەوماوێک بکات، خوا لە دنیا و قیامەتدا بۆی ئاسان دەکات، و هەر کەسێک عەیبی موسڵمانێک دابپۆشێت، خوا لە دنیا و قیامەتدا عەیبی دادەپۆشێت، و خودا لە یارمەتیدانی بەندەکەیدایە تا ئەو کاتەی بەندەکەی لە یارمەتیدانی براکەیدا بێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever relieves a believer of a hardship in this world, Allah will relieve him of a hardship on the Day of Resurrection; whoever eases the hardship of a debtor, Allah will ease his hardship in this world and the Hereafter; whoever conceals the fault of a Muslim, Allah will conceal his fault in this world and the Hereafter. Allah assists His servant as long as the servant assists his brother.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2699)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-24">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">24</div>
+        <div class="chapter-pill">تێگەیشتن لە دین • Comprehension of Religion</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ مُعَاوِيَةَ بْنِ أَبِي سُفْيَانَ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">مَنْ يُرِدِ اللَّهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک خوای گەورە خێر و چاکەی پێ بوێت، شارەزایی و تێگەیشتنی قووڵی پێ دەبەخشێت لە ئاییندا.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whomever Allah wills good for, He grants him deep comprehension of the religion.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (71)، ومسلم (1037)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-25">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">25</div>
+        <div class="chapter-pill">فەزڵی ڕۆژووی ڕەمەزان • Virtue of Fasting Ramadan</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک مانگی ڕەمەزان بەڕۆژوو بێت لەبەر باوەڕ بە خودا و بە ئومێدی بەدەستهێنانی پاداشت، هەموو گوناهەکانی پێشووی دەبەخشرێن.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever fasts Ramadan out of sincere faith and seeking reward from Allah, all his previous sins will be forgiven.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (38)، ومسلم (760)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-26">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">26</div>
+        <div class="chapter-pill">فەزڵی شەوی قەدر • Virtue of Laylat al-Qadr</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ قَامَ لَيْلَةَ الْقَدْرِ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک شەوی قەدر بە شەونوێژ و عیبادەت زیندوو بکاتەوە لەبەر باوەڕ و بەدەستهێنانی پاداشت، گشت گوناهەکانی ڕابردووی دەسڕێنەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever stands in prayer during the Night of Decree (Laylat al-Qadr) with faith and seeking reward, his past sins will be forgiven.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (1901)، ومسلم (760)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-27">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">27</div>
+        <div class="chapter-pill">فەزڵی دروستکردنی مزگەوت • Virtue of Building Mosques</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عُثْمَانَ بْنِ عَفَّانَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ بَنَى مَسْجِدًا لِلَّهِ، بَنَى اللَّهُ لَهُ فِي الْجَنَّةِ مِثْلَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک مزگەوتێک بۆ ڕەزامەندی خودا دروست بکات، خوای گەورە ماڵێکی هاوشێوەی بۆ لە بەهەشتدا بنیات دەنێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever builds a mosque for the sake of Allah, Allah will build for him a house like it in Paradise.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (450)، ومسلم (533)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-28">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">28</div>
+        <div class="chapter-pill">فەزڵی نوێژی بە کۆمەڵ • Virtue of Congregational Prayer</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عُمَرَ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">صَلاةُ الْجَمَاعَةِ تَفْضُلُ صَلاةَ الْفَذِّ بِسَبْعٍ وَعِشْرِينَ دَرَجَةً.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">نوێژی بە جەماعەت بیست و حەوت پلە فەزڵ و پاداشتی زیاترە لە نوێژی بە تەنیا.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The prayer in congregation is superior to the prayer performed individually by twenty-seven degrees.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (645)، ومسلم (650)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-29">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">29</div>
+        <div class="chapter-pill">فەزڵی هەنگاونان بەرەو مزگەوت • Walking to the Mosque</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ غَدَا إِلَى الْمَسْجِدِ أَوْ رَاحَ، أَعَدَّ اللَّهُ لَهُ فِي الْجَنَّةِ نُزُلاً كُلَّمَا غَدَا أَوْ رَاحَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک بەیانیان یان ئێواران بەرەو مزگەوت بڕوات، خوای گەورە لە بەهەشتدا شوێن و پێشوازییەکی شایستەی بۆ ئامادە دەکات هەر جارێک بڕوات و بگەڕێتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever goes to the mosque in the morning or evening, Allah prepares for him a hospitable residence in Paradise every time he goes or returns.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (662)، ومسلم (669)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-30">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">30</div>
+        <div class="chapter-pill">جۆرەکانی خێر و سەدەقە • Forms of Charity & Goodness</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح لغيره (ابن حبان والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي ذَرٍّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ، وَأَمْرُكَ بِالْمَعْرُوفِ وَنَهْيُكَ عَنِ الْمُنْكَرِ صَدَقَةٌ، وَإِرْشَادُكَ الرَّجُلَ فِي أَرْضِ الضَّلالِ لَكَ صَدَقَةٌ، وَبَصَرُكَ لِلرَّجُلِ الرَّدِيءِ الْبَصَرِ لَكَ صَدَقَةٌ، وَإِمَاطَتُكَ الْحَجَرَ وَالشَّوْكَةَ وَالْعَظْمَ عَنِ الطَّرِيقِ لَكَ صَدَقَةٌ، وَإِفْرَاغُكَ مِنْ دَلْوِكَ فِي دَلْوِ أَخِيكَ لَكَ صَدَقَةٌ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">زەردەخەنەکردنت لە ڕووی براتدا سەدەقەیە بۆت، و فەرمانکردنت بە چاکە و نەهیکردنت لە خراپە سەدەقەیە، و ڕێنوێنیکردنی کەسێکی ڕێ ونکردوو سەدەقەیە، و هاوکاریکردنی کەسێکی کەم بینا سەدەقەیە، و لادانی بەرد و دڕک و ئێسک لەسەر ڕێگا سەدەقەیە، و ڕژاندنی ئاو لە دەفرەکەی خۆتەوە بۆ ناو دەفری براکەت سەدەقەیە بۆت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Your smile for your brother is charity; enjoining good and forbidding evil is charity; guiding a lost person is charity; assisting someone with poor vision is charity; removing stones, thorns, and bones from the road is charity; and pouring water from your bucket into your brother's bucket is charity.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (1956) وصححه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-31">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">31</div>
+        <div class="chapter-pill">بەخشین و لێبوردەیی و بێفیزی • Charity, Forgiveness & Humility</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ، وَمَا زَادَ اللَّهُ عَبْدًا بِعَفْوٍ إِلاَّ عِزًّا، وَمَا تَوَاضَعَ أَحَدٌ لِلَّهِ إِلاَّ رَفَعَهُ اللَّهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هیچ سەدەقەیەک سەروەت و ماڵ کەم ناکاتەوە، و بەهۆی لێبوردەییەوە خوای گەورە جگە لە شکۆمەندی هیچی تر بۆ بەندەکەی زیاد ناکات، و هیچ کەسێک لە پێناوی خودا خۆی بەکەم نازانێت و بێفیز نابێت مەگەر خودا پایەی بەرز دەکاتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Charity does not decrease wealth, no one forgives another except that Allah increases him in honor, and no one humbles himself for the sake of Allah except that Allah elevates him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2588)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-32">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">32</div>
+        <div class="chapter-pill">باوەڕداری بەهێز و پشتبەستن بە خودا • The Strong Believer & Fate</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الْمُؤْمِنُ الْقَوِيُّ خَيْرٌ وَأَحَبُّ إِلَى اللَّهِ مِنَ الْمُؤْمِنِ الضَّعِيفِ، وَفِي كُلٍّ خَيْرٌ، احْرِصْ عَلَى مَا يَنْفَعُكَ، وَاسْتَعِنْ بِاللَّهِ وَلا تَعْجِزْ، وَإِنْ أَصَابَكَ شَيْءٌ فَلا تَقُلْ: لَوْ أَنِّي فَعَلْتُ كَانَ كَذَا وَكَذَا، وَلَكِنْ قُلْ: قَدَرُ اللَّهِ وَمَا شَاءَ فَعَلَ، فَإِنَّ «لَوْ» تَفْتَحُ عَمَلَ الشَّيْطَانِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">باوەڕداری بەهێز چاکتر و خۆشەویستترە لەلای خودا لە باوەڕداری بێهێز، لە هەردووکیانیشدا خێر هەیە، پەرۆشبە بۆ ئەو شتەی کە سوودت پێ دەگەیەنێت و پشت بە خودا ببەستە و بێ هیوا مەبە، خۆ ئەگەر تووشی ناڕەحەتییەک بوویت مەڵێ: ئەگەر وام بکردایە وا دەبوو، بەڵکو بڵێ: ئەوە قەدەری خودایە و چی ویستبێت ئەوە دەکات، چونکە وشەی «ئەگەر» دەرگای فیتنەی شەیتان دەکاتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The strong believer is better and more beloved to Allah than the weak believer, while there is good in both. Be eager for what benefits you, seek help from Allah, and do not lose heart. If something befalls you, do not say 'If only I had done such and such,' but say: 'Allah has decreed, and what He willed He has done,' for 'if' opens the door to Satan.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2664)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-33">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">33</div>
+        <div class="chapter-pill">نییەتی دڵ و کردەوەی ڕاستەقینە • The State of Hearts & Deeds</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِنَّ اللَّهَ لا يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ، وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی خوای گەورە تەماشای شێوە و ڕووخسارتان و سەروەت و ماڵتان ناکات، بەڵکو تەماشای ناوەڕۆکی دڵەکانتان و کردەوەکانتان دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Verily, Allah does not look at your appearances or wealth, but rather He looks at your hearts and deeds.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2564)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-34">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">34</div>
+        <div class="chapter-pill">یەکگرتوویی و سۆزی باوەڕداران • Unity & Compassion of Believers</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنِ النُّعْمَانِ بْنِ بَشِيرٍ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">مَثَلُ الْمُؤْمِنِينَ فِي تَوَادِّهِمْ وَتَرَاحُمِهِمْ وَتَعَاطُفِهِمْ مَثَلُ الْجَسَدِ، إِذَا اشْتَكَى مِنْهُ عُضْوٌ تَدَاعَى لَهُ سَائِرُ الْجَسَدِ بِالسَّهَرِ وَالْحُمَّى.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">نموونەی باوەڕداران لە خۆشەویستی و بەزەیی و هاوسۆزیاندا بۆ یەکتر، وەک نموونەی یەک جەستە وایە؛ هەر کاتێک ئەندامێکی بەئازار بێت، سەرجەم ئەندامەکانی تری جەستە بە تا لێهاتن و بێخەوییەوە بە دەنگیەوە دەچن.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The example of the believers in their mutual love, mercy, and compassion is like the whole body: when a limb aches, the rest of the body responds to it with wakefulness and fever.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (6011)، ومسلم (2586)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-35">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">35</div>
+        <div class="chapter-pill">فەزڵی سەڵاواتدان لەسەر پێغەمبەر ﷺ • Blessings Upon the Prophet (ﷺ)</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ صَلَّى عَلَيَّ صَلاةً وَاحِدَةً، صَلَّى اللَّهُ عَلَيْهِ بِهَا عَشْرًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک یەک سەڵاواتم لەسەر لێبدات، خوای گەورە لە بەرامبەردا دە جار سەڵاوات و ڕەحمەتی بەسەردا دەبارێنێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever sends blessings upon me once, Allah will send ten blessings upon him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (408)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-36">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">36</div>
+        <div class="chapter-pill">ژیانی دڵ بە زیکری خودا • Life of Hearts Through Dhikr</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي مُوسَى الأَشْعَرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَثَلُ الَّذِي يَذْكُرُ رَبَّهُ وَالَّذِي لا يَذْكُرُ رَبَّهُ مَثَلُ الْحَيِّ وَالْمَيِّتِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">نموونەی ئەو کەسەی زیکری پەروەردگاری دەکات لەگەڵ ئەو کەسەی زیکری پەروەردگاری ناکات، وەک نموونەی کەسی زیندوو و مردوو وایە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The likeness of the one who remembers his Lord and the one who does not remember his Lord is that of the living and the dead.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (6407)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-37">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">37</div>
+        <div class="chapter-pill">پاداشتی نەپچڕاو لەدوای مردن • Everlasting Rewards After Death</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِذَا مَاتَ الإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ إِلاَّ مِنْ ثَلاثَةٍ: إِلاَّ مِنْ صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">کاتێک مرۆڤ کۆچی دوایی دەکات کردەوەکانی دەپچڕێن مەگەر لە سێ ڕێگاوە نەبێت: خێر و سەدەقەیەکی بەردەوام، یان زانستێک کە خەڵکی سوودی لێ وەرگرن، یان منداڵێکی ساڵح و چاکەکار کە دوعای خێری بۆ بکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">When a person dies, all his good deeds come to an end except for three: an ongoing charity, beneficial knowledge, or a righteous child who prays for him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (1631)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-38">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">38</div>
+        <div class="chapter-pill">پێناسەی چاکە و تاوان • Righteousness and Sin</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنِ النَّوَّاسِ بْنِ سَمْعَانَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الْبِرُّ حُسْنُ الْخُلُقِ، وَالإِثْمُ مَا حَاكَ فِي نَفْسِكَ وَكَرِهْتَ أَنْ يَطَّلِعَ عَلَيْهِ النَّاسُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">چاکە بریتییە لە ڕەوشتی بەرز و جوان، و گوناهیش بریتییە لەوەی کە لە دەروونتدا نائارامی و ڕاڕایی دروست دەکات و پێت ناخۆشە خەڵکی پێی بزانن.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Righteousness is good character, and sin is that which wavers in your soul and you dislike that people should find out about it.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2553)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-39">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">39</div>
+        <div class="chapter-pill">بەهێزی ڕاستەقینە • True Inner Strength</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پاڵەوان و بەهێز ئەو کەسە نییە کە لە زۆرانبازیدا خەڵک دەبەزێنێت، بەڵکو بەهێزی ڕاستەقینە ئەو کەسەیە لە کاتی تووڕەییدا دەست بەسەر نەفسی خۆیدا بگرێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The strong person is not the one who overcomes others in wrestling; rather, the strong person is the one who controls himself in a fit of rage.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (6114)، ومسلم (2609)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-40">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">40</div>
+        <div class="chapter-pill">ئاسانکاری و مژدەدان بە خەڵک • Easing & Giving Glad Tidings</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَنَسِ بْنِ مَالِكٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">يَسِّرُوا وَلا تُعَسِّرُوا، وَبَشِّرُوا وَلا تُنَفِّرُوا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئاسانکاری بکەن و قورسی مەکەن، مژدەبەخش بن و خەڵکی وەڕس و بێزار مەکەن لە دین.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Make things easy and do not make them difficult; give glad tidings and do not push people away.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (69)، ومسلم (1734)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-41">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">41</div>
+        <div class="chapter-pill">ئارامی لە ڕاستیدا و دوودڵی لە درۆدا • Certainty in Truth</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنِ الْحَسَنِ بْنِ عَلِيٍّ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">دَعْ مَا يَرِيبُكَ إِلَى مَا لا يَرِيبُكَ، فَإِنَّ الصِّدْقَ طُمَأْنِينَةٌ وَإِنَّ الْكَذِبَ رِيبَةٌ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">واز لەوە بهێنە کە دڵت دەخاتە گومانەوە بەرەو ئەوەی هیچ گومانت تێیدا نییە، چونکە بەڕاستی ڕاستگۆیی دڵنیایی و ئارامییە، و درۆش دوودڵی و ناڕەحەتییە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Leave that which makes you doubt for that which does not make you doubt; for indeed truth brings peace of mind and falsehood brings doubt.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2518) وصححه</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-42">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">42</div>
+        <div class="chapter-pill">ڕێزگرتن و چاکەکردن لەگەڵ دایکوباوک • Pleasure of Parents & Allah</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح بشواهده (الحاكم والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">رِضَا الرَّبِّ فِي رِضَا الْوَالِدِ، وَسَخَطُ الرَّبِّ فِي سَخَطِ الْوَالِدِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ڕەزامەندی پەروەردگار لە ڕەزامەندی دایکوباوکدایە، و تووڕەیی پەروەردگاریش لە تووڕەیی دایکوباوکدایە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The pleasure of the Lord lies in the pleasure of the parents, and the displeasure of the Lord lies in the displeasure of the parents.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (1899) وصححه ابن حبان والحاكم</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-43">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">43</div>
+        <div class="chapter-pill">پەیوەندی خزمایەتی و بەرەکەتی تەمەن • Kinship Ties & Abundant Provision</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَنَسِ بْنِ مَالِكٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ أَحَبَّ أَنْ يُبْسَطَ لَهُ فِي رِزْقِهِ، وَيُنْسَأَ لَهُ فِي أَثَرِهِ، فَلْيَصِلْ رَحِمَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک پێی خۆشە ڕزق و ڕۆزی فراوان بێت و بەرەکەت بخرێتە تەمەنیەوە، با پەیوەندی خزمایەتی بەهێز بکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever loves to have his provision expanded and his lifespan blessed and extended, let him maintain his ties of kinship.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (2067)، ومسلم (2557)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-44">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">44</div>
+        <div class="chapter-pill">ڕازیبوون بە پەروەردگار و ئیسلام • Contentment with Allah & Islam</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (النووي والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي سَعِيدٍ الْخُدْرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ قَالَ: رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلامِ دِينًا، وَبِمُحَمَّدٍ رَسُولاً، وَجَبَتْ لَهُ الْجَنَّةُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک بە دڵ بڵێت: ڕازی بووم بەوەی خوای پەروەردگارم بێت، و ئیسلام ئایینم بێت، و محەممەد پێغەمبەرم بێت، ئەوا چوونە بەهەشتی بۆ دەبێت بە پێویست.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever says: 'I am content with Allah as my Lord, with Islam as my religion, and with Muhammad as my Messenger,' Paradise is assured for him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه أبو داود (1529) وصححه الحاكم والنووي والألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-45">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">45</div>
+        <div class="chapter-pill">خێر و چاکەی حاڵی باوەڕدار • The Remarkable State of a Believer</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ صُهَيْبٍ الرُّومِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">عَجَبًا لأَمْرِ الْمُؤْمِنِ، إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ، وَلَيْسَ ذَاكَ لأَحَدٍ إِلاَّ لِلْمُؤْمِنِ: إِنْ أَصَابَتْهُ سَرَّاءُ شَكَرَ فَكَانَ خَيْرًا لَهُ، وَإِنْ أَصَابَتْهُ ضَرَّاءُ صَبَرَ فَكَانَ خَيْرًا لَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">سەرسوڕمێنەرە بارودۆخی باوەڕدار! هەموو کارێکی خێرە بۆی، ئەمەش بۆ کەس نییە تەنها باوەڕدار نەبێت: ئەگەر خۆشی و نیعمەتێکی بەسەربێت سوپاسی خودا دەکات و دەبێت بە خێر بۆی، و ئەگەر ناڕەحەتی و نەهامەتییەکی تووش بێت ئارامگری دەکات و دەبێت بە خێر بۆی.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">How wonderful is the case of a believer, there is good for him in everything and this applies only to a believer. If prosperity attends him, he expresses gratitude to Allah and that is good for him; and if adversity befalls him, he endures patiently and that is good for him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2999)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-46">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">46</div>
+        <div class="chapter-pill">سوودگەیاندن و دڵخۆشکردنی موسڵمان • Benefiting Humanity & Bringing Joy</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح بشواهده (الألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عُمَرَ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">أَحَبُّ النَّاسِ إِلَى اللَّهِ أَنْفَعُهُمْ لِلنَّاسِ، وَأَحَبُّ الأَعْمَالِ إِلَى اللَّهِ سُرُورٌ تُدْخِلُهُ عَلَى مُسْلِمٍ، أَوْ تَكْشِفُ عَنْهُ كُرْبَةً، أَوْ تَقْضِي عَنْهُ دَيْنًا، أَوْ تَطْرُدُ عَنْهُ جُوعًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">خۆشەویستترینی خەڵکی لەلای خودا ئەو کەسەیە کە زۆرترین سوود بە خەڵکی دەگەیەنێت، و خۆشەویستترینی کردەوەکان لەلای خودا شادی و دڵخۆشییەکە بیخەیتە دڵی موسڵمانێکەوە، یاخود خەم و تەنگانەیەکی لەسەر هەڵگریت، یاخود قەرزێکی لەسەر بدەیتەوە، یاخود برسییەتییەکی لێ دووربخەیتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The most beloved of people to Allah is the one who brings the most benefit to people, and the most beloved deed to Allah is joy that you introduce into the heart of a Muslim, or alleviating his grief, or settling his debt, or satisfying his hunger.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الطبراني وحسنه الألباني وصححه بشواهده في صحيح الجامع (176)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-47">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">47</div>
+        <div class="chapter-pill">حەرامێتی پچڕاندنی خزمایەتی • Severing Ties of Kinship</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ جُبَيْرِ بْنِ مُطْعِمٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا يَدْخُلُ الْجَنَّةَ قَاطِعٌ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەو کەسەی کە پەیوەندی خزمایەتی دەپچڕێنێت، ناچێتە بەهەشتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The one who severs ties of kinship will not enter Paradise.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (5984)، ومسلم (2556)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-48">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">48</div>
+        <div class="chapter-pill">حەرامێتی فێڵ و غەش • Prohibition of Cheating & Deceit</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ غَشَّنَا فَلَيْسَ مِنَّا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک فێڵ و غەشمان لێ بکات، لە ئێمە نییە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever deceives or cheats us is not one of us.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (101)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-49">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">49</div>
+        <div class="chapter-pill">باشترین زیکر و باشترین دوعا • The Best Dhikr & Supplication</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن (الترمذي) وصححه الحاكم</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ جَابِرِ بْنِ عَبْدِ اللَّهِ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">أَفْضَلُ الذِّكْرِ: لا إِلَهَ إِلاَّ اللَّهُ، وَأَفْضَلُ الدُّعَاءِ: الْحَمْدُ لِلَّهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">باشترین و بەرزترین زیکر بریتییە لە: (لَا إِلَهَ إِلَّا اللَّهُ)، و باشترین و بەسوودترین دوعایش بریتییە لە: (الْحَمْدُ لِلَّهِ).</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The best remembrance is 'La ilaha illallah' (There is no deity worthy of worship except Allah), and the best supplication is 'Al-hamdu lillah' (All praise is due to Allah).</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (3383) وابن ماجه (3800) وحسنه وصححه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-50">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">50</div>
+        <div class="chapter-pill">چاکترینی خەڵکی بۆ خێزان و هاوسەری • Best Character Towards Family</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَكْمَلُ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا، وَخِيَارُكُمْ خِيَارُكُمْ لِنِسَائِهِمْ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">کامڵترین و پێگەیشتووترین باوەڕدار لە باوەڕەکەیدا ئەو کەسەیە کە خاوەنی جوانترین ڕەوشتە، و باشترین و چاکترینی ئێوە ئەوانەن کە لە هەمووان چاکتر و بەڕێزترن بەرامبەر بە خێزان و هاوسەرەکانیان.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The most complete of believers in faith are those with the best character, and the best of you are those who are best to their wives.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (1162) وقال: حديث حسن صحيح، وأحمد (7396)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-51">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">51</div>
+        <div class="chapter-pill">برایەتی و حەرامێتی زۆرداری و بێڕێزی • Islamic Brotherhood & Forbidding Injustice</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا تَحَاسَدُوا، وَلا تَنَاجَشُوا، وَلا تَبَاغَضُوا، وَلا تَدَابَرُوا، وَلا يَبِعْ بَعْضُكُمْ عَلَى بَيْعِ بَعْضٍ، وَكُونُوا عِبَادَ اللَّهِ إِخْوَانًا، الْمُسْلِمُ أَخُو الْمُسْلِمِ: لا يَظْلِمُهُ، وَلا يَخْذُلُهُ، وَلا يَحْقِرُهُ، التَّقْوَى هَاهُنَا - وَيُشِيرُ إِلَى صَدْرِهِ ثَلاثَ مَرَّاتٍ - بِحَسْبِ امْرِئٍ مِنَ الشَّرِّ أَنْ يَحْقِرَ أَخَاهُ الْمُسْلِمَ، كُلُّ الْمُسْلِمِ عَلَى الْمُسْلِمِ حَرَامٌ: دَمُهُ، وَمَالُهُ، وَعِرْضُهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">حەسوودی بە یەکتر مەبەن، و لە کڕین و فرۆشتندا نرخی شت بۆ فریودان بەرز مەکەنەوە، و ڕقتان لە یەکتر نەبێت، و پشت لە یەکتر مەکەن، و لەسەر کڕینی یەکتر مامەڵە مەکەن، و ببن بە بەندەی خودای برای یەکتر؛ موسڵمان برای موسڵمانە: ستەمی لێ ناکات، و لە کاتی تەنگانەدا بە تەنیا جێی ناهێڵێت، و بە کەمی نازانێت، تەقوا و لەخواترسی لێرەدایە - و سێ جار ئاماژەی بە سنگ و دڵی خۆی کرد - بۆ مرۆڤ لە بەدی و خراپە بەسە کە برا موسڵمانەکەی بە کەم بزانێت، هەموو موسڵمانێک خوێنی و ماڵی و نامووسی لەسەر موسڵمانی تر حەرام و پارێزراوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Do not envy one another, do not inflate prices against one another, do not hate one another, do not turn away from one another, do not undercut one another in trade, and be servants of Allah, brothers. A Muslim is a brother of a Muslim: he does not oppress him, nor abandon him, nor look down upon him. Piety is here—and he pointed to his chest three times. It is evil enough for a man to despise his Muslim brother. All of a Muslim is sacred to another Muslim: his blood, his wealth, and his honor.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2564)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-52">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">52</div>
+        <div class="chapter-pill">پابەندبوون بە سوننەت و ڕەتکردنەوەی داهێنراو • Adhering to the Sunnah & Rejecting Innovation</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أُمِّ الْمُؤْمِنِينَ عَائِشَةَ رَضِيَ اللَّهُ عَنْهَا</div>
+
+    <div class="arabic-text">مَنْ أَحْدَثَ فِي أَمْرِنَا هَذَا مَا لَيْسَ فِيهِ فَهُوَ رَدٌّ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک شتێکی نوێ لەم دینەماندا دابهێنێت کە لە بنەمای دینەکەدا نەبێت، ئەوا ئەو کارەی ڕەتکراوەیە و قبووڵ ناکرێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever innovates into this affair of ours something which is not from it, it will be rejected.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (2697)، ومسلم (1718)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-53">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">53</div>
+        <div class="chapter-pill">حەڵاڵ و حەرام و پاکێتی دڵ • The Halal, Haram & Purity of the Heart</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنِ النُّعْمَانِ بْنِ بَشِيرٍ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">إِنَّ الْحَلالَ بَيِّنٌ، وَإِنَّ الْحَرَامَ بَيِّنٌ، وَبَيْنَهُمَا مُشْتَبِهَاتٌ لا يَعْلَمُهُنَّ كَثِيرٌ مِنَ النَّاسِ، فَمَنِ اتَّقَى الشُّبُهَاتِ اسْتَبْرَأَ لِدِينِهِ وَعِرْضِهِ، وَمَنْ وَقَعَ فِي الشُّبُهَاتِ وَقَعَ فِي الْحَرَامِ... أَلا وَإِنَّ فِي الْجَسَدِ مُضْغَةً إِذَا صَلَحَتْ صَلَحَ الْجَسَدُ كُلُّهُ، وَإِذَا فَسَدَتْ فَسَدَ الْجَسَدُ كُلُّهُ، أَلا وَهِيَ الْقَلْبُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی حەڵاڵ ئاشکرا و ڕوونە، و حەرامیش ئاشکرا و ڕوونە، و لە نێوانیشیاندا کۆمەڵێک شتی گوماناوی هەن کە زۆربەی خەڵکی دروستییەکەی نازانن، جا هەر کەسێک خۆی لە گومانەکان بپارێزێت دین و نامووسی خۆی پاراستووە، و هەر کەسێک بکەوێتە ناو گومانەکانەوە دەکەوێتە ناو حەرامەوە... ئاگاداربن پارچە گۆشتێک لە جەستەدا هەیە ئەگەر چاک بێت سەرجەم جەستە چاک دەبێت، و ئەگەر خراپ بێت سەرجەم جەستە خراپ دەبێت، ئاگاداربن ئەویش دڵە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Verily, what is lawful is clear and what is unlawful is clear, and between them are doubtful matters which many people do not know. Whoever guards against doubtful matters clears himself in regard to his religion and honor, but whoever falls into doubtful matters falls into that which is unlawful... Truly, in the body there is a morsel of flesh: if it is sound, the whole body is sound; and if it is corrupt, the whole body is corrupt. Truly, it is the heart.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (52)، ومسلم (1599)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-54">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">54</div>
+        <div class="chapter-pill">گۆڕینی خراپە و بەرگریکردن لە چاکە • Changing Evil & Protecting Good</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي سَعِيدٍ الْخُدْرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ رَأَى مِنْكُمْ مُنْكَرًا فَلْيُغَيِّرْهُ بِيَدِهِ، فَإِنْ لَمْ يَسْتَطِعْ فَبِلِسَانِهِ، فَإِنْ لَمْ يَسْتَطِعْ فَبِقَلْبِهِ، وَذَلِكَ أَضْعَفُ الإِيمَانِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر یەکێکتان خراپەیەکی بینی با بە دەستی بیگۆڕێت، ئەگەر نەیتوانی با بە زمانی ڕێگری لێ بکات، ئەگەر نەیتوانی با بە دڵی لێی ناڕازی بێت، و ئەوەش لاوازترین پلەی باوەڕە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever of you sees an evil, let him change it with his hand; and if he is not able, then with his tongue; and if he is not able, then with his heart—and that is the weakest of faith.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (49)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-55">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">55</div>
+        <div class="chapter-pill">پشتکردن لە دونیاپەرستی و بەدەستهێنانی خۆشەویستی خوا • Asceticism & Love of Allah and People</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن (النووي) وصحيح لغيره (الألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ سَهْلِ بْنِ سَعْدٍ السَّاعِدِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَتَى النَّبِيَّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ رَجُلٌ، فَقَالَ: يَا رَسُولَ اللَّهِ! دُلَّنِي عَلَى عَمَلٍ إِذَا عَمِلْتُهُ أَحَبَّنِي اللَّهُ وَأَحَبَّنِي النَّاسُ، فَقَالَ: «ازْهَدْ فِي الدُّنْيَا يُحِبَّكَ اللَّهُ، وَازْهَدْ فِيمَا فِي أَيْدِي النَّاسِ يُحِبَّكَ النَّاسُ».</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پیاوێک هات بۆ لای پێغەمبەر (ﷺ) و وتی: ئەی پێغەمبەری خودا! ڕێنموونیم بکە بۆ کردەوەیەک کە ئەگەر ئەنجامی بدەم خوای گەورە منی خۆشبوێت و خەڵکیش منیان خۆشبوێت، پێغەمبەر (ﷺ) فەرمووی: «چاوچنۆک مەبە بۆ دونیا خوای گەورە تۆی خۆشدەوێت، و چاوت لەوە نەبێت کە لە دەستی خەڵکیدایە خەڵکیش تۆیان خۆشدەوێت».</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">A man came to the Prophet (ﷺ) and said: 'O Messenger of Allah, direct me to an act which, if I do it, Allah will love me and people will love me.' He said: 'Be detached from this world, Allah will love you; and be detached from what is in people's hands, people will love you.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه ابن ماجه (4102) وصححه النووي والألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-56">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">56</div>
+        <div class="chapter-pill">حەرامێتی زیانگەیاندن بە خۆ و خەڵک • No Harming nor Reciprocating Harm</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح بشواهده (النووي وابن الصلاح)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عُبَادَةَ بْنِ الصَّامِتِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا ضَرَرَ وَلا ضِرَارَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هیچ زیانێک بۆ خۆ دروست نییە، و زیانگەیاندن بە بەرامبەریش ڕێگەپێنەدراوە لە ئیسلامدا.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">There should be neither harming nor reciprocating harm.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه ابن ماجه (2340)، والإمام أحمد، وصححه النووي والألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-57">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">57</div>
+        <div class="chapter-pill">ئادابی دادوەری و مافەکان • Judicial Principles & Evidence</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أصله في الصحيحين)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَبَّاسٍ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">لَوْ يُعْطَى النَّاسُ بِدَعْوَاهُمْ، لادَّعَى رِجَالٌ أَمْوَالَ قَوْمٍ وَدِمَاءَهُمْ، لَكِنِ الْبَيِّنَةُ عَلَى الْمُدَّعِي، وَالْيَمِينُ عَلَى مَنْ أَنْكَرَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەگەر بە گوێرەی تەنها داواکاری و ئیدعاکان ماف بە خەڵکی بدرایە، کەسانێک داوای ماڵ و خوێنی خەڵکیان دەکرد، بەڵام بەڵگە و شایەت لەسەر داواکارە، و سوێندخواردنیش لەسەر ئەو کەسەیە کە دان بە تاوانەکەدا نانێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Were people to be given everything they claimed, men would lay claim to the property of others and their blood. But the burden of proof is upon the claimant, and the oath is upon the one who denies.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البيهقي في السنن، وأصله في الصحيحين</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-58">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">58</div>
+        <div class="chapter-pill">میانڕەوی لە خواردن و پاراستنی تەندروستی • Moderation in Eating & Health</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنِ الْمِقْدَامِ بْنِ مَعْدِيكَرِبَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَا مَلأَ آدَمِيٌّ وِعَاءً شَرًّا مِنْ بَطْنٍ، بِحَسْبِ ابْنِ آدَمَ أُكُلاتٌ يُقِمْنَ صُلْبَهُ، فَإِنْ كَانَ لا مَحَالَةَ فَثُلُثٌ لِطَعَامِهِ، وَثُلُثٌ لِشَرَابِهِ، وَثُلُثٌ لِنَفَسِهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">مرۆڤ هیچ دەفرێکی خراپتر لە سکی خۆی پڕ نەکردووە، بەشی نەوەی ئادەم چەند پاروویەکە کە پشتی پێ ڕابگرێت، خۆ ئەگەر هەر ناچار بوو زیاتر بخوات با سێیەکی بۆ خواردنەکەی بێت، و سێیەکی بۆ خواردنەوەکەی، و سێیەکی بۆ هەناسەدانی بەجێبهێڵێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">A human being fills no vessel worse than his stomach. A few morsels are sufficient for a person to keep his back straight. But if he must, then one third for his food, one third for his drink, and one third for his breath.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2380) وقال: حديث حسن صحيح، وأحمد (17161)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-59">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">59</div>
+        <div class="chapter-pill">چوار کلیلی بەهەشت • Four Keys to Enter Paradise in Peace</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (الترمذي: حسن صحيح)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ سَلامٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">يَا أَيُّهَا النَّاسُ! أَفْشُوا السَّلامَ، وَأَطْعِمُوا الطَّعَامَ، وَصِلُوا الأَرْحَامَ، وَصَلُّوا بِاللَّيْلِ وَالنَّاسُ نِيَامٌ، تَدْخُلُوا الْجَنَّةَ بِسَلامٍ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەی خەڵکینە! سەلام بڵاوبکەنەوە لە نێوانتاندا، و خواردن ببەخشن بە لێقەوماوان، و پەیوەندی خزمایەتی بپارێزن، و بە شەودا نوێژ بکەن کاتێک خەڵکی خەوتوون، بە سەلامەتی و ئارامی دەچنە بەهەشتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">O people! Spread peace, feed the hungry, uphold ties of kinship, and pray at night while people are asleep, you will enter Paradise in peace.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2485) وقال: حديث حسن صحيح، وابن ماجه (1334)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-60">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">60</div>
+        <div class="chapter-pill">پاداشتی درەخت ڕواندن و کشتوکاڵ • Reward of Planting Trees & Agriculture</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَنَسِ بْنِ مَالِكٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَا مِنْ مُسْلِمٍ يَغْرِسُ غَرْسًا، أَوْ يَزْرَعُ زَرْعًا، فَيَأْكُلُ مِنْهُ طَيْرٌ أَوْ إِنْسَانٌ أَوْ بَهِيمَةٌ، إِلاَّ كَانَ لَهُ بِهِ صَدَقَةٌ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هیچ موسڵمانێک نییە نەمامێک بڕوێنێت، یاخود کشتوکاڵێک بکات، جا باڵندەیەک یان مرۆڤێک یان ئاژەڵێک لێی بخوات، ئیللا خوای گەورە پاداشتی خێر و سەدەقەی بۆ دەنووسێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">There is no Muslim who plants a tree or sows seeds, and then a bird, a person, or an animal eats from it, but that it is regarded as a charity for him.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (2320)، ومسلم (1553)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-61">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">61</div>
+        <div class="chapter-pill">گرنگی نوێژی بەیانی و عیشا بە جەماعەت • Fajr & Isha in Congregation</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِنَّ أَثْقَلَ صَلاةٍ عَلَى الْمُنَافِقِينَ صَلاةُ الْعِشَاءِ وَصَلاةُ الْفَجْرِ، وَلَوْ يَعْلَمُونَ مَا فِيهِمَا لأَتَوْهُمَا وَلَوْ حَبْوًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی قورسترین نوێژ لەسەر دووڕووەکان (مونافیقان) نوێژی عیشا و نوێژی بەیانییە، و ئەگەر بییانزانیایە چ پاداشت و فەزڵێکی گەورەیان تێدایە بە چۆکدادان و خشینیش بووایە دەهاتن بۆیان.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Indeed, the most burdensome prayers for the hypocrites are the Isha prayer and the Fajr prayer. If they only knew what they contain, they would come to them even if they had to crawl.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (657)، ومسلم (651)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-62">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">62</div>
+        <div class="chapter-pill">فەزڵی نوێژی بەیانی و عەسر • Virtue of Fajr & Asr Prayers</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي مُوسَى الأَشْعَرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ صَلَّى الْبَرْدَيْنِ دَخَلَ الْجَنَّةَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک نوێژی بەیانی و نوێژی عەسر ئەنجام بدات بە شێوەیەکی بەردەوام دەچێتە بەهەشتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever performs the two cool prayers (Fajr and Asr) will enter Paradise.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (574)، ومسلم (635)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-63">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">63</div>
+        <div class="chapter-pill">پارێزگاری خودا بۆ ئەنجامدەری نوێژی بەیانی • Under Allah's Protection After Fajr</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ جُنْدُبِ بْنِ عَبْدِ اللَّهِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِ، فَلا يَطْلُبَنَّكُمُ اللَّهُ مِنْ ذِمَّتِهِ بِشَيْءٍ، فَإِنَّهُ مَنْ يَطْلُبْهُ مِنْ ذِمَّتِهِ بِشَيْءٍ يُدْرِكْهُ ثُمَّ يَكُبَّهُ عَلَى وَجْهِهِ فِي نَارِ جَهَنَّمَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک نوێژی بەیانی بکات ئەوا لە پەنا و پارێزگاری خودایە، کەواتە وریابن کەسێک ئازار نەدەن کە لە پەنای خودادایە، چونکە هەر کەسێک کەسێک ئازار بدات کە لە پارێزگاری خودادایە، خوا لێپێچینەوەی لەگەڵدا دەکات و سەرەوژێر فڕێی دەداتە ناو ئاگری دۆزەخەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever offers the dawn prayer is under the protection of Allah. So be careful that Allah does not call you to account for infringing upon His protection...</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (657)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-64">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">64</div>
+        <div class="chapter-pill">پاداشتی دە چاکە بۆ هەر پیتێکی قورئان • Ten Rewards for Each Letter of the Quran</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ مَسْعُودٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ قَرَأَ حَرْفًا مِنْ كِتَابِ اللَّهِ فَلَهُ بِهِ حَسَنَةٌ، وَالْحَسَنَةُ بِعَشْرِ أَمْثَالِهَا، لا أَقُولُ: الم حَرْفٌ، وَلَكِنْ: أَلِفٌ حَرْفٌ، وَلامٌ حَرْفٌ، وَمِيمٌ حَرْفٌ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک پیتێک لە پەڕتووکی خودا بخوێنێتەوە ئەوا چاکەیەکی بۆ دەنووسرێت، و هەر چاکەیەکیش بە دە بەرامبەر پاداشت دەدرێتەوە، ناڵێم: (الم) یەک پیتە، بەڵکو: ئەلیف پیتێکە، و لام پیتێکە، و میم پیتێکە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever recites a letter from the Book of Allah, he will receive one good deed, and ten like it. I do not say that Alif-Lam-Meem is one letter, but Alif is a letter, Lam is a letter, and Meem is a letter.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2910) وقال: حديث حسن صحيح</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-65">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">65</div>
+        <div class="chapter-pill">فەزڵی خوێنەری شارەزای قورئان • Proficiency in Quran Recitation</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَائِشَةَ رَضِيَ اللَّهُ عَنْهَا</div>
+
+    <div class="arabic-text">الْمَاهِرُ بِالْقُرْآنِ مَعَ السَّفَرَةِ الْكِرَامِ الْبَرَرَةِ، وَالَّذِي يَقْرَأُ الْقُرْآنَ وَيَتَتَعْتَعُ فِيهِ، وَهُوَ عَلَيْهِ شَاقٌّ، لَهُ أَجْرَانِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەو کەسەی کە لە خوێندنەوەی قورئاندا شارەزا و لێهاتووە هاوڕێی فریشتە بەڕێز و چاکەکارەکان دەبێت، و ئەو کەسەشی کە قورئان دەخوێنێت و دەمی تێکدەچێت و بە قورسی بۆی دەخوێندرێت، ئەوا دوو پاداشتی بۆ هەیە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The one who is proficient in the recitation of the Quran will be with the honorable, obedient noble angels; and he who recites the Quran and stammers in it, and it is difficult for him, will have two rewards.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (4937)، ومسلم (798)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-66">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">66</div>
+        <div class="chapter-pill">قورئان تکاکاری ڕۆژی قیامەتە • The Quran as an Intercessor</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي أُمَامَةَ الْبَاهِلِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">اقْرَؤُوا الْقُرْآنَ، فَإِنَّهُ يَأْتِي يَوْمَ الْقِيَامَةِ شَفِيعًا لأَصْحَابِهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">قورئانی پیرۆز بخوێنن، چونکە بەڕاستی لە ڕۆژی دواییدا دێتە مەیدان و دەبێت بە تکاکار و شەفاعەتکار بۆ خوێنەرەکانی.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Read the Quran, for indeed it will come on the Day of Resurrection as an intercessor for its companions.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (804)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-67">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">67</div>
+        <div class="chapter-pill">پاداشتی شەش ڕۆژەی شەوال • Six Days of Shawwal After Ramadan</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي أَيُّوبَ الأَنْصَارِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ صَامَ رَمَضَانَ ثُمَّ أَتْبَعَهُ سِتًّا مِنْ شَوَّالٍ، كَانَ كَصِيَامِ الدَّهْرِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک مانگی ڕەمەزان بەڕۆژوو بێت و پاشان شەش ڕۆژ لە مانگی شەوال بەدوایدا بەڕۆژوو بێت، وەک ئەوە وایە کە سەرانسەری ساڵەکە بەڕۆژوو بووبێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever fasts Ramadan, then follows it with six days from Shawwal, it is as if he fasted for a whole year.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (1164)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-68">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">68</div>
+        <div class="chapter-pill">فەزڵی عەمرە لە مانگی ڕەمەزاندا • Umrah in Ramadan Equivalent to Hajj</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَبَّاسٍ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">عُمْرَةٌ فِي رَمَضَانَ تَقْضِي حَجَّةً مَعِي.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەنجامدانی عەمرەیەک لە مانگی ڕەمەزاندا، هاوتای خێری حەجکردنێکە لەگەڵ مندا.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Performing Umrah in Ramadan is equivalent to performing Hajj with me.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (1863)، ومسلم (1256)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-69">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">69</div>
+        <div class="chapter-pill">فەزڵی عەمرە و حەجی وەرگیراو • Virtue of Accepted Hajj & Umrah</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الْعُمْرَةُ إِلَى الْعُمْرَةِ كَفَّارَةٌ لِمَا بَيْنَهُمَا، وَالْحَجُّ الْمَبْرُورُ لَيْسَ لَهُ جَزَاءٌ إِلاَّ الْجَنَّةُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">عەمرەیەک تا عەمرەیەکی تر دەبێتە کەفارەت و سڕینەوەی گوناهەکانی نێوانیان، و حەجی وەرگیراویش جگە لە بەهەشت هیچ پاداشتێکی تری نییە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">From one Umrah to the next is an expiation for whatever sins occur between them, and for an accepted Hajj there is no reward except Paradise.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (1773)، ومسلم (1349)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-70">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">70</div>
+        <div class="chapter-pill">دوعاکردن بۆ برای موسڵمان لە غەیبدا • Supplicating for a Brother in His Absence</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي الدَّرْدَاءِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَا مِنْ عَبْدٍ مُسْلِمٍ يَدْعُو لأَخِيهِ بِظَهْرِ الْغَيْبِ، إِلاَّ قَالَ الْمَلَكُ: وَلَكَ بِمِثْلٍ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هیچ بەندەیەکی موسڵمان نییە لە غیابدا دوعای خێر بۆ براکەی بکات، ئیللا فریشتە پێی دەڵێت: ئامین و بۆ تۆش هاوشێوەی ئەوە هەبێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">No Muslim servant supplicates for his brother behind his back but that the angel says: 'And for you the same.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2732)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-71">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">71</div>
+        <div class="chapter-pill">نزیکترین حاڵەت لە پەروەردگار • Nearest State to Allah in Prostration</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَقْرَبُ مَا يَكُونُ الْعَبْدُ مِنْ رَبِّهِ وَهُوَ سَاجِدٌ، فَأَكْثِرُوا الدُّعَاءَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">نزیکترین کات کە بەندە لێیەوە نزیک بێت لە پەروەردگارییەوە ئەو کاتەیە کە لە سوجدەدایە، کەواتە زۆر دوعا و پاڕانەوە بکەن لە سوجدەدا.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The nearest a servant comes to his Lord is when he is in prostration, so supplicate abundantly.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (482)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-72">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">72</div>
+        <div class="chapter-pill">دابەزینی خودا لە سێیەکی کۆتایی شەودا • Descent of Allah in Last Third of Night</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">يَنْزِلُ رَبُّنَا تَبَارَكَ وَتَعَالَى كُلَّ لَيْلَةٍ إِلَى السَّمَاءِ الدُّنْيَا حِينَ يَبْقَى ثُلُثُ اللَّيْلِ الآخِرُ، يَقُولُ: مَنْ يَدْعُونِي فَأَسْتَجِيبَ لَهُ؟ مَنْ يَسْأَلُنِي فَأُعْطِيَهُ؟ مَنْ يَسْتَغْفِرُنِي فَأَغْفِرَ لَهُ؟</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پەروەردگارمان هەموو شەوێک کاتێک سێیەکی کۆتایی شەو دەمێنێت دادەبەزێتە ئاسمانی دونیا و دەفەرموێت: کێیە لێم بپاڕێتەوە تا وەڵامی بدەمەوە؟ کێیە داوای شتێکم لێ بکات تا پێی ببەخشم؟ کێیە داوای لێخۆشبوونم لێ بکات تا لێی خۆش ببم؟</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Our Lord, Blessed and Exalted is He, descends every night to the nearest heaven during the last third of the night, saying: 'Who calls upon Me so that I may respond? Who asks of Me so that I may give? Who seeks My forgiveness so that I may forgive him?'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (1145)، ومسلم (758)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-73">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">73</div>
+        <div class="chapter-pill">تەوبەکردن پێش هەڵهاتنی خۆر لە خۆرئاواوە • Repentance Before Sun Rises from the West</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ تَابَ قَبْلَ أَنْ تَطْلُعَ الشَّمْسُ مِنْ مَغْرِبِهَا، تَابَ اللَّهُ عَلَيْهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک تەوبە بکات پێش ئەوەی خۆر لە ڕۆژئاواوە هەڵبێت (نیشانە گەورەکانی قیامەت)، خوای گەورە تەوبەکەی لێ قبووڵ دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever repents before the sun rises from the west, Allah will accept his repentance.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2703)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-74">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">74</div>
+        <div class="chapter-pill">داوای لێخۆشبوون و ئیستیغفاری پێغەمبەر ﷺ • Seeking Forgiveness Over 70 Times a Day</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">وَاللَّهِ إِنِّي لأَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ فِي الْيَوْمِ أَكْثَرَ مِنْ سَبْعِينَ مَرَّةً.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">سوێند بە خودا بەڕاستی من لە ڕۆژێکدا زیاتر لە حەفتا جار داوای لێخۆشبوون لە خودا دەکەم و تەوبەی بۆ دەبەمەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">By Allah, I seek forgiveness from Allah and repent to Him more than seventy times a day.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (6307)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-75">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">75</div>
+        <div class="chapter-pill">سەروەری داوای لێخۆشبوون (سيد الاستغفار) • The Master Supplication for Forgiveness</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ شَدَّادِ بْنِ أَوْسٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">سَيِّدُ الاسْتِغْفَارِ أَنْ تَقُولَ: اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لا يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">سەروەری زیکرەکانی داوای لێخۆشبوون ئەوەیە کە بڵێیت: خودایە تۆ پەروەردگاری منی، هیچ پەرستراوێک نییە شایەنی پەرستن بێت جگە لە تۆ، تۆ منت دروستکردووە و من بەندەی تۆم، و لەسەر پەیمان و بەڵێنی تۆم تا ئەو پەڕی توانام، پەنات پێ دەگرم لە شەڕی هەموو ئەو خراپانەی کە کردوومە، دان دەنێم بە نیعمەتەکانت بەسەرمەوە و دان دەنێم بە گوناه و تاوانەکانمدا، لێم خۆشبە چونکە هیچ کەسێک لە گوناهەکان خۆش نابێت جگە لە تۆ.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The master invocation for seeking forgiveness is to say: 'O Allah, You are my Lord, there is no god but You. You created me and I am Your servant, and I uphold Your covenant and promise as much as I am able. I seek refuge in You from the evil of what I have done. I acknowledge Your favors upon me and I confess my sins, so forgive me, for none forgives sins except You.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (6306)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-76">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">76</div>
+        <div class="chapter-pill">فەزڵی سەد جار (سبحان الله وبحمده) • Subhan Allahi wa Bihamdih 100 Times</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ قَالَ حِينَ يُصْبِحُ وَحِينَ يُمْسِي: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ مِائَةَ مَرَّةٍ، لَمْ يَأْتِ أَحَدٌ يَوْمَ الْقِيَامَةِ بِأَفْضَلَ مِمَّا جَاءَ بِهِ، إِلاَّ أَحَدٌ قَالَ مِثْلَ مَا قَالَ أَوْ زَادَ عَلَيْهِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک بەیانیان و ئێواران سەد جار بڵێت: (سُبْحَانَ اللَّهِ وَبِحَمْدِهِ)، لە ڕۆژی قیامەتدا هیچ کەسێک کردەوەی چاکتری لەو پێنەبووە مەگەر کەسێک نەبێت هاوشێوەی ئەو یان زیاتری وتبێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever says in the morning and evening, 'Subhan Allahi wa bihamdih' one hundred times, no one will come on the Day of Resurrection with anything better than what he has brought, except someone who said the same or more.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2692)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-77">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">77</div>
+        <div class="chapter-pill">حەرامێتی سوێندخواردن بە غەیری خودا • Prohibition of Swearing by Other than Allah</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح بشواهده (الحاكم والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عُمَرَ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">مَنْ حَلَفَ بِغَيْرِ اللَّهِ فَقَدْ كَفَرَ أَوْ أَشْرَكَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک سوێند بە غەیری خوای گەورە بخوات، ئەوا کوفر یان شیرکی کردووە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever swears by other than Allah has committed an act of disbelief or polytheism.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (1535) وصححه، وأبو داود (3251)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-78">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">78</div>
+        <div class="chapter-pill">مەترسی تەرککردنی نوێژی عەسر • Warning Against Neglecting Asr Prayer</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ بُرَيْدَةَ بْنِ الْحُصَيْبِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ تَرَكَ صَلاةَ الْعَصْرِ فَقَدْ حَبِطَ عَمَلُهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک نوێژی عەسر بە ئەنقەست بەجێبهێڵێت و نەیکات، بەڕاستی کردەوەکانی پووچەڵ دەبنەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever neglects the Asr prayer, his good deeds will be rendered null and void.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (553)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-79">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">79</div>
+        <div class="chapter-pill">جیاکەرەوەی باوەڕ و بێباوەڕی نوێژە • Prayer Between a Man & Disbelief</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ جَابِرِ بْنِ عَبْدِ اللَّهِ رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">إِنَّ بَيْنَ الرَّجُلِ وَبَيْنَ الشِّرْكِ وَالْكُفْرِ تَرْكَ الصَّلاةِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی لە نێوان مرۆڤ و شیرک و کوفردا تەنها بەجێهێشتنی نوێژە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Verily, between a man and polytheism and disbelief is the abandonment of prayer.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (82)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-80">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">80</div>
+        <div class="chapter-pill">پەیمانی نێوان ئێمە و ئەوان نوێژە • The Covenant of Prayer</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (الترمذي: حسن صحيح)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ بُرَيْدَةَ بْنِ الْحُصَيْبِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الْعَهْدُ الَّذِي بَيْنَنَا وَبَيْنَهُمُ الصَّلاةُ، فَمَنْ تَرَكَهَا فَقَدْ كَفَرَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ئەو پەیمان و بەڵێنەی لە نێوان ئێمە و ئەواندایە بریتییە لە ئەنجامدانی نوێژ، جا هەر کەسێک نوێژ بەجێبهێڵێت ئەوا بێباوەڕ بووە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The covenant that stands between us and them is the prayer; whoever abandons it has disbelieved.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2621) والنسائي (463) وصححه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-81">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">81</div>
+        <div class="chapter-pill">پێنج نوێژەکە و هەینی کەفارەتی گوناهەکانن • Five Prayers & Friday Expunging Sins</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الصَّلَوَاتُ الْخَمْسُ، وَالْجُمُعَةُ إِلَى الْجُمُعَةِ، وَرَمَضَانُ إِلَى رَمَضَانَ، مُكَفِّرَاتٌ مَا بَيْنَهُنَّ إِذَا اجْتُنِبَتِ الْكَبَائِرُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">پێنج نوێژە فەرزەکە، و نوێژی هەینی بۆ هەینی داهاتوو، و مانگی ڕەمەزان بۆ ڕەمەزانی داهاتوو، کەفارەت و سڕینەوەی گوناهەکانی نێوانیانن ئەگەر مرۆڤ لە گوناهە گەورەکان (کەبائیر) دووربکەوێتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The five daily prayers, from one Friday prayer to the next, and from one Ramadan to the next, are expiations for whatever sins occur between them, provided major sins are avoided.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (233)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-82">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">82</div>
+        <div class="chapter-pill">فەزڵی زوو ڕۆیشتن بۆ نوێژی هەینی بە پێ • Walking Early to Friday Congregation</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (الترمذي: حسن، وصححه الألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَوْسِ بْنِ أَوْسٍ الثَّقَفِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ غَسَّلَ يَوْمَ الْجُمُعَةِ وَاغْتَسَلَ، ثُمَّ بَكَّرَ وَابْتَكَرَ، وَمَشَى وَلَمْ يَرْكَبْ، وَدَنَا مِنَ الإِمَامِ فَاسْتَمَعَ وَلَمْ يَلْغُ، كَانَ لَهُ بِكُلِّ خُطْوَةٍ عَمَلُ سَنَةٍ: أَجْرُ صِيَامِهَا وَقِيَامِهَا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک لە ڕۆژی هەینیدا سەری بشوات و خۆی بشوات، پاشان زوو بەرەو مزگەوت بکەوێتەڕێ، و بە پێ بڕوات نەک بە سواری، و لە پێشنوێژ نزیک بکەوێتەوە و بە بێدەنگی گوێ بگرێت، بۆ هەر هەنگاوێکی کە دەینێت پاداشتی عیبادەتی ساڵێکی تەواوی بۆ دەنووسرێت: بە ڕۆژووەکانی و بە شەونوێژەکانیەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever washes his head and body on Friday, goes early on foot without riding, sits close to the Imam, listens attentively and does not engage in idle talk, for every step he takes he will have the reward of a year's fasting and praying.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه أبو داود (345) والترمذي (496) وصححه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-83">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">83</div>
+        <div class="chapter-pill">کاتژمێری وەڵامدانەوەی دوعا لە ڕۆژی هەینیدا • Hour of Acceptance on Friday</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">إِنَّ فِي الْجُمُعَةِ لَسَاعَةً، لا يُوَافِقُهَا عَبْدٌ مُسْلِمٌ، وَهُوَ قَائِمٌ يُصَلِّي، يَسْأَلُ اللَّهَ شَيْئًا، إِلاَّ أَعْطَاهُ إِيَّاهُ، وَأَشَارَ بِيَدِهِ يُقَلِّلُهَا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی لە ڕۆژی هەینیدا کاتژمێرێک هەیە، هیچ بەندەیەکی موسڵمان نییە لەو کاتەدا ڕێکبکەوێت و لە نوێژ و دوعادا داوای خێر لە خودا بکات ئیللا خوای گەورە پێی دەبەخشێت، و بە دەستی ئاماژەی بە کورتێتی ئەو کاتە کرد.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">There is an hour on Friday during which no Muslim servant asks Allah for anything good while standing in prayer, except that Allah gives it to him—and he pointed with his hand to indicate its shortness.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (935)، ومسلم (852)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-84">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">84</div>
+        <div class="chapter-pill">فەزڵی خوێندنی سوورەتی کەهف لە ڕۆژی هەینیدا • Surah Al-Kahf on Friday</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح بشواهده (الحاكم والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي سَعِيدٍ الْخُدْرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ قَرَأَ سُورَةَ الْكَهْفِ فِي يَوْمِ الْجُمُعَةِ، أَضَاءَ لَهُ مِنَ النُّورِ مَا بَيْنَ الْجُمُعَتَيْنِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک سوورەتی (الکهف) لە ڕۆژی هەینیدا بخوێنێت، خوای گەورە ڕووناکییەکی لە نێوان ئەو هەینییە بۆ هەینی داهاتوو بۆ ڕووناک دەکاتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever reads Surah Al-Kahf on the day of Friday, a light will shine for him between the two Fridays.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الحاكم والبيهقي وصححه الألباني في صحيح الجامع (6470)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-85">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">85</div>
+        <div class="chapter-pill">ڕێزگرتن لە هاوەڵان و حەرامێتی جنێودان پێیان • Respecting the Prophet's Companions</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي سَعِيدٍ الْخُدْرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا تَسُبُّوا أَصْحَابِي، فَوَالَّذِي نَفْسِي بِيَدِهِ لَوْ أَنَّ أَحَدَكُمْ أَنْفَقَ مِثْلَ أُحُدٍ ذَهَبًا، مَا أَدْرَكَ مُدَّ أَحَدِهِمْ وَلا نَصِيفَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">جنێو و بێڕێزی بە هاوەڵانم مەکەن، سوێند بەو خودایەی گیانی منی بەدەستە ئەگەر یەکێکتان بە قەدەر کێوی ئوحود زێڕ ببەخشێت ناگاتە پاداشتی مستێک یان نیوە مستێکی بەخشینی ئەوان.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Do not revile my companions! For by Him in Whose Hand is my soul, if one of you were to spend gold equal to Mount Uhud, it would not equal a handful of one of them or half of it.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (3673)، ومسلم (2540)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-86">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">86</div>
+        <div class="chapter-pill">سیفەتەکانی دووڕووی تەواو • Characteristics of a Pure Hypocrite</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">أَرْبَعٌ مَنْ كُنَّ فِيهِ كَانَ مُنَافِقًا خَالِصًا، وَمَنْ كَانَتْ فِيهِ خَصْلَةٌ مِنْهُنَّ كَانَتْ فِيهِ خَصْلَةٌ مِنَ النِّفَاقِ حَتَّى يَدَعَهَا: إِذَا اؤْتُمِنَ خَانَ، وَإِذَا حَدَّثَ كَذَبَ، وَإِذَا عَاهَدَ غَدَرَ، وَإِذَا خَاصَمَ فَجَرَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">چوار سیفەت هەن هەر کەسێک هەموویانی تێدابێت دووڕوویەکی تەواوە (مونافیق)، و هەر کەسێک خەسڵەتێکیانی تێدابێت خەسڵەتێکی دووڕوویی تێدایە تا ئەو کاتەی وازی لێ دەهێنێت: کاتێک ئەمانەتی پێ دەسپێردرێت خیانەت دەکات، و کاتێک قسە دەکات درۆ دەکات، و کاتێک پەیمان دەبەستێت دەیشکێنێت، و کاتێک دەمەقاڵێ دەکات لە سنوور دەردەچێت و زۆرداری دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever possesses four traits is a pure hypocrite, and whoever possesses one of them possesses a trait of hypocrisy until he leaves it: when he is trusted he betrays, when he speaks he lies, when he makes a covenant he breaks it, and when he disputes he acts unjustly.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (34)، ومسلم (58)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-87">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">87</div>
+        <div class="chapter-pill">سێ نیشانەی سەرەکی دووڕوو • Three Signs of a Hypocrite</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">آيَةُ الْمُنَافِقِ ثَلاثٌ: إِذَا حَدَّثَ كَذَبَ، وَإِذَا وَعَدَ أَخْلَفَ، وَإِذَا اؤْتُمِنَ خَانَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">نیشانەی دووڕوو (مونافیق) سێ شتن: کاتێک قسە دەکات درۆ دەکات، و کاتێک بەڵێن دەدات پەیمانەکەی دەشکێنێت، و کاتێک ئەمانەتی پێ دەسپێردرێت خیانەت دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The signs of a hypocrite are three: when he speaks he lies, when he makes a promise he breaks it, and when he is trusted he betrays.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (33)، ومسلم (59)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-88">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">88</div>
+        <div class="chapter-pill">بەخیلی بردن تەنها لە دوو شتدا دروستە • Permissible Envy Only in Two Matters</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ مَسْعُودٍ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا حَسَدَ إِلاَّ فِي اثْنَتَيْنِ: رَجُلٌ آتَاهُ اللَّهُ مَالاً فَسَلَّطَهُ عَلَى هَلَكَتِهِ فِي الْحَقِّ، وَرَجُلٌ آتَاهُ اللَّهُ الْحِكْمَةَ فَهُوَ يَقْضِي بِهَا وَيُعَلِّمُهَا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەخیلی و ئاواتخواستن بە پێگەی کەس دروست نییە تەنها لە دوو کەسدا نەبێت: کەسێک کە خودا سامانی پێ بەخشی بێت و بەسەر هەموویدا زاڵ بێت لە پێناوی حەق و خێردا بیبەخشێت، و کەسێک کە خودا دانایی و زانستی پێ بەخشی بێت بە پێی ئەو دادوەری بکات و خەڵکیشی فێر بکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Envy is not permitted except in two cases: a man whom Allah has given wealth and directed him to spend it rightfully, and a man whom Allah has given wisdom and he judges by it and teaches it.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (73)، ومسلم (816)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-89">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">89</div>
+        <div class="chapter-pill">مرۆڤ لەسەر ڕێبازی هاوڕێکەیەتی • A Man Follows the Religion of His Friend</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن (الترمذي) وصححه الألباني</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">الرَّجُلُ عَلَى دِينِ خَلِيلِهِ، فَلْيَنْظُرْ أَحَدُكُمْ مَنْ يُخَالِلُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">مرۆڤ لەسەر ئایین و ڕەوشتی هاوڕێ نزیکەکەیەتی، کەواتە با هەریەک لە ئێوە بە وردی سەرنج بدات بزانێت هاوڕێیەتی کێ دەکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">A man follows the religion of his close friend, so let each one of you look at whom he befriends.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه أبو داود (4833) والترمذي (2378) وحسنه الألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-90">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">90</div>
+        <div class="chapter-pill">نموونەی هاوەڵی چاک و هاوەڵی خراپ • Parable of Good & Bad Companions</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي مُوسَى الأَشْعَرِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَثَلُ الْجَلِيسِ الصَّالِحِ وَالْجَلِيسِ السَّوْءِ كَمَثَلِ حَامِلِ الْمِسْكِ وَنَافِخِ الْكِيرِ؛ فَحَامِلُ الْمِسْكِ إِمَّا أَنْ يُحْذِيَكَ، وَإِمَّا أَنْ تَبْتَاعَ مِنْهُ، وَإِمَّا أَنْ تَجِدَ مِنْهُ رِيحًا طَيِّبَةً، وَنَافِخُ الْكِيرِ إِمَّا أَنْ يُحْرِقَ ثِيَابَكَ، وَإِمَّا أَنْ تَجِدَ رِيحًا خَبِيثَةً.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">نموونەی هاوەڵی چاکەکار و هاوەڵی بەدکار وەک نموونەی هەڵگری میسک (بۆنخۆشکەر) و فووکەری ئاگردانی ئاسنگەر وایە؛ هەڵگری میسک یان ئەوەتا دیاریت پێ دەدات، یان لێی دەکڕیت، یان بۆنێکی خۆشی لێوە دەبیستیت؛ بەڵام فووکەری ئاگردانەکە یان جلەکانت دەسووتێنێت، یاخود بۆنێکی ناخۆشی لێوە دەچێژیت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The likeness of a righteous companion and an evil companion is like that of a musk-seller and a blacksmith bellows-blower: the musk-seller either gives you some, or you buy some, or you smell good fragrance; whereas the blacksmith either burns your clothes or you smell foul odor.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (5534)، ومسلم (2628)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-91">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">91</div>
+        <div class="chapter-pill">باشترینتان ڕەوشت جوانترینتانە • The Best Among You Have the Best Morals</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">إِنَّ مِنْ خِيَارِكُمْ أَحْسَنَكُمْ أَخْلاقًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">بەڕاستی لە باشترین و چاکترینی ئێوە ئەوانەن کە لە هەمووان خاوەنی جوانترین و پاکترین ڕەوشتن.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Indeed, the best among you are those who have the best character.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (6035)، ومسلم (2321)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-92">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">92</div>
+        <div class="chapter-pill">قورسترین شت لە تەرازووی قیامەتدا • The Heaviest Deed on the Scale</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن صحيح (الترمذي والألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي الدَّرْدَاءِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَا شَيْءٌ أَثْقَلُ فِي مِيزَانِ الْمُؤْمِنِ يَوْمَ الْقِيَامَةِ مِنْ خُلُقٍ حَسَنٍ، وَإِنَّ اللَّهَ لَيُبْغِضُ الْفَاحِشَ الْبَذِيءَ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هیچ شتێک لە تەرازووی باوەڕداردا لە ڕۆژی قیامەتدا قورستر نییە لە ڕەوشتی جوان و پاک، و خوای گەورە ڕقی لە مرۆڤی دەم پیس و زمانپیسی بێشەرم دەبێتەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Nothing will be heavier on the scale of a believer on the Day of Resurrection than good character, and Allah hates the foul-mouthed and obscene person.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه الترمذي (2002) وقال: حديث حسن صحيح</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-93">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">93</div>
+        <div class="chapter-pill">سێ کۆشک لە پلەکانی بەهەشتدا • Three Mansions in Paradise</div>
+      </div>
+      <div class="grade-badge hasan">
+        <span>★ حسن (النووي) وصحیح لغيره (الألباني)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي أُمَامَةَ الْبَاهِلِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">أَنَا زَعِيمٌ بِبَيْتٍ فِي رَبَضِ الْجَنَّةِ لِمَنْ تَرَكَ الْمِرَاءَ وَإِنْ كَانَ مُحِقًّا، وَبِبَيْتٍ فِي وَسَطِ الْجَنَّةِ لِمَنْ تَرَكَ الْكَذِبَ وَإِنْ كَانَ مَازِحًا، وَبِبَيْتٍ فِي أَعْلَى الْجَنَّةِ لِمَنْ حَسُنَ خُلُقُهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">من دەستەبەری ماڵێکم لە دامێنی بەهەشتدا بۆ ئەو کەسەی واز لە دەمەقاڵێ و مشتومڕ بهێنێت هەرچەندە لەسەر حەقیش بێت، و ماڵێک لە ناوەڕاستی بەهەشتدا بۆ ئەو کەسەی واز لە درۆ بهێنێت هەرچەندە بە شۆخیش بێت، و ماڵێک لە بەرزترین پلەی بەهەشتدا بۆ ئەو کەسەی ڕەوشتی جوان بکات.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">I guarantee a house on the outskirts of Paradise for one who leaves off arguing even if he is right, and a house in the middle of Paradise for one who leaves off lying even when joking, and a house in the highest part of Paradise for one who makes his character good.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه أبو داود (4800) وصححه النووي والألباني</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-94">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">94</div>
+        <div class="chapter-pill">فەزڵی ڕۆژووی ڕۆژی عەرەفە و عاشوورا • Virtue of Fasting Arafah & Ashura</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي قَتَادَةَ الأَنْصَارِيِّ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">صِيَامُ يَوْمِ عَرَفَةَ أَحْتَسِبُ عَلَى اللَّهِ أَنْ يُكَفِّرَ السَّنَةَ الَّتِي قَبْلَهُ وَالسَّنَةَ الَّتِي بَعْدَهُ، وَصِيَامُ يَوْمِ عَاشُورَاءَ أَحْتَسِبُ عَلَى اللَّهِ أَنْ يُكَفِّرَ السَّنَةَ الَّتِي قَبْلَهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ڕۆژووی ڕۆژی عەرەفە ئومێدم بە خودا هەیە ببێتە کەفارەت و سڕینەوەی گوناهەکانی ساڵی پێشوو و ساڵی دوای خۆی، و ڕۆژووی ڕۆژی عاشووراش ئومێدم بە خودا هەیە ببێتە سڕینەوەی گوناهەکانی ساڵی پێشوو.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Fasting on the Day of Arafah, I hope from Allah that it will expiate the sins of the year before it and the year after it; and fasting the Day of Ashura, I hope from Allah that it will expiate the sins of the year before it.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (1162)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-95">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">95</div>
+        <div class="chapter-pill">پاداشتی چاکەکردن لەگەڵ گیانداران • Reward for Kindness to Every Living Creature</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">فِي كُلِّ كَبِدٍ رَطْبَةٍ أَجْرٌ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">لە چاکەکردن و ئاوپێدانی هەموو گیاندارێکی زیندوودا پاداشت و خێر هەیە بۆ مرۆڤ.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">There is a reward for serving any living being.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (2363)، ومسلم (2244)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-96">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">96</div>
+        <div class="chapter-pill">مەترسی کوشتنی کەسانی بێتاوان و بەڵێندراو • Sanctity of Human Life</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه البخاري)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا</div>
+
+    <div class="arabic-text">مَنْ قَتَلَ مُعَاهَدًا لَمْ يَرِحْ رَائِحَةَ الْجَنَّةِ، وَإِنَّ رِيحَهَا تُوجَدُ مِنْ مَسِيرَةِ أَرْبَعِينَ عَامًا.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک کەسێکی بێتاوان و پەیماندراو بکوژێت، بۆنی بەهەشت ناکات، هەرچەندە بۆنی بەهەشت لە مەودای چل ساڵ ڕێگاوە دەبیسترێت.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever kills a person who has a treaty with the Muslims will not smell the fragrance of Paradise, even though its fragrance can be smelled from a distance of forty years.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه البخاري (3166)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-97">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">97</div>
+        <div class="chapter-pill">شەش مافی موسڵمان لەسەر برای موسڵمانی • Six Rights of a Muslim Over Another</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">حَقُّ الْمُسْلِمِ عَلَى الْمُسْلِمِ سِتٌّ: إِذَا لَقِيتَهُ فَسَلِّمْ عَلَيْهِ، وَإِذَا دَعَاكَ فَأَجِبْهُ، وَإِذَا اسْتَنْصَحَكَ فَانْصَحْ لَهُ، وَإِذَا عَطَسَ فَحَمِدَ اللَّهَ فَشَمِّتْهُ، وَإِذَا مَرِضَ فَعُدْهُ، وَإِذَا مَاتَ فَاتَّبِعْهُ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">مافی موسڵمان لەسەر برای موسڵمانی شەش شتە: هەر کاتێک بینیت سەلامی لێ بکە، و هەر کاتێک داوەتی کردیت وەڵامی بدەرەوە، و هەر کاتێک داوای ئامۆژگاری لێ کردیت ئامۆژگاری دڵسۆزانەی بکە، و هەر کاتێک پژمی و سوپاسی خوای کرد (الحمد لله) دوعای بۆ بکە بە (یرحمك الله)، و هەر کاتێک نەخۆش کەوت سەردانی بکە، و هەر کاتێک کۆچی دوایی کرد بەشداری لە بەڕێکردنی تەرمەکەیدا بکە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">The rights of a Muslim upon a Muslim are six: when you meet him, greet him with peace; when he invites you, respond to him; when he seeks your advice, advise him sincerely; when he sneezes and praises Allah, pray for mercy for him; when he falls ill, visit him; and when he dies, follow his funeral.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (2162)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-98">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">98</div>
+        <div class="chapter-pill">پاداشتی بەشداریکردن لە نوێژی مردوو و ناشتن • Attending Funerals & Huge Reward</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ شَهِدَ الْجَنَازَةَ حَتَّى يُصَلَّى عَلَيْهَا فَلَهُ قِيرَاطٌ، وَمَنْ شَهِدَهَا حَتَّى تُدْفَنَ فَلَهُ قِيرَاطَانِ، قِيلَ: وَمَا الْقِيرَاطَانِ؟ قَالَ: «مِثْلُ الْجَبَلَيْنِ الْعَظِيمَيْنِ».</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک ئامادەی نوێژی مردوو بێت تا نوێژی لەسەر دەکرێت، قیڕاتێک پاداشتی بۆ هەیە، و هەر کەسێک ئامادە بێت تا بە تەواوی دەنێژرێت دوو قیڕات پاداشتی بۆ هەیە، وترا: دوو قیڕات چییە؟ فەرمووی: «وەک دوو کێوی گەورە لە خێر و پاداشت».</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever attends a funeral until the prayer is offered will have one Qirat, and whoever attends until it is buried will have two Qirats. It was said: 'What are two Qirats?' He said: 'Like two immense mountains.'</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (1325)، ومسلم (945)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-99">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">99</div>
+        <div class="chapter-pill">سەلامکردن هۆکاری خۆشەویستی و چوونە بەهەشتە • Greeting with Peace & Entering Paradise</div>
+      </div>
+      <div class="grade-badge ">
+        <span>★ صحيح (أخرجه مسلم)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">لا تَدْخُلُونَ الْجَنَّةَ حَتَّى تُؤْمِنُوا، وَلا تُؤْمِنُوا حَتَّى تَحَابُّوا، أَوَلا أَدُلُّكُمْ عَلَى شَيْءٍ إِذَا فَعَلْتُمُوهُ تَحَابَبْتُمْ؟ أَفْشُوا السَّلامَ بَيْنَكُمْ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">ناچنە بەهەشتەوە تاوەکو باوەڕ نەهێنن، و باوەڕتان تەواو نابێت تاوەکو یەکتریتان خۆشنەوێت، ئایا ڕێنموونیتان نەکەم بۆ کارێک کە ئەگەر ئەنجامی بدەن یەکتریتان خۆشدەوێت؟ سەلام لە نێوان خۆتاندا بڵاوبکەنەوە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">You will not enter Paradise until you believe, and you will not believe until you love one another. Shall I not guide you to something which, if you do it, you will love one another? Spread peace among yourselves.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: أخرجه مسلم (54)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+  <div class="hadith-card" id="hadith-100">
+    <div class="hadith-top">
+      <div class="hadith-id-chapter">
+        <div class="hadith-num">100</div>
+        <div class="chapter-pill">شایەتیدانی ئیمان و سەرەنجامی بەهەشت • Testifying to Faith & Entering Paradise</div>
+      </div>
+      <div class="grade-badge muttafaq">
+        <span>★ صحيح (متفق عليه)</span>
+      </div>
+    </div>
+
+    <div class="narrator">عَنْ عُبَادَةَ بْنِ الصَّامِتِ رَضِيَ اللَّهُ عَنْهُ</div>
+
+    <div class="arabic-text">مَنْ شَهِدَ أَنْ لا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لا شَرِيكَ لَهُ، وَأَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ، وَأَنَّ عِيسَى عَبْدُ اللَّهِ وَرَسُولُهُ، وَكَلِمَتُهُ أَلْقَاهَا إِلَى مَرْيَمَ وَرُوحٌ مِنْهُ، وَالْجَنَّةَ حَقٌّ، وَالنَّارَ حَقٌّ، أَدْخَلَهُ اللَّهُ الْجَنَّةَ عَلَى مَا كَانَ مِنَ الْعَمَلِ.</div>
+
+    <div class="kurdish-section">
+      <div class="section-label">وەرگێڕان و مانای کوردی:</div>
+      <div class="kurdish-text">هەر کەسێک شایەتی بدات بەوەی کە هیچ پەرستراوێک نییە شایەنی پەرستن بێت جگە لە خوای تاکی بێ هاوەڵ، و محەممەد بەندە و پێغەمبەری ئەوە، و عیسا بەندەی خوا و پێغەمبەری ئەوە و ئەو وشەیەیە کە خستیە ناو مەریەمەوە و ڕۆحێکە لە لایەن ئەوەوە، و بەهەشت حەقە، و دۆزەخ حەقە، خوای گەورە دەیخاتە بەهەشتەوە لەسەر هەر کردەوەیەک کە هەیبووە.</div>
+    </div>
+
+    <div class="english-section">
+      <div class="english-label">English Translation:</div>
+      <div class="english-text">Whoever testifies that there is no god worthy of worship except Allah alone with no partner, and that Muhammad is His servant and Messenger, and that Jesus is the servant of Allah and His Messenger, and His word bestowed upon Mary and a spirit from Him, and that Paradise is true and Hell is true, Allah will admit him to Paradise regardless of his deeds.</div>
+    </div>
+
+    <div class="hadith-footer">
+      <div class="source-tag">سەرچاوە و تەخریج: متفق عليه: أخرجه البخاري (3435)، ومسلم (28)</div>
+      <div>Nada Zikr Hadith Database</div>
+    </div>
+  </div>
+  
+</div>
+
+<div class="footer-note">
+  کۆکراوەی ١٠٠ فەرموودەی مەقبوول (صەحیح و حەسەن)ـی پێغەمبەری خودا ﷺ — بەرهەمهێنراوە بۆ نەرمەکاڵای «نەدا - زیکر و قورئان» (Nada Zikr)
+</div>
+
+</body>
+</html>

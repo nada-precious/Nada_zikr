@@ -113,16 +113,17 @@ void main() {
   });
 
   test('Broken Islamcan azan IDs fall back to the default working azan', () {
-    expect(AzanAudioService.resolveSafeSoundId('islamcan_1'), 'makkah');
-    expect(AzanAudioService.resolveSafeSoundId('islamcan_2'), 'makkah');
+    expect(AzanAudioService.resolveSafeSoundId('islamcan_1'), 'kurdistan');
+    expect(AzanAudioService.resolveSafeSoundId('islamcan_2'), 'kurdistan');
     expect(AzanAudioService.resolveSafeSoundId('makkah'), 'makkah');
-    expect(AzanAudioService.resolveSafeSoundId('islamcan_9'), 'makkah');
+    expect(AzanAudioService.resolveSafeSoundId('kurdistan'), 'kurdistan');
+    expect(AzanAudioService.resolveSafeSoundId('islamcan_9'), 'kurdistan');
   });
 
   test('Stored invalid azan IDs are sanitized before the chosen card plays', () async {
     await StorageService.saveAzanSound('islamcan_2');
-    expect(await StorageService.getAzanSound(), 'makkah');
-    expect(AzanAudioService.resolveSafeSoundId(await StorageService.getAzanSound()), 'makkah');
+    expect(await StorageService.getAzanSound(), 'kurdistan');
+    expect(AzanAudioService.resolveSafeSoundId(await StorageService.getAzanSound()), 'kurdistan');
   });
 
   testWidgets('Custom target input replaces the fixed 100x tasbih option',

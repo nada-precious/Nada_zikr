@@ -133,13 +133,14 @@ class QuranService {
 
   List<QuranSurahMeta>? _surahs;
   Map<int, List<QuranAyah>>? _ayahsBySurah;
+  Map<int, List<QuranAyah>>? _ayahsByPage;
 
   final Map<String, Map<int, Map<int, String>>> _tafsirCache = {};
   final List<String> _tafsirLoadOrder = [];
   static const int _maxCachedTafsirs = 3;
 
   Future<void> _ensureQuranLoaded() async {
-    if (_surahs != null && _ayahsBySurah != null) return;
+    if (_surahs != null && _ayahsBySurah != null && _ayahsByPage != null) return;
 
     final raw = await rootBundle.loadString('assets/quran/quran.json');
     final data = json.decode(raw) as Map<String, dynamic>;
@@ -151,6 +152,7 @@ class QuranService {
 
     final ayahsJson = data['ayahs'] as List<dynamic>;
     final grouped = <int, List<QuranAyah>>{};
+    final byPage = <int, List<QuranAyah>>{};
     for (final dynamic a in ayahsJson) {
       final map = a as Map<String, dynamic>;
       final rawText = map['text'] as String? ?? '';
@@ -162,11 +164,19 @@ class QuranService {
         juz: map['juz'] as int? ?? 1,
       );
       (grouped[ayah.surah] ??= []).add(ayah);
+      (byPage[ayah.page] ??= []).add(ayah);
     }
     for (final list in grouped.values) {
       list.sort((a, b) => a.ayah.compareTo(b.ayah));
     }
+    for (final list in byPage.values) {
+      list.sort((a, b) {
+        if (a.surah != b.surah) return a.surah.compareTo(b.surah);
+        return a.ayah.compareTo(b.ayah);
+      });
+    }
     _ayahsBySurah = grouped;
+    _ayahsByPage = byPage;
   }
 
   Future<List<QuranSurahMeta>> loadSurahs() async {
@@ -178,6 +188,18 @@ class QuranService {
     await _ensureQuranLoaded();
     return _ayahsBySurah![surahNumber] ?? const [];
   }
+
+  Future<List<QuranAyah>> loadAyahsForPage(int pageNumber) async {
+    await _ensureQuranLoaded();
+    return _ayahsByPage![pageNumber] ?? const [];
+  }
+
+  Future<Map<int, List<QuranAyah>>> loadAllAyahsByPage() async {
+    await _ensureQuranLoaded();
+    return _ayahsByPage!;
+  }
+
+  Map<int, List<QuranAyah>>? get ayahsByPageSync => _ayahsByPage;
 
   Future<QuranAyah?> getAyah(int surahNumber, int ayahNumber) async {
     await _ensureQuranLoaded();

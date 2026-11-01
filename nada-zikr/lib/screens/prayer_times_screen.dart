@@ -83,15 +83,19 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
 
   void _updateCountdown() {
     if (!mounted) return;
+    // Auto-refresh when the countdown reaches/passes zero (prayer time arrived)
+    if (_timeUntilNext.inSeconds <= 0 && _timeUntilNext != Duration.zero) {
+      _refreshSchedule();
+      return;
+    }
     setState(() {});
   }
 
   /// Checks if prayer time just arrived while user is actively in the app,
   /// playing the Azan loud and clear through device speakers.
-  void _checkForegroundAzanTrigger(String nextId, DateTime? nextTime) {
+  void _checkForegroundAzanTrigger(String nextId, DateTime? nextTime, DateTime targetCityNow) {
     if (nextTime == null) return;
-    final now = DateTime.now();
-    final diff = nextTime.difference(now);
+    final diff = nextTime.difference(targetCityNow);
     final key = '${nextId}_${nextTime.day}_${nextTime.hour}_${nextTime.minute}';
 
     // If within 1 second of prayer time or just passed within 30 seconds
@@ -123,7 +127,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     if (next == 'azan') {
       final currentSound = await StorageService.getAzanSound();
       if (currentSound == 'silent' || currentSound == 'vibrate') {
-        await StorageService.saveAzanSound('makkah');
+        await StorageService.saveAzanSound('kurdistan');
       }
     }
     await NotificationService.rescheduleUpcomingPrayerAzans();
@@ -159,44 +163,56 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     final bool isExactAlarmMissing = !_exactAlarmsAllowed;
 
     final String title = isNotificationMissing
-        ? (isKurdish
-            ? 'ئاگادارکردنەوەکان ناچالاکن'
-            : (lang == 'ar' ? 'الإشعارات معطلة' : 'Notifications are disabled'))
-        : (isExactAlarmMissing
-            ? (isKurdish
-                ? 'کات دیاریکردنی ورد سنووردارە'
-                : (lang == 'ar'
-                    ? 'تنبيهات المواعيد الدقيقة مقيدة'
-                    : 'Exact prayer alarms restricted'))
+        ? (lang == 'kmr'
+            ? 'ئاگەهداری نەچالاکن'
             : (isKurdish
-                ? 'دەستکاریکەری پاتری (پاشبنەما)'
-                : (lang == 'ar'
-                    ? 'تحسين البطارية نشط'
-                    : 'Battery Saver Active')));
+                ? 'ئاگادارکردنەوەکان ناچالاکن'
+                : (lang == 'ar' ? 'الإشعارات معطلة' : 'Notifications are disabled')))
+        : (isExactAlarmMissing
+            ? (lang == 'kmr'
+                ? 'دیاریکردنا دەمێ دروست سنووردارە'
+                : (isKurdish
+                    ? 'کات دیاریکردنی ورد سنووردارە'
+                    : (lang == 'ar'
+                        ? 'تنبيهات المواعيد الدقيقة مقيدة'
+                        : 'Exact prayer alarms restricted')))
+            : (lang == 'kmr'
+                ? 'دەستکاریکەرێ پاتریێ'
+                : (isKurdish
+                    ? 'دەستکاریکەری پاتری (پاشبنەما)'
+                    : (lang == 'ar'
+                        ? 'تحسين البطارية نشط'
+                        : 'Battery Saver Active'))));
 
     final String subtitle = isNotificationMissing
-        ? (isKurdish
-            ? 'تکایە ڕێگە بە ئاگادارکردنەوە بدە بۆ گەیشتنی بانگ و کاتی نوێژەکان.'
-            : (lang == 'ar'
-                ? 'يرجى تفعيل الإشعارات لسماع الأذان وتنبيهات أوقات الصلاة.'
-                : 'Enable notifications to hear the Azan and prayer alerts on time.'))
-        : (isExactAlarmMissing
-            ? (isKurdish
-                ? 'بۆ ئەوەی بانگ ڕێک لە کاتی خۆیدا لێبدات، ڕێگە بە کاتژمێری ورد بدە لە ڕێکخستنەکان.'
-                : (lang == 'ar'
-                    ? 'لسماع الأذان بدقة في وقته المحدد، يرجى السماح بالتنبيهات الدقيقة.'
-                    : 'To ring the Azan accurately on time, allow Alarms & Reminders in settings.'))
+        ? (lang == 'kmr'
+            ? 'هیڤییە ڕێگێ بدە ئاگەهدارییان بۆ گەهشتنا بانگی و دەمێن نڤێژێ.'
             : (isKurdish
-                ? 'بۆ ئەوەی لە کاتی قفڵبووندا مۆبایلەکەت بانگ نەوەستێنێت، بەخشین لە پاتری هەڵبژێرە.'
+                ? 'تکایە ڕێگە بە ئاگادارکردنەوە بدە بۆ گەیشتنی بانگ و کاتی نوێژەکان.'
                 : (lang == 'ar'
-                    ? 'لضمان سماع صوت الأذان عند قفل الشاشة، يرجى استثناء التطبيق من تحسين البطارية.'
-                    : 'To ensure Azan sounds reliably when phone is locked, exclude from battery saver.')));
+                    ? 'يرجى تفعيل الإشعارات لسماع الأذان وتنبيهات أوقات الصلاة.'
+                    : 'Enable notifications to hear the Azan and prayer alerts on time.')))
+        : (isExactAlarmMissing
+            ? (lang == 'kmr'
+                ? 'داکو بانگ ڕێک ل دەمێ خۆ لێبدەت، ڕێگێ بدە دەمژمێرا هویر د ڕێکخستنان دا.'
+                : (isKurdish
+                    ? 'بۆ ئەوەی بانگ ڕێک لە کاتی خۆیدا لێبدات، ڕێگە بە کاتژمێری ورد بدە لە ڕێکخستنەکان.'
+                    : (lang == 'ar'
+                        ? 'لسماع الأذان بدقة في وقته المحدد، يرجى السماح بالتنبيهات الدقيقة.'
+                        : 'To ring the Azan accurately on time, allow Alarms & Reminders in settings.')))
+            : (lang == 'kmr'
+                ? 'داکو ل دەمێ قفلبوونێ مۆبایلا تە بانگی نەڕاوەستینیت، پاتریێ ڕێکبێخە.'
+                : (isKurdish
+                    ? 'بۆ ئەوەی لە کاتی قفڵبووندا مۆبایلەکەت بانگ نەوەستێنێت، بەخشین لە پاتری هەڵبژێرە.'
+                    : (lang == 'ar'
+                        ? 'لضمان سماع صوت الأذان عند قفل الشاشة، يرجى استثناء التطبيق من تحسين البطارية.'
+                        : 'To ensure Azan sounds reliably when phone is locked, exclude from battery saver.'))));
 
     final String buttonLabel = isNotificationMissing
-        ? (isKurdish ? 'چالاککردن' : (lang == 'ar' ? 'تفعيل' : 'Enable'))
+        ? (lang == 'kmr' ? 'چالاککرن' : (isKurdish ? 'چالاککردن' : (lang == 'ar' ? 'تفعيل' : 'Enable')))
         : (isExactAlarmMissing
-            ? (isKurdish ? 'ڕێکخستن' : (lang == 'ar' ? 'إصلاح' : 'Fix'))
-            : (isKurdish ? 'ڕێپێدان' : (lang == 'ar' ? 'سماح' : 'Allow')));
+            ? (lang == 'kmr' ? 'ڕێکخستن' : (isKurdish ? 'ڕێکخستن' : (lang == 'ar' ? 'إصلاح' : 'Fix')))
+            : (lang == 'kmr' ? 'ڕێپێدان' : (isKurdish ? 'ڕێپێدان' : (lang == 'ar' ? 'سماح' : 'Allow'))));
 
     final IconData bannerIcon = isNotificationMissing
         ? Icons.notifications_off_rounded
@@ -299,7 +315,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
-    final isKurdish = lang == 'ku';
+    final isKurdish = lang == 'ku' || lang == 'kmr';
 
     return Scaffold(
       backgroundColor: AppColors.darkBg,
@@ -348,9 +364,20 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
               final DateTime? nextTime = data['nextTime'];
               final HijriDateInfo hijriDate = data['hijriDate'];
 
+              final targetUtcOffset = (data['targetUtcOffset'] as num?)?.toDouble() ?? 3.0;
+              final targetCityUtc = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+              final targetCityNow = DateTime(
+                targetCityUtc.year,
+                targetCityUtc.month,
+                targetCityUtc.day,
+                targetCityUtc.hour,
+                targetCityUtc.minute,
+                targetCityUtc.second,
+              );
+
               if (nextTime != null) {
-                _timeUntilNext = nextTime.difference(DateTime.now());
-                _checkForegroundAzanTrigger(nextId, nextTime);
+                _timeUntilNext = nextTime.difference(targetCityNow);
+                _checkForegroundAzanTrigger(nextId, nextTime, targetCityNow);
               }
 
               final nextItem = items.firstWhere(
@@ -460,7 +487,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                 IconButton(
                                   padding: const EdgeInsets.all(4),
                                   constraints: const BoxConstraints(),
-                                  tooltip: 'Monthly Timetable',
+                                  tooltip: lang == 'kmr'
+                                      ? 'خشتەیێ مەهانە یێ دەمێن نڤێژێ'
+                                      : (isKurdish
+                                          ? 'خشتەی مانگانەی کاتەکانی بانگ'
+                                          : (lang == 'ar'
+                                              ? 'جدول أوقات الصلاة الشهري'
+                                              : 'Monthly Timetable')),
                                   icon: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
@@ -482,7 +515,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                 IconButton(
                                   padding: const EdgeInsets.all(4),
                                   constraints: const BoxConstraints(),
-                                  tooltip: 'Prayer Settings',
+                                  tooltip: lang == 'kmr'
+                                      ? 'ڕێکخستنێن دەمێن نڤێژێ'
+                                      : (isKurdish
+                                          ? 'ڕێکخستنەکانی کاتی بانگ'
+                                          : (lang == 'ar'
+                                              ? 'إعدادات الصلاة'
+                                              : 'Prayer Settings')),
                                   icon: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
@@ -505,7 +544,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                 IconButton(
                                   padding: const EdgeInsets.all(4),
                                   constraints: const BoxConstraints(),
-                                  tooltip: 'Azan sound',
+                                  tooltip: lang == 'kmr'
+                                      ? 'دەنگێ بانگی'
+                                      : (isKurdish
+                                          ? 'دەنگی بانگدان'
+                                          : (lang == 'ar'
+                                              ? 'صوت الأذان'
+                                              : 'Azan sound')),
                                   icon: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
@@ -529,7 +574,15 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                   ),
 
                   Expanded(
-                    child: SingleChildScrollView(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        _refreshSchedule();
+                        await Future.delayed(const Duration(milliseconds: 600));
+                      },
+                      color: AppColors.gold,
+                      backgroundColor: AppColors.panelColor,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
@@ -569,11 +622,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
-                                        isKurdish
-                                            ? 'نوێژی داهاتوو'
-                                            : (lang == 'ar'
-                                                ? 'الصلاة القادمة'
-                                                : 'NEXT PRAYER'),
+                                        lang == 'kmr'
+                                            ? 'نڤێژا بهێت'
+                                            : (isKurdish
+                                                ? 'نوێژی داهاتوو'
+                                                : (lang == 'ar'
+                                                    ? 'الصلاة القادمة'
+                                                    : 'NEXT PRAYER')),
                                         style: AppTheme.englishText(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
@@ -803,9 +858,57 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                               );
                             }).toList(),
                           ),
-                          const SizedBox(height: 24),
+
+                          // Active Authentic Islamic Calculation Authority Badge
+                          GestureDetector(
+                            onTap: () {
+                              PrayerSettingsSheet.show(
+                                context,
+                                onSettingsSaved: _refreshSchedule,
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 8, bottom: 20),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.panelColor.withValues(alpha: 0.75),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                    color: AppColors.gold.withValues(alpha: 0.35)),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.verified_rounded,
+                                      size: 15, color: AppColors.gold),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      isKurdish
+                                          ? (data['dataSourceKu'] ?? data['dataSource'])
+                                          : (lang == 'ar'
+                                              ? (data['dataSourceAr'] ?? data['dataSource'])
+                                              : (data['dataSourceEn'] ?? data['dataSource'])),
+                                      style: AppTheme.englishText(
+                                        fontSize: 11,
+                                        color: AppColors.gold.withValues(alpha: 0.95),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Icon(Icons.tune_rounded,
+                                      size: 13, color: AppColors.faintText),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
+                    ),
                     ),
                   ),
                 ],
@@ -822,6 +925,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
       'دووشەممە', 'سێشەممە', 'چوارشەممە', 'پێنجشەممە',
       'هەینی', 'شەممە', 'یەکشەممە',
     ];
+    const kmrDays = [
+      'دووشەمب', 'سێشەمب', 'چوارشەمب', 'پێنجشەمب',
+      'ئەینی', 'شەمبی', 'ئێکشەمب',
+    ];
     const arDays = [
       'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس',
       'الجمعة', 'السبت', 'الأحد',
@@ -831,6 +938,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
       'Friday', 'Saturday', 'Sunday',
     ];
     final index = weekday - 1; // DateTime.weekday: 1=Mon, 7=Sun
+    if (lang == 'kmr') return kmrDays[index];
     if (lang == 'ku') return kuDays[index];
     if (lang == 'ar') return arDays[index];
     return enDays[index];

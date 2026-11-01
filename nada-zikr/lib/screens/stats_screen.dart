@@ -15,12 +15,12 @@ class _StatsScreenState extends State<StatsScreen> {
   Map<String, int> _counts = {};
 
   static const _titles = [
-    ZikrTextItem(id: 'default', titleEn: 'Default Dhikr', titleKu: 'زیکری بنەڕەت', titleAr: 'الذكر الرئيسي', target: 33),
-    ZikrTextItem(id: 'subha', titleEn: 'Morning & Evening', titleKu: 'بەیانی و ئیوارە', titleAr: 'أذكار الصباح والمساء', target: 33),
-    ZikrTextItem(id: 'travel', titleEn: 'Travel', titleKu: 'سفر', titleAr: 'أذكار السفر', target: 33),
-    ZikrTextItem(id: 'health', titleEn: 'Health & Recovery', titleKu: 'توندوتیژی و چارەسەر', titleAr: 'أذكار المرض', target: 33),
-    ZikrTextItem(id: 'protection', titleEn: 'Protection', titleKu: 'پاراستن', titleAr: 'أذكار الحماية', target: 33),
-    ZikrTextItem(id: 'personal', titleEn: 'Personal', titleKu: 'شەخسی', titleAr: 'حياة شخصية', target: 33),
+    ZikrTextItem(id: 'default', titleEn: 'Default Dhikr', titleKu: 'زیکری بنەڕەت', titleKmr: 'زکرێ بنەڕەت', titleAr: 'الذكر الرئيسي', target: 33),
+    ZikrTextItem(id: 'subha', titleEn: 'Morning & Evening', titleKu: 'بەیانی و ئیوارە', titleKmr: 'سپێدە و ئێڤار', titleAr: 'أذكار الصباح والمساء', target: 33),
+    ZikrTextItem(id: 'travel', titleEn: 'Travel', titleKu: 'سفر', titleKmr: 'گەشت', titleAr: 'أذكار السفر', target: 33),
+    ZikrTextItem(id: 'health', titleEn: 'Health & Recovery', titleKu: 'توندوتیژی و چارەسەر', titleKmr: 'ساخلەمی و چارەسەری', titleAr: 'أذكار المرض', target: 33),
+    ZikrTextItem(id: 'protection', titleEn: 'Protection', titleKu: 'پاراستن', titleKmr: 'پاراستن', titleAr: 'أذكار الحماية', target: 33),
+    ZikrTextItem(id: 'personal', titleEn: 'Personal', titleKu: 'شەخسی', titleKmr: 'کەسی', titleAr: 'حياة شخصية', target: 33),
   ];
 
   @override

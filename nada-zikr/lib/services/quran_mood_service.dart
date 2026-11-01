@@ -74,22 +74,29 @@ class QuranMoodSuggestion {
   String get shareText => shareTextFor('en');
 
   String shareTextFor(String language) {
-    final isKurdish = language == 'ku';
+    final isKurmanji = language == 'kmr';
+    final isKurdish = language == 'ku' || isKurmanji;
     final isArabic = language == 'ar';
     final lines = <String>[
-      isKurdish ? 'کارتی هەستی قورئان' : isArabic ? 'بطاقة مزاج قرآنية' : 'Quran mood card',
-      isKurdish ? 'هەست: $moodId' : isArabic ? 'المزاج: $moodId' : 'Mood: $moodId',
+      isKurmanji
+          ? 'کارتا هەستێ قورئانێ'
+          : (isKurdish ? 'کارتی هەستی قورئان' : isArabic ? 'بطاقة مزاج قرآنية' : 'Quran mood card'),
+      isKurmanji
+          ? 'هەست: $moodId'
+          : (isKurdish ? 'هەست: $moodId' : isArabic ? 'المزاج: $moodId' : 'Mood: $moodId'),
       title,
       shortMessage,
       '',
     ];
 
     for (final verse in verses) {
-      lines.add(isKurdish
-          ? 'سورەت ${verse.surah}:${verse.ayah}'
-          : isArabic
-              ? 'السورة ${verse.surah}:${verse.ayah}'
-              : 'Surah ${verse.surah}:${verse.ayah}');
+      lines.add(isKurmanji
+          ? 'سوورەت ${verse.surah}:${verse.ayah}'
+          : (isKurdish
+              ? 'سورەت ${verse.surah}:${verse.ayah}'
+              : isArabic
+                  ? 'السورة ${verse.surah}:${verse.ayah}'
+                  : 'Surah ${verse.surah}:${verse.ayah}'));
       lines.add(verse.arabicText);
       lines.add(isKurdish ? (verse.kurdishMeaning ?? verse.englishMeaning) : verse.englishMeaning);
       lines.add('');
@@ -724,6 +731,14 @@ class QuranMoodService {
       'joyful': 'A gift of gratitude and joy',
       'sad': 'A comfort for a heavy heart',
     };
+    final kurmanji = {
+      'grateful': 'دلەک کۆ چاکییان ب بیر دئینیت',
+      'anxious': 'بیرئینانەک بۆ دلەکێ نەئارام',
+      'hopeful': 'ڕۆناهییەک بۆ ڕۆژێن نەدیار',
+      'tired': 'بیرئینانەکا نەرم بۆ ڤەحەسیانێ ل پەنا خودێ',
+      'joyful': 'دیارییەک ژ سوپاسی و دلخۆشیێ',
+      'sad': 'دلئارامییەک بۆ دلەکێ گران',
+    };
     final kurdish = {
       'grateful': 'دڵێک کە بیرەوەرییەکان دەناسێت',
       'anxious': 'بیرخەرەوەیەک بۆ دڵێکی نائارام',
@@ -740,7 +755,7 @@ class QuranMoodService {
       'joyful': 'هدية من الشكر والفرح',
       'sad': 'مواساة لقلب مثقل',
     };
-    return (lang == 'ku' ? kurdish : lang == 'ar' ? arabic : english)[moodId] ?? english['grateful']!;
+    return (lang == 'kmr' ? kurmanji : lang == 'ku' ? kurdish : lang == 'ar' ? arabic : english)[moodId] ?? english['grateful']!;
   }
 
   String messageFor(String moodId, String lang) {
@@ -751,6 +766,14 @@ class QuranMoodService {
       'tired': 'You do not need to carry everything alone. Rest in Him.',
       'joyful': 'Let gratitude deepen your joy and keep your heart connected to Allah.',
       'sad': 'Your heart is not unseen by Allah. He knows and He comforts.',
+    };
+    final kurmanji = {
+      'grateful': 'بێهنەکێ ڕاوەستە و سوپاسییا وان قەنجییان بکە یێن خودێ دایە تە.',
+      'anxious': 'تۆ ب تنێ نینی، خودێ یێ نێزیکە و فەرەج و ئاسانی یا دهێت.',
+      'hopeful': 'دەست ژ هێڤیێ بەرنەدە؛ دلۆڤانییا خودێ ژ بارێ تە یێ گران مەزنترە.',
+      'tired': 'پێدڤی ناکەت هەمی تشتان ب تنێ هەلبگری؛ ل پەنا خودێ بهێنڤەدانێ بکە.',
+      'joyful': 'بلا سوپاسداری دلخۆشییا تە کوورتر لێبکەت و دلێ تە ب خودێ ڤە گرێدەت.',
+      'sad': 'دلێ تە ژ لایێ خودێ ڤە نەهاتییە ژبیرکرن؛ ئەو دزانیت و تە ئارام دکەت.',
     };
     final kurdish = {
       'grateful': 'کەمێک وەستە و سوپاسی ئەو بەخششە بکە کە خوا پێی بەخشیویت.',
@@ -768,6 +791,6 @@ class QuranMoodService {
       'joyful': 'دع الشكر يعمق فرحك ويربط قلبك بالله.',
       'sad': 'قلبك ليس غائباً عن الله. إنه يعلم حزنك ويواسيك.',
     };
-    return (lang == 'ku' ? kurdish : lang == 'ar' ? arabic : english)[moodId] ?? english['grateful']!;
+    return (lang == 'kmr' ? kurmanji : lang == 'ku' ? kurdish : lang == 'ar' ? arabic : english)[moodId] ?? english['grateful']!;
   }
 }

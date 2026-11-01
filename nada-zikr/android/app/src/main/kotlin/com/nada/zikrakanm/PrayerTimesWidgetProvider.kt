@@ -1,11 +1,13 @@
 package com.nada.zikrakanm
 
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.widget.RemoteViews
+import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
 
 data class WidgetThemeConfig(
@@ -35,7 +37,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_obsidian,
                 cardBg = R.drawable.widget_card_bg_obsidian,
                 activeCellBg = R.drawable.widget_active_obsidian,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_obsidian,
                 primaryColor = 0xFFFFD700.toInt(),
                 secondaryColor = 0xFFFAF9F6.toInt(),
                 mutedColor = 0xB39CA5B0.toInt()
@@ -53,7 +55,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_forest,
                 cardBg = R.drawable.widget_card_bg_forest,
                 activeCellBg = R.drawable.widget_active_forest,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_forest,
                 primaryColor = 0xFFD4AF37.toInt(),
                 secondaryColor = 0xFFF2F7EF.toInt(),
                 mutedColor = 0xB38FA89B.toInt()
@@ -62,7 +64,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_dusk,
                 cardBg = R.drawable.widget_card_bg_dusk,
                 activeCellBg = R.drawable.widget_active_dusk,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_dusk,
                 primaryColor = 0xFFF6C86D.toInt(),
                 secondaryColor = 0xFFF8F3FE.toInt(),
                 mutedColor = 0xB3A592C0.toInt()
@@ -71,7 +73,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_ocean,
                 cardBg = R.drawable.widget_card_bg_ocean,
                 activeCellBg = R.drawable.widget_active_ocean,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_ocean,
                 primaryColor = 0xFF38BDF8.toInt(),
                 secondaryColor = 0xFFF0F7FF.toInt(),
                 mutedColor = 0xB37FAACF.toInt()
@@ -80,7 +82,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_rose,
                 cardBg = R.drawable.widget_card_bg_rose,
                 activeCellBg = R.drawable.widget_active_rose,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_rose,
                 primaryColor = 0xFFF6A97A.toInt(),
                 secondaryColor = 0xFFFFF0F5.toInt(),
                 mutedColor = 0xB3BA8F9F.toInt()
@@ -89,7 +91,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_oled,
                 cardBg = R.drawable.widget_card_bg_oled,
                 activeCellBg = R.drawable.widget_active_oled,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_oled,
                 primaryColor = 0xFFFFD700.toInt(),
                 secondaryColor = 0xFFFFFFFF.toInt(),
                 mutedColor = 0xB3A0A0A0.toInt()
@@ -98,7 +100,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 rootBg = R.drawable.widget_bg_nuri,
                 cardBg = R.drawable.widget_card_bg_nuri,
                 activeCellBg = R.drawable.widget_active_nuri,
-                inactiveCellBg = R.drawable.widget_item_bg,
+                inactiveCellBg = R.drawable.widget_item_nuri,
                 primaryColor = 0xFFD4AF37.toInt(),
                 secondaryColor = 0xFFF7F2E7.toInt(),
                 mutedColor = 0xB398B8A4.toInt()
@@ -178,7 +180,7 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
 
             // Prayer Names (Clean, localized, no emojis)
             setTextViewText(R.id.widget_name_fajr,    if (isKurdish) "بەیانی" else if (isArabic) "الفجر" else "Fajr")
-            setTextViewText(R.id.widget_name_sunrise, if (isKurdish) "خۆرهەڵات" else if (isArabic) "الشروق" else "Sunrise")
+            setTextViewText(R.id.widget_name_sunrise, if (isKurdish) "خۆرهەڵاتن" else if (isArabic) "الشروق" else "Sunrise")
             setTextViewText(R.id.widget_name_dhuhr,   if (isKurdish) "نیوەڕۆ" else if (isArabic) "الظهر" else "Dhuhr")
             setTextViewText(R.id.widget_name_asr,     if (isKurdish) "عەسر" else if (isArabic) "العصر" else "Asr")
             setTextViewText(R.id.widget_name_maghrib, if (isKurdish) "شێوان" else if (isArabic) "المغرب" else "Maghrib")
@@ -227,13 +229,12 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 }
             }
 
-            // Launch app on widget tap
-            val intent = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
-            val pendingIntent = PendingIntent.getActivity(
-                context, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            // Launch app on widget tap → navigate directly to Prayer Times tab
+            val widgetUri = Uri.parse("nadazikr://open/prayer_times")
+            val pendingIntent = HomeWidgetLaunchIntent.getActivity(
+                context,
+                MainActivity::class.java,
+                widgetUri,
             )
             setOnClickPendingIntent(R.id.widget_root, pendingIntent)
         }
@@ -243,5 +244,17 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
+        try {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val componentName = ComponentName(context, PrayerTimesWidgetProvider::class.java)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+            if (appWidgetIds != null && appWidgetIds.isNotEmpty()) {
+                for (appWidgetId in appWidgetIds) {
+                    updateSingleWidget(context, appWidgetManager, appWidgetId)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

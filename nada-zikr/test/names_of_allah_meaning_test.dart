@@ -69,16 +69,16 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('ku'),
-        supportedLocales: const [Locale('ku'), Locale('en')],
-        localizationsDelegates: const [
+      const MaterialApp(
+        locale: Locale('ku'),
+        supportedLocales: [Locale('ku'), Locale('en')],
+        localizationsDelegates: [
           _TestAppLocDelegate('ku'),
           _TestMaterialLocDelegate(),
           _TestCupertinoLocDelegate(),
           _TestWidgetsLocDelegate(),
         ],
-        home: const NamesOfAllahScreen(),
+        home: NamesOfAllahScreen(),
       ),
     );
     await tester.pump();
@@ -124,16 +124,16 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('en'),
-        supportedLocales: const [Locale('ku'), Locale('en')],
-        localizationsDelegates: const [
+      const MaterialApp(
+        locale: Locale('en'),
+        supportedLocales: [Locale('ku'), Locale('en')],
+        localizationsDelegates: [
           _TestAppLocDelegate('en'),
           _TestMaterialLocDelegate(),
           _TestCupertinoLocDelegate(),
           _TestWidgetsLocDelegate(),
         ],
-        home: const NamesOfAllahScreen(),
+        home: NamesOfAllahScreen(),
       ),
     );
     await tester.pump();

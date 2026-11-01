@@ -10,7 +10,7 @@ class HadithService {
     _cachedHadiths = hadiths;
   }
 
-  /// Loads all 100 authentic hadiths from bundled asset
+  /// Loads all 200 authentic hadiths from bundled asset
   static Future<List<HadithItem>> loadAllHadiths() async {
     if (_cachedHadiths != null && _cachedHadiths!.isNotEmpty) {
       return _cachedHadiths!;

@@ -8,7 +8,12 @@ class AppPalette {
   final String key;
   final String label;
   final String labelKu;
+  final String? labelKmr;
+  final String? labelAr;
   final String description;
+  final String? descriptionKu;
+  final String? descriptionKmr;
+  final String? descriptionAr;
   final bool isDark;
   final Color darkBg;
   final Color darkBgAlt;
@@ -29,7 +34,12 @@ class AppPalette {
     required this.key,
     required this.label,
     required this.labelKu,
+    this.labelKmr,
+    this.labelAr,
     required this.description,
+    this.descriptionKu,
+    this.descriptionKmr,
+    this.descriptionAr,
     required this.isDark,
     required this.darkBg,
     required this.darkBgAlt,
@@ -47,7 +57,27 @@ class AppPalette {
     required this.softSurface,
   });
 
-  String getLocalizedLabel(bool isKurdish) => isKurdish ? labelKu : label;
+  String getLocalizedLabel(dynamic langOrIsKurdish) {
+    if (langOrIsKurdish is bool) {
+      return langOrIsKurdish ? labelKu : label;
+    }
+    final lang = langOrIsKurdish.toString();
+    if (lang == 'kmr') return labelKmr ?? labelKu;
+    if (lang == 'ku') return labelKu;
+    if (lang == 'ar') return labelAr ?? label;
+    return label;
+  }
+
+  String getLocalizedDescription(dynamic langOrIsKurdish) {
+    if (langOrIsKurdish is bool) {
+      return langOrIsKurdish ? (descriptionKu ?? description) : description;
+    }
+    final lang = langOrIsKurdish.toString();
+    if (lang == 'kmr') return descriptionKmr ?? descriptionKu ?? description;
+    if (lang == 'ku') return descriptionKu ?? description;
+    if (lang == 'ar') return descriptionAr ?? description;
+    return description;
+  }
 }
 
 class AppPalettes {
@@ -56,7 +86,12 @@ class AppPalettes {
     key: 'nuri',
     label: 'Nûrî Emerald',
     labelKu: 'زمردی و زێڕین',
-    description: 'Deep Kurdish emerald green with polished gold highlights',
+    labelKmr: 'زومڕووت و زێڕین',
+    labelAr: 'زمردي وذهبي',
+    description: 'Deep emerald green with polished gold highlights',
+    descriptionKu: 'سەوزی زمردی قووڵ لەگەڵ بریقەی زێڕینی شاهانە',
+    descriptionKmr: 'کەسکێ زومڕووتی یێ کویر دگەل بریقەیا زێڕینی',
+    descriptionAr: 'أخضر زمردي عميق مع لمسات ذهبية راقية',
     isDark: true,
     darkBg: Color(0xFF07140E),
     darkBgAlt: Color(0xFF0E251B),
@@ -79,7 +114,12 @@ class AppPalettes {
     key: 'obsidian',
     label: 'Obsidian Gold',
     labelKu: 'پۆڵای تاریک و زێڕین',
+    labelKmr: 'پۆلایێ تاری و زێڕین',
+    labelAr: 'سبجي وذهبي',
     description: 'Luxury obsidian black with 24K glowing gold highlights',
+    descriptionKu: 'ڕەشی پۆڵایینی شاهانە لەگەڵ زێڕی ۲٤ عەیار',
+    descriptionKmr: 'ڕەشێ پۆلایینی دگەل زێڕێ ۲٤ عەیار',
+    descriptionAr: 'أسود سبجي فاخر مع لمسات ذهب عيار 24',
     isDark: true,
     darkBg: Color(0xFF0A0D10),
     darkBgAlt: Color(0xFF12171C),
@@ -102,7 +142,12 @@ class AppPalettes {
     key: 'sunrise',
     label: 'Golden Dawn',
     labelKu: 'ڕۆژهەڵاتی زێڕین',
+    labelKmr: 'ڕۆژهەلاتێ زێڕین',
+    labelAr: 'إشراقة ذهبية',
     description: 'Warm amber and soft cream for a luminous daylight feel',
+    descriptionKu: 'عەنبەری گەرم و ڕەنگی ڕۆشن بۆ کاتی ڕۆژ',
+    descriptionKmr: 'عەنبەرێ گەرم و ڕەنگێ ڕۆهن بۆ دەمێ ڕۆژێ',
+    descriptionAr: 'عنبر دافئ وكريمي ناعم لأجواء نهارية مشرقة',
     isDark: false,
     darkBg: Color(0xFFF3ECE0),
     darkBgAlt: Color(0xFFE8DECA),
@@ -125,7 +170,12 @@ class AppPalettes {
     key: 'forest',
     label: 'Forest Calm',
     labelKu: 'دارستانی هێمن',
+    labelKmr: 'دارستانا ئارام',
+    labelAr: 'هدوء الغابة',
     description: 'Fresh pine green tones and grounded earthy balance',
+    descriptionKu: 'سەوزی دارستانی سنەوبەر و ئارامی سروشت',
+    descriptionKmr: 'کەسکێ دارستانا سنەوبەرێ و ئارامییا سروشتی',
+    descriptionAr: 'درجات الأخضر الصنوبري الهادئ والتوازن الطبيعي',
     isDark: true,
     darkBg: Color(0xFF081812),
     darkBgAlt: Color(0xFF102A20),
@@ -148,7 +198,12 @@ class AppPalettes {
     key: 'dusk',
     label: 'Royal Violet Dusk',
     labelKu: 'بنەوشەیی شاهانە',
+    labelKmr: 'مۆرێ شاهانە',
+    labelAr: 'بنفسجي ملكي',
     description: 'Velvet violet and lavender for a calm, premium mood',
+    descriptionKu: 'بنەوشەیی مەخمەڵی و لاڤێندەر بۆ هەستێکی هێمن',
+    descriptionKmr: 'مۆرێ مەخمەلی و لاڤێندەر بۆ هەستەکێ ئارام',
+    descriptionAr: 'مخمل بنفسجي وخزامى لأجواء هادئة وفاخرة',
     isDark: true,
     darkBg: Color(0xFF120C1D),
     darkBgAlt: Color(0xFF1B122C),
@@ -171,7 +226,12 @@ class AppPalettes {
     key: 'ocean',
     label: 'Midnight Sapphire',
     labelKu: 'یاقوتی شین',
+    labelKmr: 'یاقووتێ شین',
+    labelAr: 'ياقوت أزرق',
     description: 'Deep navy ocean blue with cyan and sapphire accents',
+    descriptionKu: 'شینی دەریایی قووڵ لەگەڵ یاقوتی ئاسمانی',
+    descriptionKmr: 'شینێ دەریایی یێ کویر دگەل یاقووتێ ئەسمانی',
+    descriptionAr: 'أزرق بحري عميق مع لمسات ياقوتية وسماوية',
     isDark: true,
     darkBg: Color(0xFF07111D),
     darkBgAlt: Color(0xFF0E1F34),
@@ -194,7 +254,12 @@ class AppPalettes {
     key: 'rose',
     label: 'Rose Gold Burgundy',
     labelKu: 'مەییی گوڵباخی شاهانە',
+    labelKmr: 'گوڵباخیێ شاهانە',
+    labelAr: 'عنابي وذهب وردي',
     description: 'Rich burgundy with elegant rose gold accents',
+    descriptionKu: 'بۆرگۆندی دەوڵەمەند لەگەڵ زێڕی گوڵباخی ناسک',
+    descriptionKmr: 'بۆرگۆندیێ دەولەمەند دگەل زێڕێ گوڵباخی',
+    descriptionAr: 'عنابي فاخر مع لمسات من الذهب الوردي الأنيق',
     isDark: true,
     darkBg: Color(0xFF180A12),
     darkBgAlt: Color(0xFF28101E),
@@ -217,7 +282,12 @@ class AppPalettes {
     key: 'oled',
     label: 'Pure OLED Black',
     labelKu: 'ڕەشی ڕەقیک بۆ شەو',
+    labelKmr: 'ڕەشێ تەمام یێ شەڤێ',
+    labelAr: 'أسود داكن (OLED)',
     description: '100% pitch black for AMOLED battery saving with gold accent',
+    descriptionKu: 'ڕەشی تەواو ۱۰۰٪ بۆ پاراستنی پاتری و شەو',
+    descriptionKmr: 'ڕەشێ سەد ژ سەدێ بۆ پاراستنا پاتریێ د شەڤێ دا',
+    descriptionAr: 'أسود نقي 100% لتوفير البطارية مع لمسات ذهبية',
     isDark: true,
     darkBg: Color(0xFF000000),
     darkBgAlt: Color(0xFF0D0D0D),
@@ -274,6 +344,7 @@ class AppThemeController extends ChangeNotifier {
     _palette = AppPalettes.byKey(key);
     await StorageService.saveSetting('appTheme', key);
     notifyListeners();
+    unawaited(PrayerWidgetService.updateTheme(key));
     unawaited(PrayerWidgetService.updateWidgets());
   }
 }
@@ -365,6 +436,22 @@ class AppTheme {
       fontFeatures: const [
         FontFeature('cv72', 1),
       ],
+    );
+  }
+
+  // Scheherazade New for Hadiths, Prophetic Invocations, and Adhkar (as seen in Morning Zikr)
+  static TextStyle zikrText({
+    Color? color,
+    double fontSize = 25,
+    FontWeight fontWeight = FontWeight.w500,
+    double height = 2.05,
+  }) {
+    return GoogleFonts.scheherazadeNew(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color ?? AppColors.cream,
+      height: height,
+      letterSpacing: 0,
     );
   }
 

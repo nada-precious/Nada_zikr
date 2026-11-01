@@ -291,6 +291,10 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
 
         final normalized = (h + 360.0) % 360.0;
 
+        if (_heading == null) {
+          _smoothHeading = normalized;
+        }
+
         // Smooth angle tracking to prevent 360° spin jumps
         double diff = (normalized - _smoothHeading) % 360.0;
         if (diff > 180.0) diff -= 360.0;
@@ -330,7 +334,8 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.languageCode;
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || lang == 'kmr';
     final isArabic = lang == 'ar';
 
     final needleAngleRad = ((_qiblaBearing - _smoothHeading) * math.pi / 180.0);
@@ -344,18 +349,24 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
     final String statusText;
     if (_hasSensor) {
       if (_isAligned) {
-        statusText = isKurdish
-            ? 'ڕوو لە قیبلەی پیرۆز'
-            : (isArabic ? 'مواجه للقبلة المشرفة' : 'Aligned with Qibla');
+        statusText = isKurmanji
+            ? 'ڕوو ل قیبلەیا پیرۆز'
+            : (isKurdish
+                ? 'ڕوو لە قیبلەی پیرۆز'
+                : (isArabic ? 'مواجه للقبلة المشرفة' : 'Aligned with Qibla'));
       } else {
-        statusText = isKurdish
-            ? 'قیبلەنمای ڕاستەوخۆ چالاکە'
-            : (isArabic ? 'البوصلة المباشرة نشطة' : 'Live Compass Active');
+        statusText = isKurmanji
+            ? 'قیبلەنما یا چالاکە'
+            : (isKurdish
+                ? 'قیبلەنمای ڕاستەوخۆ چالاکە'
+                : (isArabic ? 'البوصلة المباشرة نشطة' : 'Live Compass Active'));
       }
     } else {
-      statusText = isKurdish
-          ? 'هەستەوەری قیبلەنما بەردەست نییە'
-          : (isArabic ? 'مستشعر البوصلة غير متوفر' : 'Compass Sensor Unavailable');
+      statusText = isKurmanji
+          ? 'هەستەوەرێ قیبلەنمایێ بەردەست نینە'
+          : (isKurdish
+              ? 'هەستەوەری قیبلەنما بەردەست نییە'
+              : (isArabic ? 'مستشعر البوصلة غير متوفر' : 'Compass Sensor Unavailable'));
     }
 
     return Container(
@@ -415,9 +426,11 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              isKurdish
-                                  ? 'قیبلەنمای پیرۆز'
-                                  : (isArabic ? 'بوصلة القبلة' : 'Qibla Compass'),
+                              isKurmanji
+                                  ? 'قیبلەنما یا پیرۆز'
+                                  : (isKurdish
+                                      ? 'قیبلەنمای پیرۆز'
+                                      : (isArabic ? 'بوصلة القبلة' : 'Qibla Compass')),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: isKurdish
@@ -644,7 +657,9 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                                     Positioned(
                                       right: 14,
                                       child: _cardinalLabel(
-                                        isKurdish ? 'ڕۆژهەڵات' : (isArabic ? 'شرق' : 'E'),
+                                        isKurmanji
+                                            ? 'ڕۆژهەلات'
+                                            : (isKurdish ? 'ڕۆژهەڵات' : (isArabic ? 'شرق' : 'E')),
                                         lang: lang,
                                       ),
                                     ),
@@ -658,7 +673,9 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                                     Positioned(
                                       left: 14,
                                       child: _cardinalLabel(
-                                        isKurdish ? 'ڕۆژئاوا' : (isArabic ? 'غرب' : 'W'),
+                                        isKurmanji
+                                            ? 'ڕۆژئاڤا'
+                                            : (isKurdish ? 'ڕۆژئاوا' : (isArabic ? 'غرب' : 'W')),
                                         lang: lang,
                                       ),
                                     ),
@@ -761,9 +778,11 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                               FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  isKurdish
-                                      ? 'ئاڕاستەی ئامێر'
-                                      : (isArabic ? 'اتجاه الجهاز' : 'Device Heading'),
+                                  isKurmanji
+                                      ? 'ئاراستەیا ئامێری'
+                                      : (isKurdish
+                                          ? 'ئاڕاستەی ئامێر'
+                                          : (isArabic ? 'اتجاه الجهاز' : 'Device Heading')),
                                   style: isKurdish
                                       ? AppTheme.kurdishText(fontSize: 11, color: AppColors.faintText)
                                       : (isArabic
@@ -813,9 +832,11 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                               FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  isKurdish
-                                      ? 'ڕووگەی قیبلە'
-                                      : (isArabic ? 'اتجاه القبلة' : 'Qibla Direction'),
+                                  isKurmanji
+                                      ? 'ئاڕاستەیا قیبلێ'
+                                      : (isKurdish
+                                          ? 'ڕووگەی قیبلە'
+                                          : (isArabic ? 'اتجاه القبلة' : 'Qibla Direction')),
                                   style: isKurdish
                                       ? AppTheme.kurdishText(fontSize: 11, color: AppColors.faintText)
                                       : (isArabic
@@ -865,9 +886,11 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                               FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  isKurdish
-                                      ? 'دووری تا مەککە'
-                                      : (isArabic ? 'المسافة إلى مكة' : 'Distance to Makkah'),
+                                  isKurmanji
+                                      ? 'دووری تا مەککەهـ'
+                                      : (isKurdish
+                                          ? 'دووری تا مەککە'
+                                          : (isArabic ? 'المسافة إلى مكة' : 'Distance to Makkah')),
                                   style: isKurdish
                                       ? AppTheme.kurdishText(fontSize: 11, color: AppColors.faintText)
                                       : (isArabic
@@ -927,16 +950,20 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
                         Expanded(
                           child: Text(
                             _isAligned
-                                ? (isKurdish
-                                    ? 'ئامێرەکەت بە تەواوی ئاڕاستەی کەعبەی پیرۆز کراوە! دەتوانیت دەست بە نوێژ بکەیت.'
-                                    : (isArabic
-                                        ? 'جهازك موجه بدقة نحو الكعبة المشرفة! يمكنك البدء بالصلاة.'
-                                        : 'Your device is precisely aligned with the Holy Kaaba! You may begin prayer.'))
-                                : (isKurdish
-                                    ? 'مۆبایلەکەت بخەرە سەر ڕوویەکی تەخت و بیسوڕێنەوە تا دەرزیە زێڕینەکە و نیشاندەری سەرەوە بە تەواوی یەکدەگرنەوە.'
-                                    : (isArabic
-                                        ? 'ضع هاتفك على سطح مستوٍ وأدره حتى تتطابق الإبرة الذهبية مع المؤشر العلوي تماماً.'
-                                        : 'Place your phone flat and rotate it until the golden needle aligns with the top indicator.')),
+                                ? (isKurmanji
+                                    ? 'ئامێرێ تە ب تەمامی بەرەڤ کەعبەیا پیرۆزە! دشێی دەست ب نڤێژێ بکەی.'
+                                    : (isKurdish
+                                        ? 'ئامێرەکەت بە تەواوی ئاڕاستەی کەعبەی پیرۆز کراوە! دەتوانیت دەست بە نوێژ بکەیت.'
+                                        : (isArabic
+                                            ? 'جهازك موجه بدقة نحو الكعبة المشرفة! يمكنك البدء بالصلاة.'
+                                            : 'Your device is precisely aligned with the Holy Kaaba! You may begin prayer.')))
+                                : (isKurmanji
+                                    ? 'مۆبایلا خۆ بینە سەر جهەکێ تەخت و بسوڕینە هەتا دەرزیکا زێڕین دگەل نیشاندەرێ سەری ب تەمامی دگونجیت.'
+                                    : (isKurdish
+                                        ? 'مۆبایلەکەت بخەرە سەر ڕوویەکی تەخت و بیسوڕێنەوە تا دەرزیە زێڕینەکە و نیشاندەری سەرەوە بە تەواوی یەکدەگرنەوە.'
+                                        : (isArabic
+                                            ? 'ضع هاتفك على سطح مستوٍ وأدره حتى تتطابق الإبرة الذهبية مع المؤشر العلوي تماماً.'
+                                            : 'Place your phone flat and rotate it until the golden needle aligns with the top indicator.'))),
                             style: isKurdish
                                 ? AppTheme.kurdishText(
                                     fontSize: 12,
@@ -967,7 +994,7 @@ class _QiblaCompassSheetState extends State<QiblaCompassSheet> with SingleTicker
   }
 
   Widget _cardinalLabel(String label, {bool isNorth = false, required String lang}) {
-    final isKu = lang == 'ku';
+    final isKu = lang == 'ku' || lang == 'kmr';
     final isAr = lang == 'ar';
     return Container(
       padding: EdgeInsets.symmetric(

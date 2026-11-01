@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/widget_bg"
-    android:padding="10dp">
+    android:padding="8dp">
 
     <!-- Top Header: App Name, City, and Hijri Date -->
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="نەدا"
             android:textColor="#FFE5B84B"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:includeFontPadding="false" />
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text=" • "
             android:textColor="#80E5B84B"
-            android:textSize="11sp"
+            android:textSize="10sp"
             android:singleLine="true"
             android:includeFontPadding="false" />
 
@@ -42,7 +42,7 @@
             android:layout_weight="1"
             android:text="کوردستان"
             android:textColor="#CCF3E8D2"
-            android:textSize="12sp"
+            android:textSize="11.5sp"
             android:singleLine="true"
             android:ellipsize="end"
             android:includeFontPadding="false" />
@@ -53,21 +53,24 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="#80F3E8D2"
-            android:textSize="10sp"
+            android:textSize="9.5sp"
             android:singleLine="true"
             android:includeFontPadding="false" />
     </LinearLayout>
 
-    <!-- Next Prayer Highlight Card -->
+    <!-- Next Prayer Highlight Card (Hero Bar) -->
     <LinearLayout
         android:id="@+id/widget_next_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:background="@drawable/widget_card_bg"
-        android:padding="8dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center_vertical">
 
         <LinearLayout
@@ -91,10 +94,10 @@
                 android:id="@+id/widget_next_prayer_remaining"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:text=""
                 android:textColor="#CCF3E8D2"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
                 android:singleLine="true"
                 android:includeFontPadding="false" />
         </LinearLayout>
@@ -105,34 +108,33 @@
             android:layout_height="wrap_content"
             android:text="--:--"
             android:textColor="#FFE5B84B"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:singleLine="true"
             android:includeFontPadding="false" />
     </LinearLayout>
 
-    <!-- 6 Prayer Times (2 Rows x 3 Columns) - Clean, Minimal & Single-Line -->
-    <!-- Row 1: Fajr, Sunrise, Dhuhr -->
+    <!-- All 6 Prayer Times in a Single Responsive Horizontal Strip (Fills Remaining Space) -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="6"
+        android:gravity="center_vertical">
 
-        <!-- Fajr -->
         <LinearLayout
             android:id="@+id/widget_cell_fajr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/widget_item_bg"
             android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:gravity="center">
 
             <TextView
@@ -141,8 +143,9 @@
                 android:layout_height="wrap_content"
                 android:text="بەیانی"
                 android:textColor="#B3F3E8D2"
-                android:textSize="10sp"
+                android:textSize="8.5sp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -152,35 +155,36 @@
                 android:layout_marginTop="2dp"
                 android:text="--:--"
                 android:textColor="#FFF3E8D2"
-                android:textSize="12sp"
+                android:textSize="10.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:includeFontPadding="false" />
         </LinearLayout>
 
-        <!-- Sunrise -->
+        <!-- 2. Sunrise -->
         <LinearLayout
             android:id="@+id/widget_cell_sunrise"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/widget_item_bg"
             android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:gravity="center">
 
             <TextView
                 android:id="@+id/widget_name_sunrise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="خۆرهەڵات"
+                android:text="خۆرهەڵاتن"
                 android:textColor="#B3F3E8D2"
-                android:textSize="10sp"
+                android:textSize="8.5sp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -190,24 +194,25 @@
                 android:layout_marginTop="2dp"
                 android:text="--:--"
                 android:textColor="#FFF3E8D2"
-                android:textSize="12sp"
+                android:textSize="10.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:includeFontPadding="false" />
         </LinearLayout>
 
-        <!-- Dhuhr -->
+        <!-- 3. Dhuhr -->
         <LinearLayout
             android:id="@+id/widget_cell_dhuhr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/widget_item_bg"
             android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:gravity="center">
 
             <TextView
@@ -216,8 +221,9 @@
                 android:layout_height="wrap_content"
                 android:text="نیوەڕۆ"
                 android:textColor="#B3F3E8D2"
-                android:textSize="10sp"
+                android:textSize="8.5sp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -227,33 +233,25 @@
                 android:layout_marginTop="2dp"
                 android:text="--:--"
                 android:textColor="#FFF3E8D2"
-                android:textSize="12sp"
+                android:textSize="10.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:includeFontPadding="false" />
         </LinearLayout>
-    </LinearLayout>
 
-    <!-- Row 2: Asr, Maghrib, Isha -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <!-- Asr -->
+        <!-- 4. Asr -->
         <LinearLayout
             android:id="@+id/widget_cell_asr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/widget_item_bg"
             android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:gravity="center">
 
             <TextView
@@ -262,8 +260,9 @@
                 android:layout_height="wrap_content"
                 android:text="عەسر"
                 android:textColor="#B3F3E8D2"
-                android:textSize="10sp"
+                android:textSize="8.5sp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -273,25 +272,25 @@
                 android:layout_marginTop="2dp"
                 android:text="--:--"
                 android:textColor="#FFF3E8D2"
-                android:textSize="12sp"
+                android:textSize="10.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:includeFontPadding="false" />
         </LinearLayout>
 
-        <!-- Maghrib -->
+        <!-- 5. Maghrib -->
         <LinearLayout
             android:id="@+id/widget_cell_maghrib"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/widget_item_bg"
             android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:gravity="center">
 
             <TextView
@@ -300,8 +299,9 @@
                 android:layout_height="wrap_content"
                 android:text="شێوان"
                 android:textColor="#B3F3E8D2"
-                android:textSize="10sp"
+                android:textSize="8.5sp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -311,24 +311,24 @@
                 android:layout_marginTop="2dp"
                 android:text="--:--"
                 android:textColor="#FFF3E8D2"
-                android:textSize="12sp"
+                android:textSize="10.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:includeFontPadding="false" />
         </LinearLayout>
 
-        <!-- Isha -->
+        <!-- 6. Isha -->
         <LinearLayout
             android:id="@+id/widget_cell_isha"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/widget_item_bg"
             android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:gravity="center">
 
             <TextView
@@ -337,8 +337,9 @@
                 android:layout_height="wrap_content"
                 android:text="خەوتنان"
                 android:textColor="#B3F3E8D2"
-                android:textSize="10sp"
+                android:textSize="8.5sp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:includeFontPadding="false" />
 
             <TextView
@@ -348,7 +349,7 @@
                 android:layout_marginTop="2dp"
                 android:text="--:--"
                 android:textColor="#FFF3E8D2"
-                android:textSize="12sp"
+                android:textSize="10.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:includeFontPadding="false" />

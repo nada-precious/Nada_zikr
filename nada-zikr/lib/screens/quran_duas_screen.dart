@@ -88,18 +88,43 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
     super.dispose();
   }
 
-  void _copyDua(QuranDuaItem dua, bool isKurdish, bool isArabic) {
+  void _copyDua(QuranDuaItem dua, String lang, bool isKurmanji, bool isKurdish, bool isArabic) {
     AppHaptics.lightImpact();
-    final surahLabel = isKurdish
-        ? dua.surahNameKu
-        : (isArabic ? dua.surahNameAr : dua.surah);
+    final surahLabel = isKurmanji
+        ? dua.surahNameKmr
+        : (isKurdish
+            ? dua.surahNameKu
+            : (isArabic ? dua.surahNameAr : dua.surah));
 
-    final text = '💫 دوعای پیرۆزی قورئانی پیرۆز:\n\n'
+    final String titleText = isKurmanji
+        ? '💫 دوعایا پیرۆز یا قورئانا پیرۆز:\n\n'
+        : (isKurdish
+            ? '💫 دوعای پیرۆزی قورئانی پیرۆز:\n\n'
+            : (isArabic
+                ? '💫 دعاء مبارك من القرآن الكريم:\n\n'
+                : '💫 Blessed Quranic Supplication:\n\n'));
+
+    final String tafsirHeader = isKurmanji
+        ? '📖 تەفسیرا ب ساناهی (کوردی):\n'
+        : (isKurdish
+            ? '📖 تەفسیری ئاسان (کوردی):\n'
+            : (isArabic
+                ? '📖 المعنى والتفسير:\n'
+                : '📖 Easy Tafsir:\n'));
+
+    final String sourceLabel = isKurmanji
+        ? 'ژێدەر: $surahLabel : ئایەتا ${dua.ayah}\nژ بەرنامێ نەدا (Nada) 🌟'
+        : (isKurdish
+            ? 'سەرچاوە: $surahLabel : ئایەتی ${dua.ayah}\nلە ئەپی نەدا (Nada) 🌟'
+            : (isArabic
+                ? 'المصدر: $surahLabel : آية ${dua.ayah}\nمن تطبيق ندى (Nada) 🌟'
+                : 'Source: $surahLabel : Ayah ${dua.ayah}\nFrom Nada App 🌟'));
+
+    final text = '$titleText'
         '«${dua.arabic}»\n\n'
-        '📖 تەفسیری ئاسان (کوردی):\n${dua.kurdishMeaning}\n\n'
+        '$tafsirHeader${dua.kurdishMeaning}\n\n'
         '🌐 English Translation:\n${dua.englishMeaning}\n\n'
-        'سەرچاوە: $surahLabel : ئایەتی ${dua.ayah}\n'
-        'لە ئەپی نەدا (Nada) 🌟';
+        '$sourceLabel';
 
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
@@ -110,12 +135,14 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                 color: Color(0xFF34D399), size: 18),
             const SizedBox(width: 10),
             Text(
-              isKurdish
-                  ? 'دوعاکە کۆپیکرا بۆ کلیپبۆرد'
-                  : (isArabic
-                      ? 'تم نسخ الدعاء إلى الحافظة'
-                      : 'Dua copied to clipboard'),
-              style: (isKurdish || isArabic)
+              isKurmanji
+                  ? 'دوعا هاتە کۆپیکرن بۆ کلیپبۆردێ'
+                  : (isKurdish
+                      ? 'دوعاکە کۆپیکرا بۆ کلیپبۆرد'
+                      : (isArabic
+                          ? 'تم نسخ الدعاء إلى الحافظة'
+                          : 'Dua copied to clipboard')),
+              style: (isKurmanji || isKurdish || isArabic)
                   ? AppTheme.kurdishText(color: Colors.white, fontSize: 12)
                   : AppTheme.englishText(color: Colors.white, fontSize: 12),
             ),
@@ -133,6 +160,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? AppLocalizations.languageCode;
+    final isKurmanji = lang == 'kmr';
     final isKurdish = lang == 'ku';
     final isArabic = lang == 'ar';
 
@@ -173,6 +201,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                       d.englishMeaning.toLowerCase().contains(query) ||
                       d.arabic.toLowerCase().contains(query) ||
                       d.surah.toLowerCase().contains(query) ||
+                      d.surahNameKmr.toLowerCase().contains(query) ||
                       d.surahNameKu.toLowerCase().contains(query) ||
                       d.surahNameAr.toLowerCase().contains(query) ||
                       d.ayah.toLowerCase().contains(query);
@@ -185,19 +214,19 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
               slivers: [
                 // Top App Bar
                 SliverToBoxAdapter(
-                  child: _buildHeader(context, isKurdish, isArabic),
+                  child: _buildHeader(context, isKurmanji, isKurdish, isArabic),
                 ),
 
                 // Search Bar (if activated)
                 if (_isSearching)
                   SliverToBoxAdapter(
-                    child: _buildSearchBar(isKurdish, isArabic),
+                    child: _buildSearchBar(isKurmanji, isKurdish, isArabic),
                   ),
 
                 // Surahs Horizontal Filter Chips
                 SliverToBoxAdapter(
                   child: _buildSurahChips(
-                      surahsMap, allDuas, allDuas.length, lang, isKurdish, isArabic),
+                      surahsMap, allDuas, allDuas.length, lang, isKurmanji, isKurdish, isArabic),
                 ),
 
                 // Quranic Dua of the Day Hero Banner (Only when not searching & not filtered)
@@ -207,7 +236,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                     _selectedSurah == 'all')
                   SliverToBoxAdapter(
                     child: _buildDuaOfTheDayBanner(
-                        context, dailyDua, isKurdish, isArabic),
+                        context, dailyDua, lang, isKurmanji, isKurdish, isArabic),
                   ),
 
                 // Section Title / Results counter
@@ -219,16 +248,20 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                       children: [
                         Text(
                           _showFavoritesOnly
-                              ? (isKurdish
-                                  ? 'دوعا هەڵبژێردراوەکانم'
-                                  : (isArabic
-                                      ? 'الأدعية المفضلة'
-                                      : 'Saved Supplications'))
-                              : (isKurdish
-                                  ? '${filteredDuas.length} دوعای قورئانی'
-                                  : (isArabic
-                                      ? '${filteredDuas.length} دعاء قرآني'
-                                      : '${filteredDuas.length} Quranic Duas')),
+                              ? (isKurmanji
+                                  ? 'دوعایێن من یێن هەلبژارتی'
+                                  : (isKurdish
+                                      ? 'دوعا هەڵبژێردراوەکانم'
+                                      : (isArabic
+                                          ? 'الأدعية المفضلة'
+                                          : 'Saved Supplications')))
+                              : (isKurmanji
+                                  ? '${filteredDuas.length} دوعایێن قورئانی'
+                                  : (isKurdish
+                                      ? '${filteredDuas.length} دوعای قورئانی'
+                                      : (isArabic
+                                          ? '${filteredDuas.length} دعاء قرآني'
+                                          : '${filteredDuas.length} Quranic Duas'))),
                           style: TextStyle(
                             color: AppColors.mutedText,
                             fontSize: 12,
@@ -239,9 +272,11 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                           GestureDetector(
                             onTap: () => setState(() => _selectedSurah = 'all'),
                             child: Text(
-                              isKurdish
-                                  ? 'پاککردنەوەی فلتەر'
-                                  : (isArabic ? 'إلغاء التصفية' : 'Clear filter'),
+                              isKurmanji
+                                  ? 'پاقژکرنا فلتەری'
+                                  : (isKurdish
+                                      ? 'پاککردنەوەی فلتەر'
+                                      : (isArabic ? 'إلغاء التصفية' : 'Clear filter')),
                               style: TextStyle(
                                   fontSize: 11, color: AppColors.gold),
                             ),
@@ -254,7 +289,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                 // Duas List
                 if (filteredDuas.isEmpty)
                   SliverToBoxAdapter(
-                    child: _buildEmptyState(isKurdish),
+                    child: _buildEmptyState(isKurmanji, isKurdish),
                   )
                 else
                   SliverPadding(
@@ -267,9 +302,11 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                           final reciteCount =
                               _reciteCounters[dua.id] ?? 0;
 
-                          final surahLabel = isKurdish
-                              ? dua.surahNameKu
-                              : (isArabic ? dua.surahNameAr : dua.surah);
+                          final surahLabel = isKurmanji
+                              ? dua.surahNameKmr
+                              : (isKurdish
+                                  ? dua.surahNameKu
+                                  : (isArabic ? dua.surahNameAr : dua.surah));
 
                           final hasKurdish =
                               dua.kurdishMeaning.trim().isNotEmpty;
@@ -312,10 +349,10 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                               showDialog(
                                 context: context,
                                 builder: (ctx) => DuaCardGeneratorDialog(
-                                    azkar: dua.toAzkar()),
+                                    azkar: dua.toAzkar(lang)),
                               );
                             },
-                            onCopy: () => _copyDua(dua, isKurdish, isArabic),
+                            onCopy: () => _copyDua(dua, lang, isKurmanji, isKurdish, isArabic),
                             onFocusRead: () async {
                               final newCount = await FocusedReadingSheet.show(
                                 context,
@@ -335,7 +372,9 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                               }
                             },
                             lang: lang,
-                            meaningBadgeKurdishLabel: '📖 تەفسیری ئاسان (کوردی)',
+                            meaningBadgeKurdishLabel: isKurmanji
+                                ? '📖 تەفسیرا ب ساناهی (کوردی)'
+                                : '📖 تەفسیری ئاسان (کوردی)',
                             isDisplayingEnglish: isDisplayingEnglish,
                             onToggleLanguage: () {
                               AppHaptics.selectionClick();
@@ -360,7 +399,8 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // HEADER
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildHeader(BuildContext context, bool isKurdish, bool isArabic) {
+  Widget _buildHeader(BuildContext context, bool isKurmanji, bool isKurdish, bool isArabic) {
+    final bool isKurdishAny = isKurmanji || isKurdish;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Row(
@@ -395,28 +435,32 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isKurdish
-                      ? 'دوعاکانی قورئانی پیرۆز'
-                      : (isArabic
-                          ? 'أدعية القرآن الكريم'
-                          : 'Quranic Supplications'),
+                  isKurmanji
+                      ? 'دوعایێن قورئانا پیرۆز'
+                      : (isKurdish
+                          ? 'دوعاکانی قورئانی پیرۆز'
+                          : (isArabic
+                              ? 'أدعية القرآن الكريم'
+                              : 'Quranic Supplications')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: isKurdish
+                  style: isKurdishAny
                       ? AppTheme.kurdishTitle(
                           fontSize: 17, color: AppColors.cream)
                       : AppTheme.englishTitle(
                           fontSize: 17, color: AppColors.cream),
                 ),
                 Text(
-                  isKurdish
-                      ? '70 دوعای پیرۆز بە تەفسیری ئاسان'
-                      : (isArabic
-                          ? '70 دعاء مبارك من آيات الذكر الحكيم'
-                          : '70 authentic supplications from the Holy Quran'),
+                  isKurmanji
+                      ? '70 دوعایێن پیرۆز ب تەفسیرەکا ب ساناهی'
+                      : (isKurdish
+                          ? '70 دوعای پیرۆز بە تەفسیری ئاسان'
+                          : (isArabic
+                              ? '70 دعاء مبارك من آيات الذكر الحكيم'
+                              : '70 authentic supplications from the Holy Quran')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: isKurdish
+                  style: isKurdishAny
                       ? AppTheme.kurdishText(
                           fontSize: 11, color: AppColors.mutedText)
                       : AppTheme.englishText(
@@ -502,7 +546,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // SEARCH BAR
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildSearchBar(bool isKurdish, bool isArabic) {
+  Widget _buildSearchBar(bool isKurmanji, bool isKurdish, bool isArabic) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 4, 16, 10),
       padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -516,11 +560,13 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
         autofocus: true,
         style: TextStyle(color: AppColors.cream, fontSize: 13.5),
         decoration: InputDecoration(
-          hintText: isKurdish
-              ? 'گەڕان لە دوعاکان، سوورەت یان ئایەت...'
-              : (isArabic
-                  ? 'ابحث في نصوص الأدعية أو السور...'
-                  : 'Search supplications, surahs, or ayahs...'),
+          hintText: isKurmanji
+              ? 'ل دەقێ دوعایان، سورەت یان ئایەتان بگەڕە...'
+              : (isKurdish
+                  ? 'گەڕان لە دوعاکان، سوورەت یان ئایەت...'
+                  : (isArabic
+                      ? 'ابحث في نصوص الأدعية أو السور...'
+                      : 'Search supplications, surahs, or ayahs...')),
           hintStyle: TextStyle(color: AppColors.faintText, fontSize: 12.5),
           border: InputBorder.none,
           icon: Icon(Icons.search_rounded, color: AppColors.gold, size: 18),
@@ -544,7 +590,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
   // SURAHS FILTER CHIPS
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildSurahChips(Map<String, int> surahsMap, List<QuranDuaItem> allDuas,
-      int totalCount, String lang, bool isKurdish, bool isArabic) {
+      int totalCount, String lang, bool isKurmanji, bool isKurdish, bool isArabic) {
     return Container(
       height: 38,
       margin: const EdgeInsets.only(top: 4, bottom: 8),
@@ -554,15 +600,17 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
         physics: const BouncingScrollPhysics(),
         children: [
           _buildFilterChip(
-            label: isKurdish
-                ? 'هەمووی ($totalCount)'
-                : (isArabic ? 'الكل ($totalCount)' : 'All ($totalCount)'),
+            label: isKurmanji
+                ? 'هەمی ($totalCount)'
+                : (isKurdish
+                    ? 'هەمووی ($totalCount)'
+                    : (isArabic ? 'الكل ($totalCount)' : 'All ($totalCount)')),
             isSelected: _selectedSurah == 'all',
             onTap: () {
               AppHaptics.selectionClick();
               setState(() => _selectedSurah = 'all');
             },
-            isKurdish: isKurdish,
+            isKurdish: isKurmanji || isKurdish,
           ),
           ...surahsMap.entries.map((entry) {
             final isSelected = _selectedSurah == entry.key;
@@ -578,7 +626,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                 AppHaptics.selectionClick();
                 setState(() => _selectedSurah = entry.key);
               },
-              isKurdish: isKurdish,
+              isKurdish: isKurmanji || isKurdish,
             );
           }),
         ],
@@ -627,12 +675,12 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
   // QURANIC DUA OF THE DAY (CALM SPOTLIGHT)
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildDuaOfTheDayBanner(BuildContext context, QuranDuaItem dua,
-      bool isKurdish, bool isArabic) {
-    final loc = AppLocalizations.of(context);
-    final lang = loc?.locale.languageCode ?? AppLocalizations.languageCode;
-    final surahLabel = isKurdish
-        ? dua.surahNameKu
-        : (isArabic ? dua.surahNameAr : dua.surah);
+      String lang, bool isKurmanji, bool isKurdish, bool isArabic) {
+    final surahLabel = isKurmanji
+        ? dua.surahNameKmr
+        : (isKurdish
+            ? dua.surahNameKu
+            : (isArabic ? dua.surahNameAr : dua.surah));
     final isFav = _favoriteIds.contains(dua.id);
     final reciteCount = _reciteCounters[dua.id] ?? 0;
 
@@ -658,10 +706,10 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
             AppHaptics.lightImpact();
             showDialog(
               context: context,
-              builder: (ctx) => DuaCardGeneratorDialog(azkar: dua.toAzkar()),
+              builder: (ctx) => DuaCardGeneratorDialog(azkar: dua.toAzkar(lang)),
             );
           },
-          onCopy: () => _copyDua(dua, isKurdish, isArabic),
+          onCopy: () => _copyDua(dua, lang, isKurmanji, isKurdish, isArabic),
           onOpenInQuran: () => _openQuranAyah(dua.surahNumber, dua.ayahNumber),
           onFocusRead: () async {
             final newCount = await FocusedReadingSheet.show(
@@ -714,11 +762,13 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(
-                          isKurdish
-                              ? 'دوعای قورئانیی ئەمڕۆ'
-                              : (isArabic
-                                  ? 'دعاء اليوم من القرآن'
-                                  : 'Daily Quranic Dua'),
+                          isKurmanji
+                              ? 'دوعایا قورئانی یا ئەڤڕۆ'
+                              : (isKurdish
+                                  ? 'دوعای قورئانیی ئەمڕۆ'
+                                  : (isArabic
+                                      ? 'دعاء اليوم من القرآن'
+                                      : 'Daily Quranic Dua')),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -792,9 +842,9 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.right,
               style: AppTheme.quranAyahText(
-                color: const Color(0xFFFFFBEB),
-                fontSize: 19,
-                height: 1.9,
+                color: AppColors.cream,
+                fontSize: 21,
+                height: 1.95,
               ),
             ),
             if (dua.kurdishMeaning.isNotEmpty) ...[
@@ -828,9 +878,11 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                           size: 13, color: AppColors.mutedText),
                       const SizedBox(width: 4),
                       Text(
-                        isKurdish
-                            ? 'لە قورئاندا بیبینە'
-                            : (isArabic ? 'عرض في القرآن' : 'View in Quran'),
+                        isKurmanji
+                            ? 'د قورئانێ دا ببینە'
+                            : (isKurdish
+                                ? 'لە قورئاندا بیبینە'
+                                : (isArabic ? 'عرض في القرآن' : 'View in Quran')),
                         style: TextStyle(
                           color: AppColors.mutedText,
                           fontSize: 11,
@@ -843,9 +895,11 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isKurdish
-                          ? 'دەست لێبدە بۆ زیاتر'
-                          : (isArabic ? 'اضغط للمزيد' : 'Tap for more'),
+                      isKurmanji
+                          ? 'دەست لێبدە بۆ پتر'
+                          : (isKurdish
+                              ? 'دەست لێبدە بۆ زیاتر'
+                              : (isArabic ? 'اضغط للمزيد' : 'Tap for more')),
                       style: TextStyle(
                         color: AppColors.gold.withValues(alpha: 0.7),
                         fontSize: 10,
@@ -853,7 +907,7 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
                     ),
                     const SizedBox(width: 3),
                     Icon(
-                      isKurdish
+                      (isKurmanji || isKurdish)
                           ? Icons.chevron_left_rounded
                           : Icons.chevron_right_rounded,
                       size: 14,
@@ -872,7 +926,8 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // EMPTY STATE
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildEmptyState(bool isKurdish) {
+  Widget _buildEmptyState(bool isKurmanji, bool isKurdish) {
+    final bool isKurdishAny = isKurmanji || isKurdish;
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -888,14 +943,18 @@ class _QuranDuasScreenState extends State<QuranDuasScreen> {
           const SizedBox(height: 14),
           Text(
             _showFavoritesOnly
-                ? (isKurdish
-                    ? 'هیچ دوعایەکت لە دڵخوازەکان دیاری نەکردووە'
-                    : 'No saved supplications yet')
-                : (isKurdish
-                    ? 'هیچ دوعایەک بەم ناوەوە نەدۆزرایەوە'
-                    : 'No supplications found'),
+                ? (isKurmanji
+                    ? 'تە چ دوعا ل دڵخوازان دیار نەکریە'
+                    : (isKurdish
+                        ? 'هیچ دوعایەکت لە دڵخوازەکان دیاری نەکردووە'
+                        : 'No saved supplications yet'))
+                : (isKurmanji
+                    ? 'چ دوعا ب ڤی ناڤی نەهاتە دیتن'
+                    : (isKurdish
+                        ? 'هیچ دوعایەک بەم ناوەوە نەدۆزرایەوە'
+                        : 'No supplications found')),
             textAlign: TextAlign.center,
-            style: isKurdish
+            style: isKurdishAny
                 ? AppTheme.kurdishText(
                     color: AppColors.mutedText, fontSize: 13.5)
                 : AppTheme.englishText(

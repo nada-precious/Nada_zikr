@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,7 +27,7 @@ class LocationResult {
   });
 
   String displayName(String locale) {
-    if (locale == 'ku') return displayNameKu;
+    if (locale == 'ku' || locale == 'kmr') return displayNameKu;
     if (locale == 'ar') return displayNameAr;
     return displayNameEn;
   }
@@ -102,12 +103,12 @@ class LocationService {
               position = await Geolocator.getLastKnownPosition();
             }
 
-            // If no last known position or explicit live fix requested, query live position with a short timeout
+            // If no last known position or explicit live fix requested, query live position with a proper timeout
             if (position == null) {
               try {
                 position = await Geolocator.getCurrentPosition(
                   desiredAccuracy: LocationAccuracy.medium,
-                  timeLimit: const Duration(milliseconds: 2500),
+                  timeLimit: const Duration(seconds: 8),
                 );
               } catch (_) {
                 position = await Geolocator.getLastKnownPosition();
@@ -148,6 +149,11 @@ class LocationService {
     final isGpsMode = (locationMode == 'gps' || forceGps);
     final gpsSuffix = (gpsSuccess && isGpsMode) ? ' (GPS)' : '';
 
+    // If GPS was successful and active, keep stored city in sync with nearest city
+    if (gpsSuccess && isGpsMode) {
+      unawaited(StorageService.savePrayerSelectedCity(nearest.id));
+    }
+
     final result = LocationResult(
       latitude: lat,
       longitude: lng,
@@ -159,9 +165,11 @@ class LocationService {
       errorMessage: errMessage,
     );
 
-    // Cache the result for subsequent calls
-    _cachedResult = result;
-    _cacheTimestamp = DateTime.now();
+    // Only cache successful fixes or preset choices, never cache failed GPS fallback
+    if (gpsSuccess || locationMode != 'gps') {
+      _cachedResult = result;
+      _cacheTimestamp = DateTime.now();
+    }
 
     return result;
   }

@@ -47,12 +47,12 @@ class GeneralDuaItem {
 
   /// Returns clean localized category title
   String getCategoryTitle(String lang) {
-    if (category.isEmpty) return lang == 'ku' ? 'دوعای گشتی' : 'General Dua';
+    if (category.isEmpty) return (lang == 'ku' || lang == 'kmr') ? (lang == 'kmr' ? 'دوعایا گشتی' : 'دوعای گشتی') : 'General Dua';
     if (category.contains('(') && category.contains(')')) {
       final parts = category.split('(');
       final enPart = parts[0].trim();
       final kuPart = parts[1].replaceAll(')', '').trim();
-      if (lang == 'ku') return kuPart.isNotEmpty ? kuPart : enPart;
+      if (lang == 'ku' || lang == 'kmr') return kuPart.isNotEmpty ? kuPart : enPart;
       return enPart.isNotEmpty ? enPart : kuPart;
     }
     return category;
@@ -60,12 +60,12 @@ class GeneralDuaItem {
 
   /// Returns clean localized title
   String getDisplayTitle(String lang) {
-    if (title.isEmpty) return lang == 'ku' ? 'دوعای پێغەمبەر ﷺ' : 'Prophetic Dua ﷺ';
+    if (title.isEmpty) return (lang == 'ku' || lang == 'kmr') ? (lang == 'kmr' ? 'دوعایا پێغەمبەری ﷺ' : 'دوعای پێغەمبەر ﷺ') : 'Prophetic Dua ﷺ';
     if (title.contains('(') && title.contains(')')) {
       final parts = title.split('(');
       final enPart = parts[0].trim();
       final kuPart = parts[1].replaceAll(')', '').trim();
-      if (lang == 'ku') return kuPart.isNotEmpty ? kuPart : enPart;
+      if (lang == 'ku' || lang == 'kmr') return kuPart.isNotEmpty ? kuPart : enPart;
       return enPart.isNotEmpty ? enPart : kuPart;
     }
     return title;

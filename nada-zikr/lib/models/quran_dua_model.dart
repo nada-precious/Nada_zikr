@@ -118,8 +118,46 @@ class QuranDuaItem {
     return map[surah] ?? 'سورة $surah';
   }
 
+  /// Returns Kurmanji formatted Surah title
+  String get surahNameKmr {
+    final map = {
+      'Al-Fatihah': 'سورەتا الفاتحة',
+      'Al-Baqarah': 'سورەتا البقرة',
+      "Ali 'Imran": 'سورەتا آل عمران',
+      'An-Nisa': 'سورەتا النساء',
+      "Al-Ma'idah": 'سورەتا المائدة',
+      "Al-A'raf": 'سورەتا الأعراف',
+      'Yunus': 'سورەتا یونس',
+      'Hud': 'سورەتا هود',
+      'Yusuf': 'سورەتا یوسف',
+      'Ibrahim': 'سورەتا إبراهیم',
+      'Al-Isra': 'سورەتا الإسراء',
+      'Al-Kahf': 'سورەتا الكهف',
+      'Maryam': 'سورەتا مریم',
+      'Ta-Ha': 'سورەتا طه',
+      'Al-Anbiya': 'سورەتا الأنبیاء',
+      "Al-Mu'minun": 'سورەتا المؤمنون',
+      'Al-Furqan': 'سورەتا الفرقان',
+      "Ash-Shu'ara": 'سورەتا الشعراء',
+      'An-Naml': 'سورەتا النمل',
+      'Al-Qasas': 'سورەتا القصص',
+      'Al-Ankabut': 'سورەتا العنكبوت',
+      'As-Saffat': 'سورەتا الصافات',
+      'Sad': 'سورەتا ص',
+      'Ghafir': 'سورەتا غافر',
+      'Al-Ahqaf': 'سورەتا الأحقاف',
+      'Al-Qamar': 'سورەتا القمر',
+      'Al-Hashr': 'سورەتا الحشر',
+      'Al-Mumtahanah': 'سورەتا الممتحنة',
+      'At-Tahrim': 'سورەتا التحریم',
+      'Nuh': 'سورەتا نوح',
+    };
+    return map[surah] ?? 'سورەتا $surah';
+  }
+
   /// Returns localized Surah title based on current language (Kurdish, Arabic, or English)
   String getSurahName(String lang) {
+    if (lang == 'kmr') return surahNameKmr;
     if (lang == 'ku') return surahNameKu;
     if (lang == 'ar') return surahNameAr;
     return surah;
@@ -182,14 +220,24 @@ class QuranDuaItem {
   }
 
   /// Convert to Azkar item for reading screens and visual card generator
-  Azkar toAzkar() {
+  Azkar toAzkar([String lang = 'ku']) {
+    final String src;
+    if (lang == 'kmr') {
+      src = '$surahNameKmr • ئایەتا $ayah';
+    } else if (lang == 'ar') {
+      src = '$surahNameAr • آية $ayah';
+    } else if (lang == 'ku') {
+      src = '$surahNameKu • ئایەتی $ayah';
+    } else {
+      src = '$surah • Ayah $ayah';
+    }
     return Azkar(
       id: id,
       arabic: arabic,
       translation: englishMeaning,
       kurdishTranslation: kurdishMeaning,
       repeat: 1,
-      source: '$surahNameKu • ئایەتی $ayah',
+      source: src,
     );
   }
 }

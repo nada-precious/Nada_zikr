@@ -121,14 +121,17 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)?.locale.languageCode ?? 'ku';
-    final isKurdish = locale == 'ku';
-    final isRtl = locale == 'ku' || locale == 'ar';
+    final isKurmanji = locale == 'kmr';
+    final isKurdish = locale == 'ku' || isKurmanji;
+    final isRtl = locale == 'ku' || locale == 'kmr' || locale == 'ar';
 
     return FutureBuilder<PrayerTimesCatalog>(
       future: _catalogFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return _messageScreen(isKurdish ? 'داتای کاتەکانی بانگ نەهاتەوە.' : 'Prayer times could not be loaded.');
+          return _messageScreen(isKurmanji
+              ? 'داتایا دەمێن بانگی نەهات.'
+              : (isKurdish ? 'داتای کاتەکانی بانگ نەهاتەوە.' : 'Prayer times could not be loaded.'));
         }
         if (!snapshot.hasData) {
           return Scaffold(
@@ -143,7 +146,7 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
         final prayers = _prayersFor(day);
         final next = _nextPrayer(prayers);
 
-        return _buildPage(context, catalog, selectedCity, day, prayers, next, locale, isKurdish, isRtl);
+        return _buildPage(context, catalog, selectedCity, day, prayers, next, locale, isKurmanji, isKurdish, isRtl);
       },
     );
   }
@@ -156,6 +159,7 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
     List<_Prayer> prayers,
     _Prayer next,
     String locale,
+    bool isKurmanji,
     bool isKurdish,
     bool isRtl,
   ) {
@@ -188,13 +192,15 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
                       crossAxisAlignment: isRtl ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isKurdish ? 'کاتەکانی بانگ' : locale == 'ar' ? 'مواقيت الصلاة' : 'Prayer Times',
+                          isKurmanji
+                              ? 'دەمێن بانگی'
+                              : (isKurdish ? 'کاتەکانی بانگ' : (locale == 'ar' ? 'مواقيت الصلاة' : 'Prayer Times')),
                           textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                           style: isKurdish ? AppTheme.kurdishTitle(fontSize: 23, color: AppColors.gold) : AppTheme.englishTitle(fontSize: 23, color: AppColors.gold),
                         ),
                         Text(
                           _isLocating
-                              ? (isKurdish ? 'شوێن دەخوێنرێتەوە...' : 'Finding your location...')
+                              ? (isKurmanji ? 'جهـ دهێتە خاندن...' : (isKurdish ? 'شوێن دەخوێنرێتەوە...' : 'Finding your location...'))
                               : _cityLabel(city, locale),
                           textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                           style: isKurdish ? AppTheme.kurdishText(fontSize: 12, color: AppColors.faintText) : AppTheme.englishText(fontSize: 12, color: AppColors.faintText),
@@ -209,7 +215,7 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
                     ),
                   IconButton(
-                    tooltip: isKurdish ? 'شار هەڵبژێرە' : 'Choose city',
+                    tooltip: isKurmanji ? 'باژێڕی هەلبژێرە' : (isKurdish ? 'شار هەڵبژێرە' : 'Choose city'),
                     onPressed: () => _chooseCity(context, catalog, locale),
                     icon: Icon(Icons.location_on_outlined, color: AppColors.gold),
                   ),
@@ -226,7 +232,13 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
                 child: Column(
                   crossAxisAlignment: isRtl ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                   children: [
-                    Text(isKurdish ? 'بانگی داهاتوو' : locale == 'ar' ? 'الصلاة القادمة' : 'Next prayer', textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr, style: isKurdish ? AppTheme.kurdishText(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w700) : AppTheme.englishText(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w700)),
+                    Text(
+                      isKurmanji
+                          ? 'بانگێ بهێت'
+                          : (isKurdish ? 'بانگی داهاتوو' : (locale == 'ar' ? 'الصلاة القادمة' : 'Next prayer')),
+                      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+                      style: isKurdish ? AppTheme.kurdishText(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w700) : AppTheme.englishText(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w700),
+                    ),
                     const SizedBox(height: 10),
                     Row(
                       textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
@@ -250,7 +262,15 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
               Row(
                 textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                 children: [
-                  Expanded(child: Text(isKurdish ? 'کاتەکانی ئەمڕۆ' : locale == 'ar' ? 'مواقيت اليوم' : "Today's prayer times", textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr, style: isKurdish ? AppTheme.kurdishTitle(fontSize: 15, color: AppColors.cream) : AppTheme.englishTitle(fontSize: 15, color: AppColors.cream))),
+                  Expanded(
+                    child: Text(
+                      isKurmanji
+                          ? 'دەمێن ئەڤڕۆ'
+                          : (isKurdish ? 'کاتەکانی ئەمڕۆ' : (locale == 'ar' ? 'مواقيت اليوم' : "Today's prayer times")),
+                      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+                      style: isKurdish ? AppTheme.kurdishTitle(fontSize: 15, color: AppColors.cream) : AppTheme.englishTitle(fontSize: 15, color: AppColors.cream),
+                    ),
+                  ),
                   Text(day.date, style: AppTheme.englishText(fontSize: 12, color: AppColors.mutedText)),
                 ],
               ),
@@ -265,7 +285,19 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
                   children: [
                     Icon(Icons.verified_outlined, color: AppColors.gold, size: 20),
                     const SizedBox(width: 9),
-                    Expanded(child: Text(_locationMessage ?? (isKurdish ? 'کاتەکان لە داتابەیسی imanikurd ـەوە وەرگیراون.' : locale == 'ar' ? 'الأوقات مأخوذة من قاعدة بيانات imanikurd.' : 'Times are supplied by the imanikurd prayer-times database.'), textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr, style: isKurdish ? AppTheme.kurdishText(fontSize: 12, color: AppColors.faintText) : AppTheme.englishText(fontSize: 12, color: AppColors.faintText))),
+                    Expanded(
+                      child: Text(
+                        _locationMessage ?? (isKurmanji
+                            ? 'دەم ژ داتابەیسا imanikurd هاتینە وەرگرتن.'
+                            : (isKurdish
+                                ? 'کاتەکان لە داتابەیسی imanikurd ـەوە وەرگیراون.'
+                                : (locale == 'ar'
+                                    ? 'الأوقات مأخوذة من قاعدة بيانات imanikurd.'
+                                    : 'Times are supplied by the imanikurd prayer-times database.'))),
+                        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+                        style: isKurdish ? AppTheme.kurdishText(fontSize: 12, color: AppColors.faintText) : AppTheme.englishText(fontSize: 12, color: AppColors.faintText),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -277,6 +309,8 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
   }
 
   Widget _prayerRow(_Prayer prayer, String locale, bool isRtl, bool isNext) {
+    final isKurmanji = locale == 'kmr';
+    final isKurdish = locale == 'ku' || isKurmanji;
     return Container(
       margin: const EdgeInsets.only(bottom: 9),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -286,7 +320,7 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
         children: [
           Icon(prayer.icon, color: isNext ? AppColors.gold : AppColors.mutedText, size: 22),
           const SizedBox(width: 12),
-          Expanded(child: Text(prayer.label(locale), textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr, style: locale == 'ku' ? AppTheme.kurdishText(fontSize: 14, color: isNext ? AppColors.gold : AppColors.cream, fontWeight: FontWeight.w700) : AppTheme.englishText(fontSize: 14, color: isNext ? AppColors.gold : AppColors.cream, fontWeight: FontWeight.w700))),
+          Expanded(child: Text(prayer.label(locale), textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr, style: isKurdish ? AppTheme.kurdishText(fontSize: 14, color: isNext ? AppColors.gold : AppColors.cream, fontWeight: FontWeight.w700) : AppTheme.englishText(fontSize: 14, color: isNext ? AppColors.gold : AppColors.cream, fontWeight: FontWeight.w700))),
           const SizedBox(width: 8),
           Flexible(
             child: FittedBox(
@@ -316,6 +350,8 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
   }
 
   Future<void> _chooseCity(BuildContext context, PrayerTimesCatalog catalog, String locale) async {
+    final isKurmanji = locale == 'kmr';
+    final isKurdish = locale == 'ku' || isKurmanji;
     final selected = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
@@ -349,10 +385,14 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        locale == 'ku' ? 'شار هەڵبژێرە' : locale == 'ar' ? 'اختر المدينة' : 'Choose city',
+                        isKurmanji
+                            ? 'باژێڕی هەلبژێرە'
+                            : (isKurdish ? 'شار هەڵبژێرە' : (locale == 'ar' ? 'اختر المدينة' : 'Choose city')),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTheme.englishTitle(fontSize: 18, color: AppColors.gold),
+                        style: isKurdish
+                            ? AppTheme.kurdishTitle(fontSize: 18, color: AppColors.gold)
+                            : AppTheme.englishTitle(fontSize: 18, color: AppColors.gold),
                       ),
                     ),
                     IconButton(
@@ -383,9 +423,16 @@ class _PrayerTimesDatasetScreenState extends State<PrayerTimesDatasetScreen> {
   }
 
   String _cityLabel(String city, String locale) {
-    if (city == 'Hawler' && locale == 'ku') return 'هەولێر';
-    if (city == 'Slemani' && locale == 'ku') return 'سلێمانی';
-    if (city == 'Duhok' && locale == 'ku') return 'دهۆک';
+    if (locale == 'ku' || locale == 'kmr') {
+      if (city == 'Hawler') return 'هەولێر';
+      if (city == 'Slemani') return 'سلێمانی';
+      if (city == 'Duhok') return 'دهۆک';
+      if (city == 'Zakho') return 'زاخۆ';
+      if (city == 'Halabja') return 'هەڵەبجە';
+      if (city == 'Kirkuk') return 'کەرکووک';
+      if (city == 'Mosul') return 'مووسڵ';
+      if (city == 'Baghdad') return 'بەغدا';
+    }
     return city;
   }
 
@@ -417,6 +464,17 @@ class _Prayer {
   }
 
   String label(String locale) {
+    if (locale == 'kmr') {
+      const names = {
+        'fajr': 'سپێدە',
+        'sunrise': 'ڕۆژهەلات',
+        'dhuhr': 'نیڤروو',
+        'asr': 'ئێڤاری',
+        'maghrib': 'مەغریب',
+        'isha': 'عەشا',
+      };
+      return names[id] ?? id;
+    }
     if (locale == 'ku') {
       const names = {'fajr': 'بەیانی', 'sunrise': 'هەڵاتنی خۆر', 'dhuhr': 'نیوەڕۆ', 'asr': 'عەسر', 'maghrib': 'ئێوارە', 'isha': 'عیشا'};
       return names[id] ?? id;

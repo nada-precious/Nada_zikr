@@ -104,8 +104,10 @@ class _NamesOfAllahScreenState extends State<NamesOfAllahScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
+    final isKurmanji = lang == 'kmr';
     final isKurdish = lang == 'ku';
-    final isRTL = lang == 'ar' || lang == 'ku';
+    final isKurdishAny = isKurmanji || isKurdish;
+    final isRTL = lang == 'ar' || lang == 'ku' || lang == 'kmr';
     final bool showEnglish = _showEnglishMode ?? (lang == 'en');
 
     return Scaffold(
@@ -137,10 +139,15 @@ class _NamesOfAllahScreenState extends State<NamesOfAllahScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          loc?.translate('namesOfAllah') ?? 'ناوی پیرۆزی خوای گەورە',
+                          loc?.translate('namesOfAllah') ??
+                              (isKurmanji
+                                  ? 'ناڤێن خودێ یێن پیرۆز'
+                                  : (isKurdish
+                                      ? 'ناوی پیرۆزی خوای گەورە'
+                                      : 'Names of Allah')),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: isKurdish
+                          style: isKurdishAny
                               ? AppTheme.kurdishTitle(fontSize: 18, color: AppColors.gold)
                               : AppTheme.englishTitle(fontSize: 18, color: AppColors.gold),
                         ),
@@ -188,7 +195,7 @@ class _NamesOfAllahScreenState extends State<NamesOfAllahScreen> {
                                   if (_isGridView) ...[
                                     const SizedBox(width: 4),
                                     Text(
-                                      isKurdish ? 'چوارگۆشە' : 'Grid',
+                                      isKurdishAny ? 'چوارگۆشە' : 'Grid',
                                       style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
@@ -220,7 +227,7 @@ class _NamesOfAllahScreenState extends State<NamesOfAllahScreen> {
                                   if (!_isGridView) ...[
                                     const SizedBox(width: 4),
                                     Text(
-                                      isKurdish ? 'لیست' : 'List',
+                                      isKurmanji ? 'لیستە' : (isKurdish ? 'لیست' : 'List'),
                                       style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
@@ -248,7 +255,12 @@ class _NamesOfAllahScreenState extends State<NamesOfAllahScreen> {
                 textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
                 style: AppTheme.englishText(color: AppColors.cream),
                 decoration: InputDecoration(
-                  hintText: loc?.translate('search') ?? 'گەڕان لە ناواندا... / Search',
+                  hintText: loc?.translate('search') ??
+                      (isKurmanji
+                          ? 'ل ناڤاندا بگەڕە... / Search'
+                          : (isKurdish
+                              ? 'گەڕان لە ناواندا... / Search'
+                              : 'Search names...')),
                   hintStyle: AppTheme.englishText(color: AppColors.veryFaintText, fontSize: 13),
                   prefixIcon: Icon(Icons.search_rounded, color: AppColors.gold, size: 20),
                   suffixIcon: _searchController.text.isNotEmpty
@@ -290,8 +302,15 @@ class _NamesOfAllahScreenState extends State<NamesOfAllahScreen> {
               Expanded(
                 child: Center(
                   child: Text(
-                    loc?.translate('noResults') ?? 'هیچ ئەنجامێک نەدۆزرایەوە',
-                    style: AppTheme.kurdishText(color: AppColors.cream, fontSize: 14),
+                    loc?.translate('noResults') ??
+                        (isKurmanji
+                            ? 'چ ئەنجام نەهاتنە دیتن'
+                            : (isKurdish
+                                ? 'هیچ ئەنجامێک نەدۆزرایەوە'
+                                : 'No results found')),
+                    style: isKurdishAny
+                        ? AppTheme.kurdishText(color: AppColors.cream, fontSize: 14)
+                        : AppTheme.englishText(color: AppColors.cream, fontSize: 14),
                   ),
                 ),
               )
@@ -499,9 +518,7 @@ class _NameOfAllahSquareCard extends StatelessWidget {
                         meaning,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
-                        style: lang == 'ku'
+                        style: (lang == 'ku' || lang == 'kmr')
                             ? AppTheme.kurdishText(fontSize: 11, color: AppColors.cream)
                             : AppTheme.englishText(fontSize: 11, color: AppColors.cream),
                       ),
@@ -580,7 +597,11 @@ class _NameOfAllahListCard extends StatelessWidget {
                     style: AppTheme.arabicTitle(fontSize: 20, color: AppColors.gold),
                   ),
                 ),
-                Icon(Icons.chevron_right_rounded, color: AppColors.gold, size: 20),
+                Icon(
+                  (lang == 'ku' || lang == 'kmr') ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
+                  color: AppColors.gold,
+                  size: 20,
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -601,6 +622,7 @@ class _NameOfAllahListCard extends StatelessWidget {
               final hasBoth = hasKurdish && hasEnglish;
               final bool isDisplayingEnglish = (showEnglish && hasEnglish) || !hasKurdish;
               final bool hasContent = hasKurdish || hasEnglish;
+              final isKurmanjiLang = lang == 'kmr';
               final isKurdishLang = lang == 'ku';
 
               if (!hasContent) return const SizedBox.shrink();
@@ -660,16 +682,20 @@ class _NameOfAllahListCard extends StatelessWidget {
                                     const SizedBox(width: 5),
                                     Text(
                                       isDisplayingEnglish
-                                          ? (isKurdishLang
-                                              ? 'مانای ئینگلیزی'
-                                              : (lang == 'ar'
-                                                  ? 'الترجمة بالإنجليزية'
-                                                  : 'English Meaning'))
-                                          : (isKurdishLang
-                                              ? 'مانای کوردی'
-                                              : (lang == 'ar'
-                                                  ? 'المعنى بالكردية'
-                                                  : 'Kurdish Meaning')),
+                                          ? (isKurmanjiLang
+                                              ? 'ڕامانا ئینگلیزی'
+                                              : (isKurdishLang
+                                                  ? 'مانای ئینگلیزی'
+                                                  : (lang == 'ar'
+                                                      ? 'الترجمة بالإنجليزية'
+                                                      : 'English Meaning')))
+                                          : (isKurmanjiLang
+                                              ? 'ڕامانا کوردی'
+                                              : (isKurdishLang
+                                                  ? 'مانای کوردی'
+                                                  : (lang == 'ar'
+                                                      ? 'المعنى بالكردية'
+                                                      : 'Kurdish Meaning'))),
                                       style: isDisplayingEnglish
                                           ? const TextStyle(
                                               fontSize: 10.5,
@@ -706,7 +732,9 @@ class _NameOfAllahListCard extends StatelessWidget {
                                             const SizedBox(width: 2),
                                             Text(
                                               isDisplayingEnglish
-                                                  ? (isKurdishLang ? 'کوردی' : 'Kurdish')
+                                                  ? (isKurmanjiLang
+                                                      ? 'کوردی'
+                                                      : (isKurdishLang ? 'کوردی' : 'Kurdish'))
                                                   : 'English',
                                               style: TextStyle(
                                                 fontSize: 9,
@@ -806,7 +834,13 @@ class _NameDetailModalSheetState extends State<_NameDetailModalSheet> {
     Clipboard.setData(ClipboardData(text: textToCopy));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('کۆپی کرا! • Copied to Clipboard'),
+        content: Text(
+          widget.lang == 'kmr'
+              ? 'هاتە کۆپیکرن! • Copied'
+              : (widget.lang == 'ku'
+                  ? 'کۆپی کرا! • Copied to Clipboard'
+                  : 'تم النسخ! • Copied'),
+        ),
         backgroundColor: AppColors.gold,
         duration: const Duration(seconds: 2),
       ),
@@ -949,6 +983,7 @@ class _NameDetailModalSheetState extends State<_NameDetailModalSheet> {
                 final bool isDisplayingEnglish = (_showEnglishMode ?? widget.showEnglish)
                     ? (hasEnglish || !hasKurdish)
                     : (!hasKurdish);
+                final isKurmanjiLang = widget.lang == 'kmr';
                 final isKurdishLang = widget.lang == 'ku';
 
                 return Container(
@@ -1007,16 +1042,20 @@ class _NameDetailModalSheetState extends State<_NameDetailModalSheet> {
                                       const SizedBox(width: 6),
                                       Text(
                                         isDisplayingEnglish
-                                            ? (isKurdishLang
-                                                ? 'مانای ئینگلیزی'
-                                                : (widget.lang == 'ar'
-                                                    ? 'الترجمة بالإنجليزية'
-                                                    : 'English Meaning'))
-                                            : (isKurdishLang
-                                                ? 'مانای کوردی'
-                                                : (widget.lang == 'ar'
-                                                    ? 'المعنى بالكردية'
-                                                    : 'Kurdish Meaning')),
+                                            ? (isKurmanjiLang
+                                                ? 'ڕامانا ئینگلیزی'
+                                                : (isKurdishLang
+                                                    ? 'مانای ئینگلیزی'
+                                                    : (widget.lang == 'ar'
+                                                        ? 'الترجمة بالإنجليزية'
+                                                        : 'English Meaning')))
+                                            : (isKurmanjiLang
+                                                ? 'ڕامانا کوردی'
+                                                : (isKurdishLang
+                                                    ? 'مانای کوردی'
+                                                    : (widget.lang == 'ar'
+                                                        ? 'المعنى بالكردية'
+                                                        : 'Kurdish Meaning'))),
                                         style: isDisplayingEnglish
                                             ? const TextStyle(
                                                 fontSize: 11,
@@ -1053,7 +1092,9 @@ class _NameDetailModalSheetState extends State<_NameDetailModalSheet> {
                                               const SizedBox(width: 3),
                                               Text(
                                                 isDisplayingEnglish
-                                                    ? (isKurdishLang ? 'کوردی' : 'Kurdish')
+                                                    ? (isKurmanjiLang
+                                                        ? 'کوردی'
+                                                        : (isKurdishLang ? 'کوردی' : 'Kurdish'))
                                                     : 'English',
                                                 style: TextStyle(
                                                   fontSize: 9.5,
@@ -1114,9 +1155,18 @@ class _NameDetailModalSheetState extends State<_NameDetailModalSheet> {
                         ),
                       ),
                       icon: const Icon(Icons.copy_rounded, size: 18),
-                      label: const FittedBox(
+                      label: FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text('کۆپیکردن • Copy', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          widget.lang == 'kmr'
+                              ? 'کۆپیکرن • Copy'
+                              : (widget.lang == 'ku'
+                                  ? 'کۆپیکردن • Copy'
+                                  : (widget.lang == 'ar'
+                                      ? 'نسخ • Copy'
+                                      : 'Copy')),
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -1134,9 +1184,18 @@ class _NameDetailModalSheetState extends State<_NameDetailModalSheet> {
                         ),
                       ),
                       icon: const Icon(Icons.close_rounded, size: 18),
-                      label: const FittedBox(
+                      label: FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text('داخستن • Close', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          widget.lang == 'kmr'
+                              ? 'گرتن • Close'
+                              : (widget.lang == 'ku'
+                                  ? 'داخستن • Close'
+                                  : (widget.lang == 'ar'
+                                      ? 'إغلاق • Close'
+                                      : 'Close')),
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

@@ -47,6 +47,16 @@ class CalculationMethod {
     this.maghribAngle,
   });
 
+  /// 0. Automatic (Recommended for selected country / city)
+  static const auto = CalculationMethod(
+    id: 'auto',
+    nameEn: 'Automatic (Recommended for Location)',
+    nameAr: 'تلقائي (الموصى به حسب البلد والمدينة)',
+    nameKu: 'خۆکار (پێشنیارکراو بەپێی وڵات و شار)',
+    fajrAngle: 18.0,
+    ishaAngle: 17.0,
+  );
+
   /// 1. Official Kurdistan Region Ministry of Endowments (وەزارەتی ئەوقاف)
   static const kurdistanEndowments = CalculationMethod(
     id: 'kurdistan_endowments',
@@ -140,15 +150,25 @@ class CalculationMethod {
     maghribAngle: 4.0,
   );
 
-  /// 9. Gulf Region / UAE Standard
+  /// 9. Gulf Region — Qatar, Bahrain, Oman (Umm Al-Qura-style, Fajr 18°, Isha 90min)
   static const gulf = CalculationMethod(
     id: 'gulf',
-    nameEn: 'Gulf Region / UAE Standard',
-    nameAr: 'منطقة الخليج العربي / الإمارات',
-    nameKu: 'ناوچەی کەنداو / ئیمارات',
-    fajrAngle: 19.5,
+    nameEn: 'Gulf States (Qatar, Bahrain, Oman)',
+    nameAr: 'دول الخليج (قطر، البحرين، عُمان)',
+    nameKu: 'دەوڵەتانی کەنداو (قەتەر، بەحرەین، عومان)',
+    fajrAngle: 18.0,
     ishaAngle: 0,
     ishaIntervalMinutes: 90,
+  );
+
+  /// 9b. Kuwait — Ministry of Awqaf and Islamic Affairs (Fajr 18°, Isha 17.5°)
+  static const kuwait = CalculationMethod(
+    id: 'kuwait',
+    nameEn: 'Kuwait Ministry of Awqaf and Islamic Affairs',
+    nameAr: 'وزارة الأوقاف والشؤون الإسلامية - الكويت',
+    nameKu: 'وەزارەتی ئەوقاف و کاروباری ئایینی کوێت',
+    fajrAngle: 18.0,
+    ishaAngle: 17.5,
   );
 
   /// 10. Majlis Ugama Islam Singapura (MUIS)
@@ -191,25 +211,50 @@ class CalculationMethod {
     ishaAngle: 18.0,
   );
 
-  /// 14. Dubai / UAE Standard
+  /// 14. UAE — General Authority of Islamic Affairs & Endowments (GCAM / IACAD)
+  /// Official UAE federal standard: Fajr 19.5°, Isha 90 minutes after Maghrib
   static const dubai = CalculationMethod(
     id: 'dubai',
-    nameEn: 'Dubai / UAE',
-    nameAr: 'دبي / الإمارات العربية المتحدة',
-    nameKu: 'دوبەی / ئیمارات',
-    fajrAngle: 18.2,
-    ishaAngle: 18.2,
+    nameEn: 'UAE General Authority of Islamic Affairs (IACAD/GCAM)',
+    nameAr: 'الهيئة العامة للشؤون الإسلامية والأوقاف - الإمارات',
+    nameKu: 'دەستەی گشتی کاروباری ئیسلامی و ئەوقاف (ئیمارات)',
+    fajrAngle: 19.5,
+    ishaAngle: 0,
+    ishaIntervalMinutes: 90,
+  );
+
+  /// 15. Tunisia — Ministry of Religious Affairs (Fajr 18°, Isha 18°)
+  static const tunisia = CalculationMethod(
+    id: 'tunisia',
+    nameEn: 'Tunisian Ministry of Religious Affairs',
+    nameAr: 'وزارة الشؤون الدينية التونسية',
+    nameKu: 'وەزارەتی کاروباری ئایینی توونس',
+    fajrAngle: 18.0,
+    ishaAngle: 18.0,
+  );
+
+  /// 16. London Unified Prayer Timetable (UK - London Central Mosque / East London Mosque)
+  static const londonUnified = CalculationMethod(
+    id: 'london_unified',
+    nameEn: 'London Unified Prayer Timetable (UK)',
+    nameAr: 'الجدول الموحد لمواقيت لندن (المملكة المتحدة)',
+    nameKu: 'خشتەی یەکگرتووی کاتەکانی لەندەن و بەریتانیا',
+    fajrAngle: 16.0,
+    ishaAngle: 15.0,
   );
 
   static const List<CalculationMethod> allMethods = [
+    auto,
     kurdistanEndowments,
     mwl,
+    londonUnified,
     ummAlQura,
     isna,
     egypt,
     karachi,
     diyanet,
     gulf,
+    kuwait,
     tehran,
     jafari,
     singapore,
@@ -217,6 +262,7 @@ class CalculationMethod {
     russia,
     indonesia,
     dubai,
+    tunisia,
   ];
 
   static CalculationMethod byId(String id) {
@@ -285,11 +331,8 @@ class OfflinePrayerCalculator {
     final cleanDate = DateTime(date.year, date.month, date.day);
     final timezoneOffsetHours = targetUtcOffsetHours ?? (date.timeZoneOffset.inMinutes / 60.0);
 
-    // Day of year
-    final dayOfYear = _julianDayOfYear(date.year, date.month, date.day);
-
-    // Sun's declination & equation of time
-    final solarParams = _calculateSolarParameters(date.year, dayOfYear);
+    // High-precision Sun's declination & equation of time (NOAA / Jean Meeus Astronomical standard)
+    final solarParams = _calculateSolarParameters(date.year, date.month, date.day);
     final declination = solarParams.declination;
     final eqOfTime = solarParams.equationOfTime;
 
@@ -302,7 +345,16 @@ class OfflinePrayerCalculator {
     final sunriseSunsetZenith = 90.833 + dip;
 
     // 1. Sunrise & Sunset (Maghrib standard)
-    final sunriseHourAngle = _hourAngle(sunriseSunsetZenith, latitude, declination);
+    double sunriseHourAngle = _hourAngle(sunriseSunsetZenith, latitude, declination);
+    if (sunriseHourAngle.isNaN) {
+      // In polar day (midnight sun) or polar night, apply Islamic Fiqh resolution (ECFR / MWL)
+      // by referencing closest normal latitude (48°N / 48°S)
+      final refLat = latitude >= 0 ? 48.0 : -48.0;
+      sunriseHourAngle = _hourAngle(sunriseSunsetZenith, refLat, declination);
+      if (sunriseHourAngle.isNaN) {
+        sunriseHourAngle = 90.0;
+      }
+    }
     final sunsetHourAngle = sunriseHourAngle;
 
     double sunriseMinutes = solarNoonMinutes - (sunriseHourAngle * 4.0);
@@ -438,34 +490,78 @@ class OfflinePrayerCalculator {
   }
 
 
-  /// Calculates Solar Declination (radians) and Equation of Time (minutes).
-  static _SolarParameters _calculateSolarParameters(int year, int dayOfYear) {
-    final gamma = (2.0 * math.pi / 365.0) * (dayOfYear - 1.0);
+  /// Calculates Solar Declination (radians) and Equation of Time (minutes)
+  /// using high-precision Jean Meeus / NOAA Astronomical Solar Position Algorithm.
+  static _SolarParameters _calculateSolarParameters(int year, int month, int day) {
+    // Julian Day Number for the given date at 12:00 UTC
+    final double jd = _gregorianToJulian(year, month, day);
+    final double d = jd - 2451545.0; // Days since J2000.0 epoch
 
-    // Equation of time in minutes
-    final eqOfTime = 229.18 *
-        (0.000075 +
-            0.001868 * math.cos(gamma) -
-            0.032077 * math.sin(gamma) -
-            0.014615 * math.cos(2.0 * gamma) -
-            0.040849 * math.sin(2.0 * gamma));
+    // Julian centuries from J2000.0
+    final double t = d / 36525.0;
 
-    // Declination in radians
-    final declination = 0.006918 -
-        0.399912 * math.cos(gamma) +
-        0.070257 * math.sin(gamma) -
-        0.006758 * math.cos(2.0 * gamma) +
-        0.000907 * math.sin(2.0 * gamma) -
-        0.002697 * math.cos(3.0 * gamma) +
-        0.00148 * math.sin(3.0 * gamma);
+    // Geometric mean longitude of the Sun (degrees)
+    double l0 = 280.46646 + t * (36000.76983 + 0.0003032 * t);
+    l0 = (l0 % 360.0 + 360.0) % 360.0;
+
+    // Geometric mean anomaly of the Sun (degrees)
+    double m = 357.52911 + t * (35999.05029 - 0.0001537 * t);
+    m = (m % 360.0 + 360.0) % 360.0;
+    final double mRad = m * math.pi / 180.0;
+
+    // Eccentricity of Earth's orbit
+    final double e = 0.016708634 - t * (0.000042037 + 0.0000001267 * t);
+
+    // Sun equation of center (degrees)
+    final double c = math.sin(mRad) * (1.914602 - t * (0.004817 + 0.000014 * t)) +
+        math.sin(2.0 * mRad) * (0.019993 - 0.000101 * t) +
+        math.sin(3.0 * mRad) * 0.000289;
+
+    // Sun's true longitude (degrees)
+    final double trueLong = l0 + c;
+
+    // Sun's apparent longitude (degrees)
+    final double omega = 125.04 - 1934.136 * t;
+    final double lambda = trueLong - 0.00569 - 0.00478 * math.sin(omega * math.pi / 180.0);
+    final double lambdaRad = lambda * math.pi / 180.0;
+
+    // Mean obliquity of the ecliptic (degrees)
+    final double seconds = 21.448 - t * (46.8150 + t * (0.00059 - t * 0.001813));
+    final double ob0 = 23.0 + (26.0 + seconds / 60.0) / 60.0;
+
+    // Obliquity correction (degrees)
+    final double ob = ob0 + 0.00256 * math.cos(omega * math.pi / 180.0);
+    final double obRad = ob * math.pi / 180.0;
+
+    // Solar Declination in radians
+    final double declination = math.asin(math.sin(obRad) * math.sin(lambdaRad));
+
+    // Equation of Time in minutes
+    final double y = math.tan(obRad / 2.0) * math.tan(obRad / 2.0);
+    final double l0Rad = l0 * math.pi / 180.0;
+    final double eqOfTime = 4.0 * (180.0 / math.pi) * (
+        y * math.sin(2.0 * l0Rad) -
+        2.0 * e * math.sin(mRad) +
+        4.0 * e * y * math.sin(mRad) * math.cos(2.0 * l0Rad) -
+        0.5 * y * y * math.sin(4.0 * l0Rad) -
+        1.25 * e * e * math.sin(2.0 * mRad)
+    );
 
     return _SolarParameters(declination: declination, equationOfTime: eqOfTime);
   }
 
-  static int _julianDayOfYear(int year, int month, int day) {
-    final date = DateTime(year, month, day);
-    final firstDay = DateTime(year, 1, 1);
-    return date.difference(firstDay).inDays + 1;
+  static double _gregorianToJulian(int year, int month, int day) {
+    if (month <= 2) {
+      year -= 1;
+      month += 12;
+    }
+    final int a = (year / 100).floor();
+    final int b = 2 - a + (a / 4).floor();
+    return (365.25 * (year + 4716)).floor() +
+        (30.6001 * (month + 1)).floor() +
+        day +
+        b -
+        1524.5;
   }
 
   static DateTime _minutesToDateTime(DateTime date, double minutesFromMidnight) {

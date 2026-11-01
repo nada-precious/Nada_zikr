@@ -46,15 +46,36 @@ class _HadithScreenState extends State<HadithScreen> {
     super.dispose();
   }
 
-  void _copyHadith(HadithItem hadith, bool isKurdish, [String lang = 'ku']) {
+  void _copyHadith(HadithItem hadith, String lang, bool isKurmanji, bool isKurdish, bool isArabic) {
     AppHaptics.lightImpact();
-    final text = '📜 فەرموودەی پێغەمبەر ﷺ:\n\n'
+    final header = isKurmanji
+        ? '📜 فەرموودەیا پێغەمبەری ﷺ:\n\n'
+        : (isKurdish
+            ? '📜 فەرموودەی پێغەمبەر ﷺ:\n\n'
+            : (isArabic
+                ? '📜 الحديث النبوي الشريف:\n\n'
+                : '📜 Prophetic Hadith:\n\n'));
+
+    final meaningHeader = isKurmanji
+        ? 'مانایا کوردی:\n'
+        : (isKurdish
+            ? 'مانای کوردی:\n'
+            : (isArabic ? 'المعنى:\n' : 'English Translation:\n'));
+
+    final sourceLabel = isKurmanji
+        ? 'ژێدەر: ${hadith.source} (${hadith.grade})\nژ بەرنامێ نەدا (Nada) 🌟'
+        : (isKurdish
+            ? 'سەرچاوە: ${hadith.source} (${hadith.grade})\nلە ئەپی (نەدا) 🌟'
+            : (isArabic
+                ? 'المصدر: ${hadith.source} (${hadith.grade})\nمن تطبيق ندى (Nada) 🌟'
+                : 'Source: ${hadith.source} (${hadith.grade})\nFrom Nada App 🌟'));
+
+    final text = '$header'
         '${hadith.narratorAr}\n'
         '«${hadith.textAr}»\n\n'
-        'مانای کوردی:\n${hadith.textKu}\n\n'
+        '$meaningHeader${hadith.textKu}\n\n'
         'English Translation:\n${hadith.textEn}\n\n'
-        'سەرچاوە: ${hadith.source} (${hadith.grade})\n'
-        'لە ئەپی (نەدا) 🌟';
+        '$sourceLabel';
 
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
@@ -65,10 +86,14 @@ class _HadithScreenState extends State<HadithScreen> {
                 color: Color(0xFF34D399), size: 18),
             const SizedBox(width: 10),
             Text(
-              isKurdish
-                  ? 'فەرموودەکە کۆپیکرا بۆ کلیپبۆرد'
-                  : 'Hadith copied to clipboard',
-              style: isKurdish
+              isKurmanji
+                  ? 'فەرموودە هاتە کۆپیکرن بۆ کلیپبۆردێ'
+                  : (isKurdish
+                      ? 'فەرموودەکە کۆپیکرا بۆ کلیپبۆرد'
+                      : (isArabic
+                          ? 'تم نسخ الحديث إلى الحافظة'
+                          : 'Hadith copied to clipboard')),
+              style: (isKurmanji || isKurdish || isArabic)
                   ? AppTheme.kurdishText(color: Colors.white, fontSize: 12)
                   : AppTheme.englishText(color: Colors.white, fontSize: 12),
             ),
@@ -103,7 +128,8 @@ class _HadithScreenState extends State<HadithScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? AppLocalizations.languageCode;
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
     final isArabic = lang == 'ar';
 
     return Scaffold(
@@ -153,19 +179,19 @@ class _HadithScreenState extends State<HadithScreen> {
               slivers: [
                 // Top App Bar
                 SliverToBoxAdapter(
-                  child: _buildHeader(context, isKurdish, isArabic),
+                  child: _buildHeader(context, isKurmanji, isKurdish, isArabic),
                 ),
 
                 // Search Bar (if activated)
                 if (_isSearching)
                   SliverToBoxAdapter(
-                    child: _buildSearchBar(isKurdish, isArabic),
+                    child: _buildSearchBar(isKurmanji, isKurdish, isArabic),
                   ),
 
                 // Chapters Horizontal Filter Chips
                 SliverToBoxAdapter(
                   child: _buildChapterChips(
-                      chaptersMap, allHadiths, allHadiths.length, lang, isKurdish, isArabic),
+                      chaptersMap, allHadiths, allHadiths.length, lang, isKurmanji, isKurdish, isArabic),
                 ),
 
                 // Hadith of the Day Spotlight Card (Only when not searching & not filtered)
@@ -175,7 +201,7 @@ class _HadithScreenState extends State<HadithScreen> {
                     _selectedChapter == 'all')
                   SliverToBoxAdapter(
                     child: _buildSpotlightHadithCard(
-                        dailyHadith, lang, isKurdish, isArabic),
+                        dailyHadith, lang, isKurmanji, isKurdish, isArabic),
                   ),
 
                 // Results Count Bar
@@ -187,16 +213,20 @@ class _HadithScreenState extends State<HadithScreen> {
                       children: [
                         Text(
                           _showFavoritesOnly
-                              ? (isKurdish
-                                  ? 'فەرموودە هەڵبژێردراوەکانم'
-                                  : (isArabic
-                                      ? 'الأحاديث المفضلة'
-                                      : 'Saved Hadiths'))
-                              : (isKurdish
+                              ? (isKurmanji
+                                  ? 'فەرموودەیێن من یێن هەلبژارتی'
+                                  : (isKurdish
+                                      ? 'فەرموودە هەڵبژێردراوەکانم'
+                                      : (isArabic
+                                          ? 'الأحاديث المفضلة'
+                                          : 'Saved Hadiths')))
+                              : (isKurmanji
                                   ? '${filteredHadiths.length} فەرموودە'
-                                  : (isArabic
-                                      ? '${filteredHadiths.length} حديث'
-                                      : '${filteredHadiths.length} Hadiths')),
+                                  : (isKurdish
+                                      ? '${filteredHadiths.length} فەرموودە'
+                                      : (isArabic
+                                          ? '${filteredHadiths.length} حديث'
+                                          : '${filteredHadiths.length} Hadiths'))),
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.mutedText,
@@ -208,11 +238,13 @@ class _HadithScreenState extends State<HadithScreen> {
                             onTap: () =>
                                 setState(() => _selectedChapter = 'all'),
                             child: Text(
-                              isKurdish
-                                  ? 'پاککردنەوەی فلتەر'
-                                  : (isArabic
-                                      ? 'إلغاء التصفية'
-                                      : 'Clear filter'),
+                              isKurmanji
+                                  ? 'پاقژکرنا فلتەری'
+                                  : (isKurdish
+                                      ? 'پاککردنەوەی فلتەر'
+                                      : (isArabic
+                                          ? 'إلغاء التصفية'
+                                          : 'Clear filter')),
                               style: TextStyle(
                                   fontSize: 11, color: AppColors.gold),
                             ),
@@ -225,7 +257,7 @@ class _HadithScreenState extends State<HadithScreen> {
                 // Hadiths List
                 if (filteredHadiths.isEmpty)
                   SliverToBoxAdapter(
-                    child: _buildEmptyState(isKurdish),
+                    child: _buildEmptyState(isKurmanji, isKurdish),
                   )
                 else
                   SliverPadding(
@@ -234,7 +266,6 @@ class _HadithScreenState extends State<HadithScreen> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final hadith = filteredHadiths[index];
-
 
                           final hasKurdish =
                               hadith.textKu.trim().isNotEmpty;
@@ -270,7 +301,7 @@ class _HadithScreenState extends State<HadithScreen> {
                             onRecite: () {},
                             onShareCard: () => _showHadithCardSheet(hadith),
                             onCopy: () =>
-                                _copyHadith(hadith, isKurdish, lang),
+                                _copyHadith(hadith, lang, isKurmanji, isKurdish, isArabic),
                             onFocusRead: () async {
                               await FocusedReadingSheet.show(
                                 context,
@@ -285,7 +316,9 @@ class _HadithScreenState extends State<HadithScreen> {
                               );
                             },
                             lang: lang,
-                            meaningBadgeKurdishLabel: '📜 مانای فەرموودە (کوردی)',
+                            meaningBadgeKurdishLabel: isKurmanji
+                                ? '📜 ڕامانا فەرموودێ (کوردی)'
+                                : '📜 مانای فەرموودە (کوردی)',
                             isDisplayingEnglish: isDisplayingEnglish,
                             onToggleLanguage: () {
                               AppHaptics.selectionClick();
@@ -310,7 +343,8 @@ class _HadithScreenState extends State<HadithScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // HEADER
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildHeader(BuildContext context, bool isKurdish, bool isArabic) {
+  Widget _buildHeader(BuildContext context, bool isKurmanji, bool isKurdish, bool isArabic) {
+    final bool isKurdishAny = isKurmanji || isKurdish;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Row(
@@ -345,28 +379,32 @@ class _HadithScreenState extends State<HadithScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isKurdish
-                      ? 'فەرموودە پیرۆزەکان'
-                      : (isArabic
-                          ? 'الأحاديث النبوية الشريفة'
-                          : 'Noble Prophetic Hadiths'),
+                  isKurmanji
+                      ? 'فەرموودەیێن پیرۆز'
+                      : (isKurdish
+                          ? 'فەرموودە پیرۆزەکان'
+                          : (isArabic
+                              ? 'الأحاديث النبوية الشريفة'
+                              : 'Noble Prophetic Hadiths')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: isKurdish
+                  style: isKurdishAny
                       ? AppTheme.kurdishTitle(
                           fontSize: 17, color: AppColors.cream)
                       : AppTheme.englishTitle(
                           fontSize: 17, color: AppColors.cream),
                 ),
                 Text(
-                  isKurdish
-                      ? '100 فەرموودەی صەحیح و پەسەند لە بارەی ژیان و ئیمان'
-                      : (isArabic
-                          ? '100 حديث نبوي صحيح في شتى أبواب الخير'
-                          : '100 authentic hadiths on faith & life'),
+                  isKurmanji
+                      ? '200 فەرموودەیێن صەحیح ل سەر ئیمان و ژیانێ'
+                      : (isKurdish
+                          ? '200 فەرموودەی صەحیح و پەسەند لە بارەی ژیان و ئیمان'
+                          : (isArabic
+                              ? '200 حديث نبوي صحيح في شتى أبواب الخير'
+                              : '200 authentic hadiths on faith & life')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: isKurdish
+                  style: isKurdishAny
                       ? AppTheme.kurdishText(
                           fontSize: 11, color: AppColors.mutedText)
                       : AppTheme.englishText(
@@ -452,7 +490,7 @@ class _HadithScreenState extends State<HadithScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // SEARCH BAR
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildSearchBar(bool isKurdish, bool isArabic) {
+  Widget _buildSearchBar(bool isKurmanji, bool isKurdish, bool isArabic) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 4, 16, 10),
       padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -466,11 +504,13 @@ class _HadithScreenState extends State<HadithScreen> {
         autofocus: true,
         style: TextStyle(color: AppColors.cream, fontSize: 13.5),
         decoration: InputDecoration(
-          hintText: isKurdish
-              ? 'گەڕان لە فەرموودەکان، تەوەر یان دەق...'
-              : (isArabic
-                  ? 'ابحث في نصوص الأحاديث أو الأبواب...'
-                  : 'Search hadiths, topics, or keywords...'),
+          hintText: isKurmanji
+              ? 'ل فەرموودە، بابەت یان دەق بگەڕە...'
+              : (isKurdish
+                  ? 'گەڕان لە فەرموودەکان، تەوەر یان دەق...'
+                  : (isArabic
+                      ? 'ابحث في نصوص الأحاديث أو الأبواب...'
+                      : 'Search hadiths, topics, or keywords...')),
           hintStyle: TextStyle(color: AppColors.faintText, fontSize: 12.5),
           border: InputBorder.none,
           icon: Icon(Icons.search_rounded, color: AppColors.gold, size: 18),
@@ -494,7 +534,7 @@ class _HadithScreenState extends State<HadithScreen> {
   // CHAPTER FILTER CHIPS
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildChapterChips(Map<String, int> chaptersMap, List<HadithItem> allHadiths,
-      int totalCount, String lang, bool isKurdish, bool isArabic) {
+      int totalCount, String lang, bool isKurmanji, bool isKurdish, bool isArabic) {
     return Container(
       height: 38,
       margin: const EdgeInsets.only(top: 4, bottom: 8),
@@ -504,15 +544,17 @@ class _HadithScreenState extends State<HadithScreen> {
         physics: const BouncingScrollPhysics(),
         children: [
           _buildFilterChip(
-            label: isKurdish
-                ? 'هەمووی ($totalCount)'
-                : (isArabic ? 'الكل ($totalCount)' : 'All ($totalCount)'),
+            label: isKurmanji
+                ? 'هەمی ($totalCount)'
+                : (isKurdish
+                    ? 'هەمووی ($totalCount)'
+                    : (isArabic ? 'الكل ($totalCount)' : 'All ($totalCount)')),
             isSelected: _selectedChapter == 'all',
             onTap: () {
               AppHaptics.selectionClick();
               setState(() => _selectedChapter = 'all');
             },
-            isKurdish: isKurdish,
+            isKurdish: isKurmanji || isKurdish,
           ),
           ...chaptersMap.entries.map((entry) {
             final isSelected = _selectedChapter == entry.key;
@@ -528,7 +570,7 @@ class _HadithScreenState extends State<HadithScreen> {
                 AppHaptics.selectionClick();
                 setState(() => _selectedChapter = entry.key);
               },
-              isKurdish: isKurdish,
+              isKurdish: isKurmanji || isKurdish,
             );
           }),
         ],
@@ -579,6 +621,7 @@ class _HadithScreenState extends State<HadithScreen> {
   Widget _buildSpotlightHadithCard(
     HadithItem hadith,
     String lang,
+    bool isKurmanji,
     bool isKurdish,
     bool isArabic,
   ) {
@@ -609,7 +652,7 @@ class _HadithScreenState extends State<HadithScreen> {
           reciteCount: 0,
           onReciteChanged: (_) {},
           onShareCard: () => _showHadithCardSheet(hadith),
-          onCopy: () => _copyHadith(hadith, isKurdish, lang),
+          onCopy: () => _copyHadith(hadith, lang, isKurmanji, isKurdish, isArabic),
           onFocusRead: () {
             FocusedReadingSheet.show(
               context,
@@ -656,9 +699,11 @@ class _HadithScreenState extends State<HadithScreen> {
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(
-                          isKurdish
-                              ? 'فەرموودەی ئەمڕۆ'
-                              : (isArabic ? 'حديث اليوم المختار' : 'Hadith of the Day'),
+                          isKurmanji
+                              ? 'فەرموودەیا ئەڤڕۆ'
+                              : (isKurdish
+                                  ? 'فەرموودەی ئەمڕۆ'
+                                  : (isArabic ? 'حديث اليوم المختار' : 'Hadith of the Day')),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -727,10 +772,11 @@ class _HadithScreenState extends State<HadithScreen> {
               '«${hadith.textAr}»',
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.right,
-              style: AppTheme.arabicTitle(
-                fontSize: 17,
-                color: const Color(0xFFFFFBEB),
-                height: 1.75,
+              style: AppTheme.zikrText(
+                fontSize: 21,
+                fontWeight: FontWeight.w500,
+                color: AppColors.cream,
+                height: 1.95,
               ),
             ),
             if (hadith.textKu.isNotEmpty) ...[
@@ -770,9 +816,11 @@ class _HadithScreenState extends State<HadithScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isKurdish
-                          ? 'دەست لێبدە بۆ زیاتر'
-                          : (isArabic ? 'اضغط للمزيد' : 'Tap for more'),
+                      isKurmanji
+                          ? 'دەست لێبدە بۆ پتر'
+                          : (isKurdish
+                              ? 'دەست لێبدە بۆ زیاتر'
+                              : (isArabic ? 'اضغط للمزيد' : 'Tap for more')),
                       style: TextStyle(
                         color: AppColors.gold.withValues(alpha: 0.7),
                         fontSize: 10,
@@ -780,7 +828,7 @@ class _HadithScreenState extends State<HadithScreen> {
                     ),
                     const SizedBox(width: 3),
                     Icon(
-                      isKurdish
+                      (isKurmanji || isKurdish)
                           ? Icons.chevron_left_rounded
                           : Icons.chevron_right_rounded,
                       size: 14,
@@ -799,7 +847,8 @@ class _HadithScreenState extends State<HadithScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // EMPTY STATE
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildEmptyState(bool isKurdish) {
+  Widget _buildEmptyState(bool isKurmanji, bool isKurdish) {
+    final bool isKurdishAny = isKurmanji || isKurdish;
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -815,14 +864,18 @@ class _HadithScreenState extends State<HadithScreen> {
           const SizedBox(height: 14),
           Text(
             _showFavoritesOnly
-                ? (isKurdish
-                    ? 'هیچ فەرموودەیەکت لە دڵخوازەکان دیاری نەکردووە'
-                    : 'No saved hadiths yet')
-                : (isKurdish
-                    ? 'هیچ فەرموودەیەک بەم ناوە نەدۆزرایەوە'
-                    : 'No hadiths found matching your query'),
+                ? (isKurmanji
+                    ? 'تە چ فەرموودە ل دڵخوازان دیار نەکریە'
+                    : (isKurdish
+                        ? 'هیچ فەرموودەیەکت لە دڵخوازەکان دیاری نەکردووە'
+                        : 'No saved hadiths yet'))
+                : (isKurmanji
+                    ? 'چ فەرموودە ب ڤی ناڤی نەهاتە دیتن'
+                    : (isKurdish
+                        ? 'هیچ فەرموودەیەک بەم ناوە نەدۆزرایەوە'
+                        : 'No hadiths found matching your query')),
             textAlign: TextAlign.center,
-            style: isKurdish
+            style: isKurdishAny
                 ? AppTheme.kurdishText(
                     fontSize: 13.5, color: AppColors.mutedText)
                 : AppTheme.englishText(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../app_localizations.dart';
 import '../services/offline_prayer_calculator.dart';
 import '../services/prayer_repository.dart';
 import 'app_theme.dart';
@@ -136,21 +137,36 @@ class _MonthlyTimetableSheetState extends State<MonthlyTimetableSheet> {
           ),
           const Divider(color: Colors.white10, height: 12),
           // Table Header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            color: AppColors.gold.withValues(alpha: 0.1),
-            child: Row(
-              children: [
-                _headerCell('ڕۆژ', width: 35),
-                Expanded(child: _headerCell('بەیانی')),
-                Expanded(child: _headerCell('هەڵاتن')),
-                Expanded(child: _headerCell('نیوەڕۆ')),
-                Expanded(child: _headerCell('عەسر')),
-                Expanded(child: _headerCell('مەغریب')),
-                Expanded(child: _headerCell('عیشا')),
-              ],
-            ),
-          ),
+          () {
+            final lang = AppLocalizations.languageCode;
+            final isKurmanji = lang == 'kmr';
+            final isKurdish = lang == 'ku' || isKurmanji;
+            final isArabic = lang == 'ar';
+
+            final dayLabel = isKurmanji ? 'ڕۆژ' : (isKurdish ? 'ڕۆژ' : (isArabic ? 'اليوم' : 'Day'));
+            final fajrLabel = isKurmanji ? 'سپێدە' : (isKurdish ? 'بەیانی' : (isArabic ? 'الفجر' : 'Fajr'));
+            final sunriseLabel = isKurmanji ? 'ڕۆژهەلات' : (isKurdish ? 'هەڵاتن' : (isArabic ? 'الشروق' : 'Sunrise'));
+            final dhuhrLabel = isKurmanji ? 'نیڤروو' : (isKurdish ? 'نیوەڕۆ' : (isArabic ? 'الظهر' : 'Dhuhr'));
+            final asrLabel = isKurmanji ? 'ئێڤاری' : (isKurdish ? 'عەسر' : (isArabic ? 'العصر' : 'Asr'));
+            final maghribLabel = isKurmanji ? 'مەغریب' : (isKurdish ? 'مەغریب' : (isArabic ? 'المغرب' : 'Maghrib'));
+            final ishaLabel = isKurmanji ? 'عەشا' : (isKurdish ? 'عیشا' : (isArabic ? 'العشاء' : 'Isha'));
+
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              color: AppColors.gold.withValues(alpha: 0.1),
+              child: Row(
+                children: [
+                  _headerCell(dayLabel, width: 35),
+                  Expanded(child: _headerCell(fajrLabel)),
+                  Expanded(child: _headerCell(sunriseLabel)),
+                  Expanded(child: _headerCell(dhuhrLabel)),
+                  Expanded(child: _headerCell(asrLabel)),
+                  Expanded(child: _headerCell(maghribLabel)),
+                  Expanded(child: _headerCell(ishaLabel)),
+                ],
+              ),
+            );
+          }(),
           Expanded(
             child: FutureBuilder<List<CalculatedPrayerTimes>>(
               future: _monthFuture,

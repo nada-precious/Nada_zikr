@@ -9,14 +9,49 @@ import 'quran_screen.dart';
 import 'settings_screen.dart';
 
 class MainAppScreen extends StatefulWidget {
-  const MainAppScreen({Key? key}) : super(key: key);
+  const MainAppScreen({Key? key, this.initialTabIndex = 0, this.tabNotifier}) : super(key: key);
+
+  final int initialTabIndex;
+
+  /// Optional external notifier — when its value changes the nav bar jumps
+  /// to that tab index.  Typically driven by a home-screen widget tap.
+  final ValueNotifier<int>? tabNotifier;
 
   @override
   State<MainAppScreen> createState() => _MainAppScreenState();
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.tabNotifier?.value ?? widget.initialTabIndex;
+    widget.tabNotifier?.addListener(_onTabNotifierChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant MainAppScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tabNotifier != widget.tabNotifier) {
+      oldWidget.tabNotifier?.removeListener(_onTabNotifierChanged);
+      widget.tabNotifier?.addListener(_onTabNotifierChanged);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.tabNotifier?.removeListener(_onTabNotifierChanged);
+    super.dispose();
+  }
+
+  void _onTabNotifierChanged() {
+    final idx = widget.tabNotifier?.value;
+    if (idx != null && mounted) {
+      setState(() => _selectedIndex = idx);
+    }
+  }
 
   void _onSelectTab(int index) {
     if (mounted) {
@@ -90,7 +125,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
     return Scaffold(
       body: IndexedStack(index: _selectedIndex, children: screens),
-      bottomNavigationBar: _InstagramFbNavBar(
+      bottomNavigationBar: _NadaBottomNavBar(
         selectedIndex: _selectedIndex,
         items: items,
         onTap: (index) => setState(() => _selectedIndex = index),
@@ -114,8 +149,8 @@ class _NavItemData {
   final IconData activeIcon;
 }
 
-class _InstagramFbNavBar extends StatelessWidget {
-  const _InstagramFbNavBar({
+class _NadaBottomNavBar extends StatelessWidget {
+  const _NadaBottomNavBar({
     required this.selectedIndex,
     required this.items,
     required this.onTap,
@@ -157,23 +192,28 @@ class _InstagramFbNavBar extends StatelessWidget {
             padding: EdgeInsets.only(bottom: bottomPadding),
             child: SizedBox(
               height: 60,
-              child: Row(
-                children: List.generate(items.length, (index) {
-                  final item = items[index];
-                  final isActive = selectedIndex == index;
-                  final label = resolveLabel(item.labelKey);
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: Row(
+                    children: List.generate(items.length, (index) {
+                      final item = items[index];
+                      final isActive = selectedIndex == index;
+                      final label = resolveLabel(item.labelKey);
 
-                  return Expanded(
-                    child: _NavBarTabButton(
-                      isActive: isActive,
-                      activeIcon: item.activeIcon,
-                      inactiveIcon: item.inactiveIcon,
-                      label: label,
-                      languageCode: languageCode,
-                      onTap: () => onTap(index),
-                    ),
-                  );
-                }),
+                      return Expanded(
+                        child: _NavBarTabButton(
+                          isActive: isActive,
+                          activeIcon: item.activeIcon,
+                          inactiveIcon: item.inactiveIcon,
+                          label: label,
+                          languageCode: languageCode,
+                          onTap: () => onTap(index),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
               ),
             ),
           ),
@@ -258,7 +298,7 @@ class _NavBarTabButtonState extends State<_NavBarTabButton>
 
   TextStyle _resolveTextStyle(Color color) {
     final fontWeight = widget.isActive ? FontWeight.w700 : FontWeight.w500;
-    if (widget.languageCode == 'ku') {
+    if (widget.languageCode == 'ku' || widget.languageCode == 'kmr') {
       return AppTheme.kurdishText(
         color: color,
         fontSize: 10.5,

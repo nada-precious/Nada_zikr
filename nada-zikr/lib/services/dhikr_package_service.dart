@@ -92,7 +92,7 @@ class DhikrPackageService {
     if (_categories != null) return _categories!;
 
     final raw =
-        await rootBundle.loadString('node_modules/imanikurd/data/dhikr.json');
+        await rootBundle.loadString('assets/data/dhikr.json');
     final data = json.decode(raw) as Map<String, dynamic>;
     final grouped = <int, List<Azkar>>{};
 
@@ -138,13 +138,21 @@ class DhikrPackageService {
         final itemArabic = splitSurahs[index];
         final surahMeaning = _surahMeaningFor(itemArabic);
 
+        final surahTitle = itemArabic.contains('قُلْ هُوَ اللَّهُ أَحَدٌ')
+            ? 'سوورەتی ئیخڵاس [112: 1-4]'
+            : itemArabic.contains('قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ')
+                ? 'سوورەتی فەلەق [113: 1-5]'
+                : itemArabic.contains('قُلْ أَعُوذُ بِرَبِّ النَّاسِ')
+                    ? 'سوورەتی ناس [114: 1-6]'
+                    : 'سوورەت';
+
         return Azkar(
           id: _splitEntryId(id, index),
           arabic: itemArabic,
           translation: surahMeaning['en'] ?? '',
           kurdishTranslation: surahMeaning['ku'] ?? '',
           repeat: 3,
-          source: 'imanikurd',
+          source: surahTitle,
         );
       });
     }

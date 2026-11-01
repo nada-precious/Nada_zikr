@@ -18,6 +18,7 @@ class AzanAudioService {
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
 
   static const Map<String, String> assetPaths = {
+    'kurdistan': 'assets/azan/kurdistan.mp3',
     'makkah': 'assets/azan/makkah.mp3',
     'madinah': 'assets/azan/madinah.mp3',
     'aqsa': 'assets/azan/aqsa.mp3',
@@ -63,7 +64,7 @@ class AzanAudioService {
     if (assetPaths.containsKey(normalized)) {
       return normalized;
     }
-    return 'makkah';
+    return 'kurdistan';
   }
 
   Future<void> playSelected({String? prayerId}) async {
@@ -73,7 +74,7 @@ class AzanAudioService {
         ? 'azan_fajr'
         : soundId;
     final effectiveSoundId = (rawSoundId == 'silent' || rawSoundId == 'vibrate')
-        ? 'makkah'
+        ? 'kurdistan'
         : rawSoundId;
     final safeSoundId = resolveSafeSoundId(effectiveSoundId);
     await play(safeSoundId);

@@ -10,6 +10,20 @@ workflows:
       groups:
         - appstore_credentials # Set this group up in Codemagic UI (APP_STORE_CONNECT_KEY_IDENTIFIER, APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_PRIVATE_KEY)
     scripts:
+      - name: Set up keychain to be used for codesigning
+        script: |
+          keychain initialize
+      - name: Fetch signing files for App and Widget extension
+        script: |
+          app-store-connect fetch-signing-files "com.nada.nadaZikrakanm" \
+            --type IOS_APP_STORE \
+            --create
+          app-store-connect fetch-signing-files "com.nada.nadaZikrakanm.PrayerTimesWidget" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Set up Apple certificate to use with code signing
+        script: |
+          keychain add-certificates
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
@@ -29,5 +43,7 @@ workflows:
       - flutter_drive.log
     publishing:
       app_store_connect:
-        auth: integration
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true

@@ -133,7 +133,7 @@ class AppData {
       english: 'Noble Hadiths',
       kurdish: 'فەرموودە پیرۆزەکان',
       icon: '📜',
-      count: 100,
+      count: 200,
       color: '#D97706',
     ),
     AzkarCategory(

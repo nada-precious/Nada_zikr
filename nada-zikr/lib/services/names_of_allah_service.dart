@@ -21,7 +21,7 @@ class NamesOfAllahService {
   /// Load all 99 Names of Allah from imanikurd package with fallback to app data
   Future<List<NameOfAllah>> loadAllNames() async {
     try {
-      final raw = await rootBundle.loadString('node_modules/imanikurd/data/names_of_allah.json');
+      final raw = await rootBundle.loadString('assets/data/names_of_allah.json');
       final data = json.decode(raw) as List<dynamic>;
       final names = <NameOfAllah>[];
 

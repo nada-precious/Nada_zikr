@@ -72,6 +72,8 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
         '🌐 English Translation:\n${dua.englishMeaning}\n\n'
         'سەرچاوە: ${dua.hadithSource}\n'
         'لە ئەپی نەدا (Nada) 🌟';
+    final lang = AppLocalizations.languageCode;
+    final isKurmanji = lang == 'kmr';
     Clipboard.setData(ClipboardData(text: textToCopy));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -81,11 +83,13 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                 color: Color(0xFF34D399), size: 18),
             const SizedBox(width: 10),
             Text(
-              isKurdish
-                  ? 'دوعاکە کۆپیکرا بۆ کلیپبۆرد'
-                  : (isArabic
-                      ? 'تم نسخ الدعاء إلى الحافظة'
-                      : 'Dua copied to clipboard'),
+              isKurmanji
+                  ? 'دوعا هاتە کۆپیکرن بۆ کلیپبۆردێ'
+                  : (isKurdish
+                      ? 'دوعاکە کۆپیکرا بۆ کلیپبۆرد'
+                      : (isArabic
+                          ? 'تم نسخ الدعاء إلى الحافظة'
+                          : 'Dua copied to clipboard')),
               style: (isKurdish || isArabic)
                   ? AppTheme.kurdishText(color: Colors.white, fontSize: 12)
                   : AppTheme.englishText(color: Colors.white, fontSize: 12),
@@ -104,7 +108,8 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? AppLocalizations.languageCode;
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
     final isArabic = lang == 'ar';
 
     return Scaffold(
@@ -122,9 +127,11 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
             if (snapshot.hasError || !snapshot.hasData) {
               return Center(
                 child: Text(
-                  isKurdish
-                      ? 'هەڵەیەک ڕوویدا لە بارکردنی دوعاکان'
-                      : 'Error loading supplications',
+                  isKurmanji
+                      ? 'خەلەتیەک چێبوو د بارکرنا دوعایاندا'
+                      : (isKurdish
+                          ? 'هەڵەیەک ڕوویدا لە بارکردنی دوعاکان'
+                          : 'Error loading supplications'),
                   style: AppTheme.kurdishText(color: AppColors.cream),
                 ),
               );
@@ -210,16 +217,20 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                       children: [
                         Text(
                           _showFavoritesOnly
-                              ? (isKurdish
-                                  ? 'دوعا هەڵبژێردراوەکانم'
-                                  : (isArabic
-                                      ? 'الأدعية المفضلة'
-                                      : 'Saved Supplications'))
-                              : (isKurdish
-                                  ? 'دوعا پیرۆزەکان'
-                                  : (isArabic
-                                      ? 'الأدعية النبوية الشريفة'
-                                      : 'Prophetic Duas')),
+                              ? (isKurmanji
+                                  ? 'دوعایێن من یێن دڵخواز'
+                                  : (isKurdish
+                                      ? 'دوعا هەڵبژێردراوەکانم'
+                                      : (isArabic
+                                          ? 'الأدعية المفضلة'
+                                          : 'Saved Supplications')))
+                              : (isKurmanji
+                                  ? 'دوعایێن پیرۆز'
+                                  : (isKurdish
+                                      ? 'دوعا پیرۆزەکان'
+                                      : (isArabic
+                                          ? 'الأدعية النبوية الشريفة'
+                                          : 'Prophetic Duas'))),
                           style: isKurdish
                               ? AppTheme.kurdishTitle(
                                   fontSize: 16, color: AppColors.cream)
@@ -245,7 +256,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                 // Empty State
                 if (filteredDuas.isEmpty)
                   SliverToBoxAdapter(
-                    child: _buildEmptyState(isKurdish),
+                    child: _buildEmptyState(isKurdish, isKurmanji),
                   )
                 else
                   // Content-First Duas List
@@ -316,7 +327,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                               }
                             },
                             lang: lang,
-                            meaningBadgeKurdishLabel: '📖 مانای دوعا (کوردی)',
+                            meaningBadgeKurdishLabel: isKurmanji ? '📖 ڕامانا دوعایێ (کوردی)' : '📖 مانای دوعا (کوردی)',
                             isDisplayingEnglish: isDisplayingEnglish,
                             onToggleLanguage: () {
                               AppHaptics.selectionClick();
@@ -343,6 +354,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildHeader(
       BuildContext context, bool isKurdish, bool isArabic, String lang) {
+    final isKurmanji = lang == 'kmr';
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Row(
@@ -377,11 +389,13 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isKurdish
-                      ? 'زیکر و دوعای گشتی'
-                      : (isArabic
-                          ? 'الأذكار والأدعية النبوية'
-                          : 'General & Prophetic Duas'),
+                  isKurmanji
+                      ? 'زکر و دوعایێن گشتی'
+                      : (isKurdish
+                          ? 'زیکر و دوعای گشتی'
+                          : (isArabic
+                              ? 'الأذكار والأدعية النبوية'
+                              : 'General & Prophetic Duas')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: isKurdish
@@ -391,11 +405,13 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                           fontSize: 17, color: AppColors.cream),
                 ),
                 Text(
-                  isKurdish
-                      ? '110 دوعای فەرموودەی سەحیح و سوننەت'
-                      : (isArabic
-                          ? '110 دعاء نبوي من الأحاديث الصحيحة'
-                          : '110 Authentic Prophetic Supplications'),
+                  isKurmanji
+                      ? '١١٠ دوعایێن فەرموودەیا سەحیح و سوننەتێ'
+                      : (isKurdish
+                          ? '110 دوعای فەرموودەی سەحیح و سوننەت'
+                          : (isArabic
+                              ? '110 دعاء نبوي من الأحاديث الصحيحة'
+                              : '110 Authentic Prophetic Supplications')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: isKurdish
@@ -461,8 +477,8 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: _showFavoritesOnly
-                      ? const Color(0xFFE11D48).withValues(alpha: 0.5)
-                      : AppColors.panelBorderColor.withValues(alpha: 0.6),
+                    ? const Color(0xFFE11D48).withValues(alpha: 0.5)
+                    : AppColors.panelBorderColor.withValues(alpha: 0.6),
                 ),
               ),
               child: Icon(
@@ -485,6 +501,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
   // SEARCH BAR
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildSearchBar(bool isKurdish) {
+    final isKurmanji = AppLocalizations.languageCode == 'kmr';
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 4, 16, 10),
       padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -503,9 +520,11 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
         },
         style: TextStyle(color: AppColors.cream, fontSize: 13.5),
         decoration: InputDecoration(
-          hintText: isKurdish
-              ? 'گەڕان لە دەقی عەرەبی، مانا، یان سەرچاوە...'
-              : 'Search in Arabic, meaning, or source...',
+          hintText: isKurmanji
+              ? 'ل دەقێ عەرەبی، مانا، یان ژێدەری بگەڕە...'
+              : (isKurdish
+                  ? 'گەڕان لە دەقی عەرەبی، مانا، یان سەرچاوە...'
+                  : 'Search in Arabic, meaning, or source...'),
           hintStyle: TextStyle(color: AppColors.faintText, fontSize: 12.5),
           border: InputBorder.none,
           icon: Icon(Icons.search_rounded, color: AppColors.gold, size: 18),
@@ -531,6 +550,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildCategoryChips(List<String> categories, String lang,
       bool isKurdish, bool isArabic) {
+    final isKurmanji = lang == 'kmr';
     return Container(
       height: 38,
       margin: const EdgeInsets.only(top: 4, bottom: 8),
@@ -545,9 +565,11 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
 
           String label;
           if (cat == 'all') {
-            label = isKurdish
-                ? 'هەمووی'
-                : (isArabic ? 'الكل' : 'All');
+            label = isKurmanji
+                ? 'هەمی'
+                : (isKurdish
+                    ? 'هەمووی'
+                    : (isArabic ? 'الكل' : 'All'));
           } else {
             if (cat.contains('(') && cat.contains(')')) {
               final parts = cat.split('(');
@@ -606,6 +628,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildDuaOfTheDayBanner(GeneralDuaItem dua, bool isKurdish,
       bool isArabic, String lang) {
+    final isKurmanji = lang == 'kmr';
     final isFav = _favoriteIds.contains(dua.id);
     final reciteCount = _reciteCounters[dua.id] ?? 0;
 
@@ -685,7 +708,9 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(
-                          isKurdish ? 'دوعای هەڵبژێردراوی ئەمڕۆ' : 'Daily Prophetic Dua',
+                          isKurmanji
+                              ? 'دوعایا هەلبژارتی یا ئەڤرۆ'
+                              : (isKurdish ? 'دوعای هەڵبژێردراوی ئەمڕۆ' : 'Daily Prophetic Dua'),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -754,10 +779,11 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
               dua.arabic,
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.right,
-              style: AppTheme.arabicTitle(
-                color: const Color(0xFFFFFBEB),
-                fontSize: 18,
-                height: 1.8,
+              style: AppTheme.zikrText(
+                color: AppColors.cream,
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                height: 1.95,
               ),
             ),
             if (dua.kurdishMeaning.isNotEmpty) ...[
@@ -797,9 +823,11 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isKurdish
-                          ? 'دەست لێبدە بۆ زیاتر'
-                          : (isArabic ? 'اضغط للمزيد' : 'Tap for more'),
+                      isKurmanji
+                          ? 'دەست لێبدە بۆ پتر'
+                          : (isKurdish
+                              ? 'دەست لێبدە بۆ زیاتر'
+                              : (isArabic ? 'اضغط للمزيد' : 'Tap for more')),
                       style: TextStyle(
                         color: AppColors.gold.withValues(alpha: 0.7),
                         fontSize: 10,
@@ -826,7 +854,7 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
   // ════════════════════════════════════════════════════════════════════════════
   // EMPTY STATE
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildEmptyState(bool isKurdish) {
+  Widget _buildEmptyState(bool isKurdish, [bool isKurmanji = false]) {
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -842,12 +870,16 @@ class _GeneralDuasScreenState extends State<GeneralDuasScreen> {
           const SizedBox(height: 14),
           Text(
             _showFavoritesOnly
-                ? (isKurdish
-                    ? 'هیچ دوعایەکت لە دڵخوازەکان دیاری نەکردووە'
-                    : 'No saved supplications yet')
-                : (isKurdish
-                    ? 'هیچ دوعایەک بەم ناوەوە نەدۆزرایەوە'
-                    : 'No supplications found'),
+                ? (isKurmanji
+                    ? 'تە چ دوعا د دڵخوازاندا دیار نەکریە'
+                    : (isKurdish
+                        ? 'هیچ دوعایەکت لە دڵخوازەکان دیاری نەکردووە'
+                        : 'No saved supplications yet'))
+                : (isKurmanji
+                    ? 'چ دوعا ب ڤی ناڤی نەهاتنە دیتن'
+                    : (isKurdish
+                        ? 'هیچ دوعایەک بەم ناوەوە نەدۆزرایەوە'
+                        : 'No supplications found')),
             textAlign: TextAlign.center,
             style: isKurdish
                 ? AppTheme.kurdishText(

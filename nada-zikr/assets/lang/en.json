@@ -40,6 +40,7 @@
   "sound": "Sound",
   "haptic": "Haptic Vibration",
   "kurdish": "Kurdish (Sorani)",
+  "kurmanji": "Kurdish (Kurmanji / Badini)",
   "english": "English",
   "arabic": "Arabic",
   "surah": "Surah",
@@ -75,5 +76,6 @@
   "jumpToPage": "Go to Page",
   "ayahNumber": "Ayah number",
   "pageNumber": "Page number",
-  "juz": "Juz"
+  "juz": "Juz",
+  "dailyPath": "Daily Path"
 }

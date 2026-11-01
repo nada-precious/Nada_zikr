@@ -127,8 +127,10 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final isKurdish = widget.lang == 'ku';
+    final isKurmanji = widget.lang == 'kmr';
+    final isKurdish = widget.lang == 'ku' || isKurmanji;
     final isArabic = widget.lang == 'ar';
+    final isKurdishAny = isKurdish;
 
     return Container(
       constraints: BoxConstraints(
@@ -229,7 +231,7 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                     Text(
                       widget.title!,
                       textAlign: TextAlign.center,
-                      style: isKurdish
+                      style: isKurdishAny
                           ? AppTheme.kurdishTitle(
                               fontSize: 16, color: AppColors.gold)
                           : AppTheme.englishTitle(
@@ -261,13 +263,13 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                     style: widget.isAyah
                         ? AppTheme.quranAyahText(
                             fontSize: 25,
-                            color: const Color(0xFFFFFBEB),
+                            color: AppColors.cream,
                             height: 2.05,
                           )
-                        : GoogleFonts.scheherazadeNew(
+                        : AppTheme.zikrText(
                             fontSize: 24,
                             fontWeight: FontWeight.w500,
-                            color: const Color(0xFFFFFBEB),
+                            color: AppColors.cream,
                             height: 2.0,
                           ),
                   ),
@@ -340,11 +342,13 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                                 color: Color(0xFF34D399), size: 18),
                             const SizedBox(width: 8),
                             Text(
-                              isKurdish
-                                  ? 'بینین و خوێندنەوە لە قورئانی پیرۆزدا'
-                                  : (isArabic
-                                      ? 'عرض الآية في المصحف الشريف'
-                                      : 'View Ayah in Holy Quran'),
+                              isKurmanji
+                                  ? 'دیتن و خاندن د قورئانا پیرۆز دا'
+                                  : (isKurdish
+                                      ? 'بینین و خوێندنەوە لە قورئانی پیرۆزدا'
+                                      : (isArabic
+                                          ? 'عرض الآية في المصحف الشريف'
+                                          : 'View Ayah in Holy Quran')),
                               style: const TextStyle(
                                 color: Color(0xFF34D399),
                                 fontSize: 13,
@@ -366,7 +370,13 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                       if (widget.showReciteCounter)
                         _buildActionButton(
                           icon: Icons.touch_app_rounded,
-                          label: _count > 0 ? '$_count' : (isKurdish ? 'خوێندنەوە' : 'Recite'),
+                          label: _count > 0
+                              ? '$_count'
+                              : (isKurmanji
+                                  ? 'خاندن'
+                                  : (isKurdish
+                                      ? 'خوێندنەوە'
+                                      : (isArabic ? 'قراءة' : 'Recite'))),
                           isActive: _count > 0,
                           activeColor: const Color(0xFF10B981),
                           onTap: _increment,
@@ -375,7 +385,9 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                       // Favorite Bookmark
                       _buildActionButton(
                         icon: _fav ? Icons.bookmark_rounded : Icons.bookmark_outline_rounded,
-                        label: isKurdish ? 'دڵخواز' : 'Save',
+                        label: isKurdishAny
+                            ? 'دڵخواز'
+                            : (isArabic ? 'حفظ' : 'Save'),
                         isActive: _fav,
                         activeColor: const Color(0xFFF43F5E),
                         onTap: _toggleFav,
@@ -384,7 +396,9 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                       // Copy
                       _buildActionButton(
                         icon: Icons.copy_rounded,
-                        label: isKurdish ? 'کۆپی' : 'Copy',
+                        label: isKurdishAny
+                            ? 'کۆپی'
+                            : (isArabic ? 'نسخ' : 'Copy'),
                         onTap: () {
                           Navigator.pop(context);
                           widget.onCopy();
@@ -394,7 +408,9 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                       // Share Card Generator
                       _buildActionButton(
                         icon: Icons.share_rounded,
-                        label: isKurdish ? 'کارت' : 'Card',
+                        label: isKurdishAny
+                            ? 'کارت'
+                            : (isArabic ? 'بطاقة' : 'Card'),
                         onTap: () {
                           Navigator.pop(context);
                           widget.onShareCard();
@@ -405,7 +421,9 @@ class _SpiritualDetailSheetState extends State<SpiritualDetailSheet> {
                       if (widget.onFocusRead != null)
                         _buildActionButton(
                           icon: Icons.fullscreen_rounded,
-                          label: isKurdish ? 'تایبەت' : 'Focus',
+                          label: isKurdishAny
+                              ? 'تایبەت'
+                              : (isArabic ? 'تركيز' : 'Focus'),
                           onTap: () {
                             Navigator.pop(context);
                             widget.onFocusRead!();

@@ -18,7 +18,7 @@ class QuranReciter {
   });
 
   String localizedName(String lang) {
-    if (lang == 'ku') return nameKu;
+    if (lang == 'ku' || lang == 'kmr') return nameKu;
     if (lang == 'ar') return nameAr;
     return nameEn;
   }

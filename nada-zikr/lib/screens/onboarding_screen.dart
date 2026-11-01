@@ -20,7 +20,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late PageController _pageController;
 
   static const _languageOptions = [
-    {'code': 'ku', 'label': 'کوردی'},
+    {'code': 'ku', 'label': 'سۆرانی'},
+    {'code': 'kmr', 'label': 'بادینی'},
     {'code': 'ar', 'label': 'العربية'},
     {'code': 'en', 'label': 'English'},
   ];
@@ -42,6 +43,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         'title': 'ئامادەیت؟',
         'subtitle': 'ئێستا ئامادەیت',
         'body': 'گەشتەکەت بە یەکەم هەنگاوی بیرکردنەوە دەست پێ بکە.'
+      },
+    ],
+    'kmr': [
+      {
+        'title': 'بخێرهاتی',
+        'subtitle': 'بخێرهاتی بۆ نەدا',
+        'body': 'هەڤالێ تە یێ ڕۆژانەیە بۆ زکر، تێڕامان و ئارامییا دلێ تە.'
+      },
+      {
+        'title': 'ب ناڤێ خودایێ مەزن',
+        'subtitle': 'نیەتا خۆ دیاربکە',
+        'body':
+            'ناڤێ خۆ و هژمارا وان دانان بنڤیسە یێن تە دڤێت هەمی ڕۆژان ئەنجام بدەی.'
+      },
+      {
+        'title': 'تۆ یێ ئامادەی؟',
+        'subtitle': 'نوکە تۆ یێ ئامادەی',
+        'body': 'گەشتا خۆ ب ئێکەم گاڤا تێڕامان و زکری دەستپێبکە.'
       },
     ],
     'ar': [
@@ -80,12 +99,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ],
   };
 
-  List<Map<String, String>> get _steps => _stepsByLanguage[_languageCode]!
+  List<Map<String, String>> get _steps => (_stepsByLanguage[_languageCode] ?? _stepsByLanguage['ku']!)
       .map((step) => Map<String, String>.from(step))
       .toList(growable: false);
 
   TextStyle _titleStyle({double fontSize = 36}) {
-    if (_languageCode == 'ku') {
+    if (_languageCode == 'ku' || _languageCode == 'kmr') {
       return AppTheme.kurdishTitle(fontSize: fontSize);
     }
     if (_languageCode == 'ar') {
@@ -95,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   TextStyle _bodyStyle({Color? color, double fontSize = 14}) {
-    if (_languageCode == 'ku') {
+    if (_languageCode == 'ku' || _languageCode == 'kmr') {
       return AppTheme.kurdishText(color: color, fontSize: fontSize);
     }
     if (_languageCode == 'ar') {
@@ -104,47 +123,61 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return AppTheme.englishText(color: color, fontSize: fontSize);
   }
 
-  String get _continueLabel => _languageCode == 'ku'
+  String get _continueLabel => _languageCode == 'kmr'
       ? 'بەردەوامبە'
-      : _languageCode == 'ar'
-          ? 'متابعة'
-          : 'Continue';
+      : _languageCode == 'ku'
+          ? 'بەردەوامبە'
+          : _languageCode == 'ar'
+              ? 'متابعة'
+              : 'Continue';
 
-  String get _beginLabel => _languageCode == 'ku'
-      ? 'گەشتەکەم دەست پێ بکە'
-      : _languageCode == 'ar'
-          ? 'ابدأ رحلتي'
-          : 'Begin My Journey';
+  String get _beginLabel => _languageCode == 'kmr'
+      ? 'گەشتا خۆ دەستپێبکە'
+      : _languageCode == 'ku'
+          ? 'گەشتەکەم دەست پێ بکە'
+          : _languageCode == 'ar'
+              ? 'ابدأ رحلتي'
+              : 'Begin My Journey';
 
-  String get _nameLabel => _languageCode == 'ku'
-      ? 'ناوت'
-      : _languageCode == 'ar'
-          ? 'اسمك'
-          : 'YOUR NAME';
+  String get _nameLabel => _languageCode == 'kmr'
+      ? 'ناڤێ تە'
+      : _languageCode == 'ku'
+          ? 'ناوت'
+          : _languageCode == 'ar'
+              ? 'اسمك'
+              : 'YOUR NAME';
 
-  String get _nameHint => _languageCode == 'ku'
+  String get _nameHint => _languageCode == 'kmr'
       ? 'بۆ نموونە: ئەحمەد'
-      : _languageCode == 'ar'
-          ? 'مثال: أحمد'
-          : 'e.g. Ahmad';
+      : _languageCode == 'ku'
+          ? 'بۆ نموونە: ئەحمەد'
+          : _languageCode == 'ar'
+              ? 'مثال: أحمد'
+              : 'e.g. Ahmad';
 
-  String get _dailyGoalLabel => _languageCode == 'ku'
-      ? 'ئامانجی ڕۆژانە — $_goal دانیشتن'
-      : _languageCode == 'ar'
-          ? 'الهدف اليومي — $_goal جلسات'
-          : 'DAILY GOAL — $_goal session${_goal > 1 ? 's' : ''}';
+  String get _dailyGoalLabel => _languageCode == 'kmr'
+      ? 'ئارمانجا ڕۆژانە — $_goal دان'
+      : _languageCode == 'ku'
+          ? 'ئامانجی ڕۆژانە — $_goal دانیشتن'
+          : _languageCode == 'ar'
+              ? 'الهدف اليومي — $_goal جلسات'
+              : 'DAILY GOAL — $_goal session${_goal > 1 ? 's' : ''}';
 
-  String get _firstDhikrLabel => _languageCode == 'ku'
-      ? 'یەکەمین زیکری ڕۆژ'
-      : _languageCode == 'ar'
-          ? 'أَوَّلُ ذِكْرٍ فِي الْيَوْمِ'
-          : 'FIRST DHIKR OF THE DAY';
+  String get _firstDhikrLabel => _languageCode == 'kmr'
+      ? 'ئێکەمین زکرێ ڕۆژێ'
+      : _languageCode == 'ku'
+          ? 'یەکەمین زیکری ڕۆژ'
+          : _languageCode == 'ar'
+              ? 'أَوَّلُ ذِكْرٍ فِي الْيَوْمِ'
+              : 'FIRST DHIKR OF THE DAY';
 
-  String get _bismillahTranslation => _languageCode == 'ku'
-      ? 'بە ناوی خوای بەخشندەی میهرەبان'
-      : _languageCode == 'ar'
-          ? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'
-          : 'In the Name of Allah, the Most Gracious, the Most Merciful';
+  String get _bismillahTranslation => _languageCode == 'kmr'
+      ? 'ب ناڤێ خودایێ مەزن و دلۆڤان'
+      : _languageCode == 'ku'
+          ? 'بە ناوی خوای بەخشندەی میهرەبان'
+          : _languageCode == 'ar'
+              ? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'
+              : 'In the Name of Allah, the Most Gracious, the Most Merciful';
 
   @override
   void initState() {
@@ -261,7 +294,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               );
             }),
             // Main content
-            Column(
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 580),
+                child: Column(
               children: [
                 // App Icon
                 Padding(
@@ -360,10 +396,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
+      ],
+    ),
+  ),
+);
   }
 
   Widget _buildStep0() {

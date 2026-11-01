@@ -13,12 +13,22 @@ class AppLocalizations {
   AppLocalizations(this.locale);
 
   static void setLanguageCode(String languageCode) {
-    if (!['en', 'ku', 'ar'].contains(languageCode)) return;
+    if (!['en', 'ku', 'ar', 'kmr'].contains(languageCode)) return;
     _languageCode = languageCode;
     languageCodeNotifier.value = languageCode;
   }
 
   static String get languageCode => _languageCode;
+
+  static bool isKurdish([String? code]) {
+    final c = code ?? _languageCode;
+    return c == 'ku' || c == 'kmr';
+  }
+
+  static bool isRtl([String? code]) {
+    final c = code ?? _languageCode;
+    return c == 'ku' || c == 'ar' || c == 'kmr';
+  }
 
   static String translateStatic(String key) {
     return _currentStrings[key] ?? _fallbackStrings[key] ?? key;
@@ -71,7 +81,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'ku', 'ar'].contains(locale.languageCode);
+    return ['en', 'ku', 'ar', 'kmr'].contains(locale.languageCode);
   }
 
   @override

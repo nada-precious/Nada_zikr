@@ -171,11 +171,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
     final isArabic = lang == 'ar';
 
     if (_completed) {
-      return _buildCompletedScreen(isKurdish, isArabic, loc);
+      return _buildCompletedScreen(isKurdish, isKurmanji, isArabic, loc, lang);
     }
 
     if (_azkarList.isEmpty) {
@@ -202,7 +203,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
           ),
         ),
         child: SafeArea(
-          child: Column(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(20),
@@ -238,7 +242,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           children: [
                             Text(
                               widget.category.getTitle(lang),
-                              style: (isKurdish || isArabic)
+                              style: (isKurdish || isKurmanji || isArabic)
                                   ? AppTheme.kurdishTitle(
                                       fontSize: 15, color: AppColors.cream)
                                   : AppTheme.englishText(
@@ -291,32 +295,150 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: AppColors.panelColor,
-                            border:
-                                Border.all(color: AppColors.panelBorderColor),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Column(
-                            children: [
-                              if (ZikrAudioService.hasAudioForCategory(widget.category.id)) ...[
-                                Align(
-                                  alignment: AlignmentDirectional.centerStart,
-                                  child: _buildAudioButton(current, isKurdish, lang),
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-                              Text(
-                                current.displayArabic,
-                                style: AppTheme.arabicTitle(fontSize: 24),
-                                textAlign: TextAlign.center,
-                                textDirection: TextDirection.rtl,
+                        () {
+                          final bool isQuran = current.isQuranAyah ||
+                              widget.category.id == 'surah_mulk' ||
+                              widget.category.id == 'surah_kahf' ||
+                              widget.category.id == 'ayat_kursi' ||
+                              widget.category.id == 'quran';
+                          final quranTitle = current.getQuranTitle(lang);
+                          final rawArabic = current.displayArabic;
+
+                          // Check if starts with Bismillah
+                          final bismillahPattern = RegExp(
+                            r'^بِسْمِ\s+اللَّهِ\s+الرَّحْمَٰنِ\s+الرَّحِيمِ(?:\s*۝)?\s*',
+                            unicode: true,
+                          );
+                          final bismillahMatch = bismillahPattern.firstMatch(rawArabic);
+                          final hasLeadingBismillah = isQuran &&
+                              bismillahMatch != null &&
+                              bismillahMatch.end < rawArabic.length;
+                          final remainingAyahText = hasLeadingBismillah
+                              ? rawArabic.substring(bismillahMatch.end).trim()
+                              : rawArabic;
+
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 22, vertical: 24),
+                            decoration: BoxDecoration(
+                              color: AppColors.panelColor,
+                              border: Border.all(
+                                color: isQuran
+                                    ? AppColors.gold.withValues(alpha: 0.35)
+                                    : AppColors.panelBorderColor,
                               ),
-                            ],
-                          ),
-                        ),
+                              borderRadius: BorderRadius.circular(24),
+                              boxShadow: isQuran
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.gold.withValues(alpha: 0.04),
+                                        blurRadius: 18,
+                                        spreadRadius: 2,
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                            child: Column(
+                              children: [
+                                if (ZikrAudioService.hasAudioForCategory(widget.category.id)) ...[
+                                  Align(
+                                    alignment: AlignmentDirectional.centerStart,
+                                    child: _buildAudioButton(current, isKurdish, isKurmanji, lang),
+                                  ),
+                                  const SizedBox(height: 14),
+                                ],
+                                // Dignified Quran Banner / Header if Ayah or Surah
+                                if (isQuran && quranTitle != null && quranTitle.isNotEmpty) ...[
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 6.5),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          AppColors.gold.withValues(alpha: 0.05),
+                                          AppColors.gold.withValues(alpha: 0.16),
+                                          AppColors.gold.withValues(alpha: 0.05),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: AppColors.gold.withValues(alpha: 0.38),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '۞',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: AppColors.gold.withValues(alpha: 0.85),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          quranTitle,
+                                          style: AppTheme.quranAyahText(
+                                            fontSize: 14.5,
+                                            color: AppColors.gold,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '۞',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: AppColors.gold.withValues(alpha: 0.85),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                // Centered Bismillah when verse has leading Basmala
+                                if (hasLeadingBismillah) ...[
+                                  Center(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                                        textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        style: AppTheme.quranAyahText(
+                                          fontSize: 21,
+                                          color: AppColors.gold,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                ],
+                                // Authentic Quran Text / Spiritual Calligraphy
+                                Text(
+                                  isQuran ? remainingAyahText : rawArabic,
+                                  style: isQuran
+                                      ? AppTheme.quranAyahText(
+                                          fontSize: 26,
+                                          color: AppColors.cream,
+                                          height: 2.15,
+                                        )
+                                      : AppTheme.zikrText(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.cream,
+                                          height: 2.05,
+                                        ),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                ),
+                              ],
+                            ),
+                          );
+                        }(),
                         const SizedBox(height: 24),
                         // Meaning Section: toggle between Kurdish and English
                         () {
@@ -380,27 +502,37 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                           const SizedBox(width: 6),
                                           Text(
                                             showEnglish
-                                                ? (isKurdish
-                                                    ? 'مانای ئینگلیزی'
-                                                    : (lang == 'ar'
-                                                        ? 'الترجمة بالإنجليزية'
-                                                        : 'English Translation'))
-                                                : (isKurdish
-                                                    ? 'مانای کوردی'
-                                                    : (lang == 'ar'
-                                                        ? 'المعنى بالكردية'
-                                                        : 'Kurdish Meaning')),
+                                                ? (isKurmanji
+                                                    ? 'ڕامانا ئینگلیزی'
+                                                    : (isKurdish
+                                                        ? 'مانای ئینگلیزی'
+                                                        : (lang == 'ar'
+                                                            ? 'الترجمة بالإنجليزية'
+                                                            : 'English Translation')))
+                                                : (isKurmanji
+                                                    ? 'ڕامانا کوردی'
+                                                    : (isKurdish
+                                                        ? 'مانای کوردی'
+                                                        : (lang == 'ar'
+                                                            ? 'المعنى بالكردية'
+                                                            : 'Kurdish Meaning'))),
                                             style: showEnglish
                                                 ? const TextStyle(
                                                     fontSize: 11,
                                                     color: Color(0xFF93C5FD),
                                                     fontWeight: FontWeight.bold,
                                                   )
-                                                : AppTheme.kurdishText(
-                                                    fontSize: 11,
-                                                    color: AppColors.gold,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                : (isKurmanji || isKurdish
+                                                    ? AppTheme.kurdishText(
+                                                        fontSize: 11,
+                                                        color: AppColors.gold,
+                                                        fontWeight: FontWeight.bold,
+                                                      )
+                                                    : AppTheme.englishText(
+                                                        fontSize: 11,
+                                                        color: AppColors.gold,
+                                                        fontWeight: FontWeight.bold,
+                                                      )),
                                           ),
                                           if (hasBoth) ...[
                                             const SizedBox(width: 6),
@@ -431,7 +563,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                                   const SizedBox(width: 3),
                                                   Text(
                                                     showEnglish
-                                                        ? (isKurdish
+                                                        ? (isKurmanji || isKurdish
                                                             ? 'کوردی'
                                                             : (isArabic ? 'كردي' : 'Kurdish'))
                                                         : (isArabic ? 'الإنجليزية' : 'English'),
@@ -504,12 +636,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    isKurdish
+                                    isKurmanji || isKurdish
                                         ? 'ژمارە: ${current.repeatLabel}'
                                         : (isArabic
                                             ? 'العدد: ${current.repeatLabel}'
                                             : 'Repeat: ${current.repeatLabel}'),
-                                    style: (isKurdish || isArabic)
+                                    style: (isKurdish || isKurmanji || isArabic)
                                         ? AppTheme.kurdishText(
                                             fontSize: 11,
                                             color: AppColors.faintText,
@@ -528,7 +660,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                   const SizedBox(height: 6),
                                   Text(
                                     _repeatCount >= current.repeat
-                                        ? (isKurdish
+                                        ? (isKurmanji || isKurdish
                                             ? 'تەواوبوو'
                                             : (isArabic
                                                 ? 'تم الانتهاء'
@@ -545,15 +677,19 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                               return 'اضغط $remaining مرة';
                                             }
                                             if (remaining == 1) {
-                                              return isKurdish
-                                                  ? 'یەک جار بکە'
-                                                  : 'Tap 1 time';
+                                              return isKurmanji
+                                                  ? 'ئێک جار لێبدە'
+                                                  : (isKurdish
+                                                      ? 'یەک جار بکە'
+                                                      : 'Tap 1 time');
                                             }
-                                            return isKurdish
-                                                ? 'بۆ $remaining جار بکە'
-                                                : 'Tap $remaining times';
+                                            return isKurmanji
+                                                ? '$remaining جاران لێبدە'
+                                                : (isKurdish
+                                                    ? 'بۆ $remaining جار بکە'
+                                                    : 'Tap $remaining times');
                                           }()),
-                                    style: (isKurdish || isArabic)
+                                    style: (isKurdish || isKurmanji || isArabic)
                                         ? AppTheme.kurdishText(
                                             color: AppColors.cream,
                                             fontSize: 12)
@@ -621,12 +757,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                     size: 18, color: AppColors.faintText),
                                 const SizedBox(width: 4),
                                 Text(
-                                  isKurdish
-                                      ? 'گەڕانەوە'
-                                      : (lang == 'ar' ? 'السابق' : 'Back'),
+                                  isKurmanji
+                                      ? 'زڤڕین'
+                                      : (isKurdish
+                                          ? 'گەڕانەوە'
+                                          : (lang == 'ar' ? 'السابق' : 'Back')),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: (isKurdish || isArabic)
+                                  style: (isKurdish || isKurmanji || isArabic)
                                       ? AppTheme.kurdishTitle(
                                           fontSize: 14,
                                           color: AppColors.faintText)
@@ -660,12 +798,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              isKurdish
-                                  ? 'ژماردن'
-                                  : (isArabic ? 'تسبيح' : 'Count'),
+                              isKurmanji
+                                  ? 'هژمارتن'
+                                  : (isKurdish
+                                      ? 'ژماردن'
+                                      : (isArabic ? 'تسبيح' : 'Count')),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: (isKurdish || isArabic)
+                              style: (isKurdish || isKurmanji || isArabic)
                                   ? AppTheme.kurdishTitle(
                                       fontSize: 15, color: AppColors.darkBg)
                                   : AppTheme.englishTitle(
@@ -699,12 +839,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  isKurdish
-                                  ? 'دواتر'
-                                  : (isArabic ? 'التالي' : 'Next'),
+                                  isKurmanji
+                                      ? 'پاشتر'
+                                      : (isKurdish
+                                          ? 'دواتر'
+                                          : (isArabic ? 'التالي' : 'Next')),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: (isKurdish || isArabic)
+                                  style: (isKurdish || isKurmanji || isArabic)
                                       ? AppTheme.kurdishTitle(
                                           fontSize: 14,
                                           color: AppColors.cream)
@@ -729,10 +871,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
-  Widget _buildCompletedScreen(bool isKurdish, bool isArabic, AppLocalizations? loc) {
+  Widget _buildCompletedScreen(bool isKurdish, bool isKurmanji, bool isArabic, AppLocalizations? loc, String lang) {
     return Scaffold(
       backgroundColor: AppColors.darkBg,
       body: Center(
@@ -746,12 +890,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 Icon(Icons.check_circle_outline_rounded, size: 68, color: AppColors.gold),
                 const SizedBox(height: 24),
                 Text(
-                  isKurdish
-                      ? 'خوای گەورە پاداشتت بداتەوە!'
-                      : (isArabic
-                          ? 'جزاك الله خيراً وتقبل منك!'
-                          : 'Session Completed!'),
-                  style: (isKurdish || isArabic)
+                  isKurmanji
+                      ? 'خودایێ مەزن پاداشتا تە بدەت!'
+                      : (isKurdish
+                          ? 'خوای گەورە پاداشتت بداتەوە!'
+                          : (isArabic
+                              ? 'جزاك الله خيراً وتقبل منك!'
+                              : 'Session Completed!')),
+                  style: (isKurdish || isKurmanji || isArabic)
                       ? AppTheme.kurdishTitle(fontSize: 22, color: AppColors.gold)
                       : AppTheme.englishTitle(
                           fontSize: 22, color: AppColors.gold),
@@ -759,12 +905,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  isKurdish
-                      ? 'هەموو زیکرەکانی ئەم بەشەت بە سەرکەوتوویی خوێندەوە.'
-                      : (isArabic
-                          ? 'لقد أكملت قراءة جميع أذكار هذا القسم بنجاح.'
-                          : 'You have completed all Azkar in this category.'),
-                  style: (isKurdish || isArabic)
+                  isKurmanji
+                      ? 'تە هەمی زکرێن ڤێ پشکێ ب سەرکەفتیانە خواندن.'
+                      : (isKurdish
+                          ? 'هەموو زیکرەکانی ئەم بەشەت بە سەرکەوتوویی خوێندەوە.'
+                          : (isArabic
+                              ? 'لقد أكملت قراءة جميع أذكار هذا القسم بنجاح.'
+                              : 'You have completed all Azkar in this category.')),
+                  style: (isKurdish || isKurmanji || isArabic)
                       ? AppTheme.kurdishText(
                           color: AppColors.mutedText, fontSize: 14)
                       : AppTheme.englishText(
@@ -783,10 +931,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    isKurdish
-                        ? 'گەڕانەوە بۆ سەرەتا'
-                        : (isArabic ? 'العودة للرئيسية' : 'Return Home'),
-                    style: (isKurdish || isArabic)
+                    isKurmanji
+                        ? 'زڤڕین بۆ سەرەتا'
+                        : (isKurdish
+                            ? 'گەڕانەوە بۆ سەرەتا'
+                            : (isArabic ? 'العودة للرئيسية' : 'Return Home')),
+                    style: (isKurdish || isKurmanji || isArabic)
                         ? AppTheme.kurdishTitle(
                             fontSize: 15, color: AppColors.darkBg)
                         : AppTheme.englishTitle(
@@ -801,7 +951,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
     );
   }
 
-  Widget _buildAudioButton(Azkar zikr, bool isKurdish, String lang) {
+  Widget _buildAudioButton(Azkar zikr, bool isKurdish, bool isKurmanji, String lang) {
     final zikrId = zikr.id ?? (_currentIndex + 1);
     final itemKey = 'zikr_${widget.category.id}_${zikrId}_$_currentIndex';
     final isArabic = lang == 'ar';
@@ -833,24 +983,30 @@ class _ReadingScreenState extends State<ReadingScreen> {
             final String label;
             final IconData icon;
             if (isThisLoading) {
-              label = isKurdish
-                  ? 'چاوەڕێبە...'
-                  : (isArabic ? 'جاري التحميل...' : 'Loading...');
+              label = isKurmanji
+                  ? 'ل هیڤیێ بە...'
+                  : (isKurdish
+                      ? 'چاوەڕێبە...'
+                      : (isArabic ? 'جاري التحميل...' : 'Loading...'));
               icon = Icons.hourglass_top_rounded;
             } else if (isThisPlaying) {
-              label = isKurdish
+              label = isKurmanji || isKurdish
                   ? 'ڕاگرتن'
                   : (isArabic ? 'إيقاف مؤقت' : 'Pause');
               icon = Icons.pause_circle_filled_rounded;
             } else if (isThisPaused) {
-              label = isKurdish
-                  ? 'دەستپێکردنەوە'
-                  : (isArabic ? 'استئناف' : 'Resume');
+              label = isKurmanji
+                  ? 'دەستپێکرنەڤە'
+                  : (isKurdish
+                      ? 'دەستپێکردنەوە'
+                      : (isArabic ? 'استئناف' : 'Resume'));
               icon = Icons.play_circle_fill_rounded;
             } else {
-              label = isKurdish
-                  ? 'خوێندنەوەی دەنگی'
-                  : (isArabic ? 'استماع' : 'Listen');
+              label = isKurmanji
+                  ? 'خواندنا دەنگی'
+                  : (isKurdish
+                      ? 'خوێندنەوەی دەنگی'
+                      : (isArabic ? 'استماع' : 'Listen'));
               icon = Icons.volume_up_rounded;
             }
 
@@ -904,7 +1060,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       const SizedBox(width: 8),
                       Text(
                         label,
-                        style: isKurdish
+                        style: isKurmanji || isKurdish
                             ? AppTheme.kurdishTitle(
                                 fontSize: 12.5, color: AppColors.gold)
                             : (isArabic

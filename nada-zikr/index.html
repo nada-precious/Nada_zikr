@@ -53,7 +53,7 @@
             position: relative;
         }
 
-        .app-badge {
+        .app-badge { 
             display: inline-block;
             background: rgba(255, 255, 255, 0.18);
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -272,7 +272,7 @@
     <!-- QUICK SWITCH -->
     <div class="lang-switch">
         <a href="#kurdish-section" class="lang-btn active">کوردی (Kurdish)</a>
-        <a href="#english-section" class="lang-btn">English (Google Play)</a>
+        <a href="#english-section" class="lang-btn">English (App Store & Google Play)</a>
     </div>
 
     <!-- MAIN CONTENT (KURDISH) -->
@@ -341,11 +341,12 @@
                 ئاگادارکردنەوە و هۆشیارکردنەوەکان (Notifications & Alarms)
             </h2>
             <p>
-                ئەپەکە مۆڵەتەکانی <span class="badge-tag">POST_NOTIFICATIONS</span> و <span class="badge-tag">SCHEDULE_EXACT_ALARM</span> بەکاردەهێنێت:
+                ئەپەکە مۆڵەتەکانی سیستەمی ئەندرۆید (<span class="badge-tag">POST_NOTIFICATIONS</span>، <span class="badge-tag">SCHEDULE_EXACT_ALARM</span>) و سیستەمی ئەپڵ (<span class="badge-tag">UNUserNotificationCenter</span>) بەکاردەهێنێت:
             </p>
             <ul>
-                <li>تەنها بە مەبەستی لێدانی بانگ یان ئاگادارکردنەوە لە کاتی نوێژەکان و زیکرەکانی بەیانی و ئێواران کە خۆت دیاریت کردوون.</li>
-                <li>دەتوانیت لە هەر کاتێکدا ئاگادارکردنەوەکان لە ڕێکخستنەکانی ئەپ یان سیستەمدا بکوژێنیتەوە.</li>
+                <li>تەنها بە مەبەستی لێدانی بانگ یان ئاگادارکردنەوە لە کاتی نوێژەکان و زیکرەکانی ڕۆژانە کە بەکارهێنەر خۆی چالاکی کردوون.</li>
+                <li>هەموو هۆشیارکردنەوەکان بە شێوەی خۆجێیی (Local) لەسەر مۆبایلەکەت دادەنرێن بەبێ پێویستی بە هیچ سێرڤەرێکی دەرەکی.</li>
+                <li>دەتوانیت لە هەر کاتێکدا لە ڕێکخستنەکانی ئەپ یان ڕێکخستنی سیستەمی مۆبایلەکەت ئاگادارکردنەوەکان ناچالاک بکەیت.</li>
             </ul>
         </section>
 
@@ -355,87 +356,131 @@
                 هێڵی ئینتەرنێت (Internet Access)
             </h2>
             <p>
-                ئەپەکە پێویستی بە ئینتەرنێت دەبێت (<span class="badge-tag">INTERNET</span>) تەنها بۆ پەخشکردنی دەنگی قورئانی پیرۆز بە شێوەی ڕاستەوخۆ (Streaming). هیچ زانیارییەکی بەکارهێنەر لەگەڵ ئەم داواکارییەدا نانێردرێت.
+                ئەپەکە پێویستی بە ئینتەرنێت دەبێت (<span class="badge-tag">INTERNET</span>) تەنها بۆ پەخشکردنی دەنگی قورئانی پیرۆز بە شێوەی ڕاستەوخۆ (Streaming). هیچ زانیارییەکی بەکارهێنەر یان ئامێر لەگەڵ ئەم داواکارییەدا نانێردرێت.
             </p>
         </section>
 
         <section class="section">
             <h2 class="section-title">
                 <span class="section-num">٧</span>
-                ڕیکلام و لایەنی سێیەم (Advertising & Third-Parties)
+                ڕێگری لە شوێنپێهەڵگرتن و سیستەمی ئەپڵ (App Tracking Transparency)
             </h2>
             <p>
-                ئەپی نەدا <strong>بە تەواوی بێ بەرامبەر و بێ هیچ ڕیکلامێکە (No Ads)</strong>. هیچ خزمەتگوزارییەکی شوێنپێهەڵگرتن (Tracking SDK) یان فرۆشتنی زانیاری لە ناو ئەپەکەدا بوونی نییە.
+                ئەپی نەدا بە تەواوی پابەندە بە یاساکانی پاراستنی تایبەتمەندی ئەپڵ (Apple App Store Guidelines):
             </p>
+            <ul>
+                <li>ئەپەکە هیچ جۆرە ناسێنەرێکی ڕیکلامی (<span class="badge-tag">IDFA</span>) کۆناکاتەوە و داوای مۆڵەتی شوێنپێهەڵگرتن لە ئەپەکانی تر ناکات.</li>
+                <li>بە هیچ شێوەیەک ڕیکلامی تێدا نییە و هیچ پەیوەندییەکی بە تۆڕەکانی بازاڕکردن و کۆکردنەوەی داتا نییە.</li>
+            </ul>
         </section>
 
         <section class="section">
             <h2 class="section-title">
                 <span class="section-num">٨</span>
+                سڕینەوە و پاراستنی داتا (Data Retention & Deletion)
+            </h2>
+            <p>
+                لەبەر ئەوەی ئەپی نەدا پێویستی بە هەژمار (Account) و سێرڤەری دەرەکی نییە، هەموو داتاکانت (ئاماری زیکرەکان، ڕێکخستنەکان، دڵخوازەکان) تەنها لەناو بیرگەی مۆبایلەکەتدا دەمێننەوە. لە هەر کاتێکدا بە سڕینەوەی ئەپەکە لەسەر ئامێرەکەت، تەواوی داتاکانت بە شێوەیەکی هەمیشەیی و خۆکار لەسەر مۆبایلەکەت دەسڕێنەوە.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">
+                <span class="section-num">٩</span>
                 پەیوەندی (Contact Us)
             </h2>
             <p>
                 بۆ هەر پرسیارێک، سەرنجێک، یان پێشنیارێک سەبارەت بەم سیاسەتە یان ئەپەکە، دەتوانیت پەیوەندیمان پێوە بکەیت لە ڕێگەی ئیمەیڵ:
                 <br>
-                <strong>ئیمەیڵ:</strong> <a href="mailto:support@zikrakanm.com">support@zikrakanm.com</a>
+                <strong>ئیمەیڵ:</strong> <a href="mailto:zanyarzahmed.dev@gmail.com">zanyarzahmed.dev@gmail.com</a>
             </p>
         </section>
 
-        <!-- ENGLISH VERSION FOR GOOGLE PLAY CONSOLE REVIEWERS -->
+        <!-- ENGLISH VERSION FOR APPLE APP STORE & GOOGLE PLAY REVIEWERS -->
         <div class="ltr" id="english-section">
             <h2 style="font-size: 1.8rem; margin-bottom: 8px; color: var(--primary);">Privacy Policy (English)</h2>
-            <p style="color: #64748b; margin-bottom: 25px;">Official Privacy Policy for Google Play Store & User Compliance</p>
+            <p style="color: #64748b; margin-bottom: 25px;">Official Privacy Policy for Apple App Store, Google Play Store & User Compliance</p>
 
             <div class="highlight-card">
                 <div class="icon">🔒</div>
                 <div>
-                    <p style="color: #166534;"><strong>Summary:</strong> Nada does NOT collect, sell, or monetize any personal data. All prayer times calculations and Zikr counters operate locally on your device.</p>
+                    <p style="color: #166534;"><strong>Summary:</strong> Nada does NOT collect, track, sell, or monetize any personal data. All prayer times calculations, compass headings, and Dhikr counters operate strictly on-device.</p>
                 </div>
             </div>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">1</span> Overview</h3>
-                <p>This Privacy Policy applies to the <strong>Nada (نەدا – Zikrakanm)</strong> mobile application. We are committed to protecting your privacy. We do not require account registration and do not harvest user personal data.</p>
+                <h3 class="section-title"><span class="section-num">1</span> Overview & Scope</h3>
+                <p>This Privacy Policy applies to the <strong>Nada (نەدا – Zikrakanm)</strong> mobile application for iOS, iPadOS, watchOS, and Android. We are deeply committed to user privacy. We do not require registration or user accounts, and we do not collect, process, or transmit personal data.</p>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">2</span> Location Data Usage</h3>
-                <p>The app may request access to location (<span class="badge-tag">ACCESS_FINE_LOCATION</span> and <span class="badge-tag">ACCESS_COARSE_LOCATION</span>):</p>
+                <h3 class="section-title"><span class="section-num">2</span> Apple App Store Privacy Nutrition Disclosures</h3>
+                <p>In accordance with Apple's App Privacy Nutrition Label requirements in App Store Connect:</p>
                 <ul>
-                    <li><strong>Purpose:</strong> Strictly to calculate accurate local Islamic prayer times (Salah) and the precise Qibla compass bearing towards Makkah.</li>
-                    <li><strong>Processing:</strong> Location data is processed <strong>ephemerally on-device</strong> only. It is never transmitted to any external server, database, or third-party service.</li>
-                    <li><strong>Optional:</strong> Users may choose to deny permission and manually select their city.</li>
+                    <li><strong>Data Used to Track You:</strong> <strong>None</strong>. We do not track users across apps or websites.</li>
+                    <li><strong>Data Linked to You:</strong> <strong>None</strong>. No personal data or identifiers are tied to your identity.</li>
+                    <li><strong>Data Collected:</strong> <strong>Data Not Collected</strong>. We do not collect contact details, financial information, health/fitness data, search history, browsing history, device identifiers, or usage diagnostics.</li>
                 </ul>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">3</span> Sensors & Compass</h3>
-                <p>The app accesses the device's hardware sensors (accelerometer & magnetometer) solely to render the real-time Qibla compass needle. Sensor values are processed in volatile memory on the device and are never recorded or transmitted.</p>
+                <h3 class="section-title"><span class="section-num">3</span> App Tracking Transparency (Apple Guideline 5.1.2)</h3>
+                <p>Nada complies strictly with Apple's App Tracking Transparency framework:</p>
+                <ul>
+                    <li>The app does not access, collect, or transmit Apple's Identifier for Advertisers (<span class="badge-tag">IDFA</span>).</li>
+                    <li>We do not track user activity across apps and websites owned by other companies.</li>
+                    <li>We do not share any data with advertising networks, analytics aggregators, or data brokers.</li>
+                </ul>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">4</span> Notifications & Alarms</h3>
-                <p>We use <span class="badge-tag">POST_NOTIFICATIONS</span> and <span class="badge-tag">SCHEDULE_EXACT_ALARM</span> strictly for local scheduled Adhan (prayer calls) and optional daily Dhikr reminders configured by the user. All alarm events are scheduled directly on the local Android AlarmManager.</p>
+                <h3 class="section-title"><span class="section-num">4</span> Location Data Usage</h3>
+                <p>The app may request access to location services (<span class="badge-tag">NSLocationWhenInUseUsageDescription</span> on iOS, <span class="badge-tag">ACCESS_FINE_LOCATION</span> / <span class="badge-tag">ACCESS_COARSE_LOCATION</span> on Android):</p>
+                <ul>
+                    <li><strong>Purpose:</strong> Strictly to calculate accurate local Islamic prayer times (Salah) and the precise Qibla compass bearing towards the Kaaba in Makkah.</li>
+                    <li><strong>Processing:</strong> Location coordinates are calculated <strong>ephemerally on-device</strong>. Location is never sent to external servers, cloud databases, or third parties.</li>
+                    <li><strong>Optional:</strong> Users may deny location permissions at any time and manually select their city from within the app.</li>
+                </ul>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">5</span> Network Access (Internet)</h3>
-                <p>Internet access (<span class="badge-tag">INTERNET</span>) is utilized solely for streaming online Quran recitation audio when initiated by the user. No telemetry or tracking information is transmitted.</p>
+                <h3 class="section-title"><span class="section-num">5</span> Sensors & Compass</h3>
+                <p>The app accesses the device's hardware sensors (accelerometer & magnetometer) solely to render the real-time Qibla compass heading. Sensor data is processed in volatile device memory in real time and is never recorded or transmitted.</p>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">6</span> Third Parties & Advertisements</h3>
-                <p>Nada is completely ad-free. It does not include advertising SDKs, behavioral analytics, or third-party trackers. We do not sell, rent, or trade your information with any third party.</p>
+                <h3 class="section-title"><span class="section-num">6</span> Notifications & Alarms</h3>
+                <p>We use Apple's UserNotifications framework (<span class="badge-tag">UNUserNotificationCenter</span>) on iOS and local notification alarms on Android strictly for scheduled local Adhan (prayer calls) and optional daily Dhikr reminders configured by the user. All alarm events are scheduled locally on the device; no remote push tokens or remote servers are involved.</p>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">7</span> Children's Privacy</h3>
-                <p>Our app does not knowingly solicit or collect personal information from children under 13.</p>
+                <h3 class="section-title"><span class="section-num">7</span> iOS Widgets & Background Execution</h3>
+                <p>The iOS Home Screen and Lock Screen widgets (<span class="badge-tag">WidgetKit</span>) calculate and refresh upcoming prayer times locally using local on-device timeline entries. No background location tracking or remote network polling is executed.</p>
             </section>
 
             <section class="section">
-                <h3 class="section-title"><span class="section-num">8</span> Contact Us</h3>
-                <p>If you have any questions regarding this Privacy Policy, please contact us at: <a href="mailto:support@zikrakanm.com">support@zikrakanm.com</a></p>
+                <h3 class="section-title"><span class="section-num">8</span> Audio Streaming</h3>
+                <p>Internet access (<span class="badge-tag">INTERNET</span>) and standard audio playback (<span class="badge-tag">AVAudioSession</span>) are utilized solely for streaming online Quran recitation audio when explicitly selected by the user. No telemetry or audio fingerprinting is performed.</p>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="section-num">9</span> Data Retention & Deletion (Apple Guideline 5.1.1(v))</h3>
+                <p>Because Nada has no account system and no remote cloud database, all user data (including prayer adjustments, saved bookmarks, and Dhikr counter tallies) is stored exclusively on your device's local storage. Users retain complete control over their data: uninstalling the application from your device permanently and immediately deletes all associated local application data.</p>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="section-num">10</span> Advertisements & Third Parties</h3>
+                <p>Nada is completely ad-free. It contains no third-party advertising SDKs, tracking pixels, or monetization trackers. We do not sell, rent, or trade user information with any entity.</p>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="section-num">11</span> Children's Privacy</h3>
+                <p>Nada does not knowingly solicit or collect personal information from children under 13. The app is safe for users of all ages.</p>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title"><span class="section-num">12</span> Contact Us</h3>
+                <p>If you have any questions or inquiries regarding this Privacy Policy, please contact the developer at: <a href="mailto:zanyarzahmed.dev@gmail.com">zanyarzahmed.dev@gmail.com</a></p>
             </section>
         </div>
 

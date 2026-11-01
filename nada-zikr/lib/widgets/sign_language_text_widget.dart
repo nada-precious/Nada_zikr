@@ -106,7 +106,7 @@ class SignLetterTile extends StatelessWidget {
 
   void _showLetterInspector(BuildContext context) {
     AppHaptics.lightImpact();
-    final isKurdish = AppLocalizations.languageCode == 'ku';
+    final isKurdish = AppLocalizations.languageCode == 'ku' || AppLocalizations.languageCode == 'kmr';
 
     final descriptions = {
       'ا': isKurdish ? 'پەنجەی دۆشاوومژە (Index) ڕاست بەرەو سەرەوە' : 'Index finger pointing straight up',

@@ -120,15 +120,18 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
     final isRtl = isKurdish || lang == 'ar';
     final reciter = QuranAudioService.instance.selectedReciter;
 
-    final sheetTitle = isKurdish
-        ? 'سورەتە دابەزێنراوەکان (ئۆفلاین)'
-        : (lang == 'ar'
-            ? 'السور المحملة (دون إنترنت)'
-            : 'Downloaded Surahs (Offline)');
+    final sheetTitle = isKurmanji
+        ? 'سورەتێن هاتیە داگرتن (ئۆفلاین)'
+        : (isKurdish
+            ? 'سورەتە دابەزێنراوەکان (ئۆفلاین)'
+            : (lang == 'ar'
+                ? 'السور المحملة (دون إنترنت)'
+                : 'Downloaded Surahs (Offline)'));
 
     return Container(
       constraints: BoxConstraints(
@@ -232,11 +235,13 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      isKurdish
-                          ? 'تێبینی: داگیراوەکان بەپێی خوێنەر دەپارێزرێن. خوێنەرەکە دیاریبکە بۆ بینینی سوورەتە داگیراوەکانی.'
-                          : (lang == 'ar'
-                              ? 'ملاحظة: السور المحملة محفوظة لكل قارئ على حدة. اختر القارئ لعرض سورك المحملة بصوته.'
-                              : 'Tip: Downloads are saved per reciter. Choose the reciter to see what surahs are downloaded.'),
+                      isKurmanji
+                          ? 'تێبینی: داگرتن ل دیف خاندەڤانی دهێنە پاراستن. خاندەڤانی دیاربکە بۆ دیتنا سورەتێن وی یێن هاتیە داگرتن.'
+                          : (isKurdish
+                              ? 'تێبینی: داگیراوەکان بەپێی خوێنەر دەپارێزرێن. خوێنەرەکە دیاریبکە بۆ بینینی سوورەتە داگیراوەکانی.'
+                              : (lang == 'ar'
+                                  ? 'ملاحظة: السور المحملة محفوظة لكل قارئ على حدة. اختر القارئ لعرض سورك المحملة بصوته.'
+                                  : 'Tip: Downloads are saved per reciter. Choose the reciter to see what surahs are downloaded.')),
                       style: isKurdish
                           ? AppTheme.kurdishText(
                               fontSize: 12,
@@ -298,9 +303,11 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                     Row(
                       children: [
                         Text(
-                          isKurdish
-                              ? 'گۆڕین'
-                              : (lang == 'ar' ? 'تغيير' : 'Change'),
+                          isKurmanji
+                              ? 'گوهۆڕین'
+                              : (isKurdish
+                                  ? 'گۆڕین'
+                                  : (lang == 'ar' ? 'تغيير' : 'Change')),
                           style: TextStyle(
                               fontSize: 12,
                               color: AppColors.gold,
@@ -339,7 +346,7 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                           color: AppColors.gold, size: 16),
                       const SizedBox(width: 6),
                       Text(
-                        '${isKurdish ? 'قەبارەی گشتی' : (lang == 'ar' ? 'المساحة المستخدمة' : 'Total Storage')}: ${_formatBytes(_totalBytes)}',
+                        '${isKurmanji ? 'قەبارێ گشتی' : (isKurdish ? 'قەبارەی گشتی' : (lang == 'ar' ? 'المساحة المستخدمة' : 'Total Storage'))}: ${_formatBytes(_totalBytes)}',
                         style: AppTheme.englishText(
                             fontSize: 12, color: AppColors.cream),
                       ),
@@ -347,13 +354,15 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                   ),
                   if (_totalBytes > 0)
                     GestureDetector(
-                      onTap: () => _confirmClearAll(context, isKurdish, lang, reciter),
+                      onTap: () => _confirmClearAll(context, isKurmanji, isKurdish, lang, reciter),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         child: Text(
-                          isKurdish
-                              ? 'سڕینەوەی هەموو'
-                              : (lang == 'ar' ? 'حذف الكل' : 'Clear All'),
+                          isKurmanji
+                              ? 'ژێبرنا هەمیێ'
+                              : (isKurdish
+                                  ? 'سڕینەوەی هەموو'
+                                  : (lang == 'ar' ? 'حذف الكل' : 'Clear All')),
                           style: const TextStyle(
                               fontSize: 11,
                               color: Colors.redAccent,
@@ -398,11 +407,13 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              isKurdish
-                                  ? 'هیچ سوورەتێک بۆ «${reciter.localizedName(lang)}» دانەبەزێنراوە'
-                                  : (lang == 'ar'
-                                      ? 'لا توجد سور محملة لهذا القارئ'
-                                      : 'No Downloaded Surahs for ${reciter.localizedName(lang)}'),
+                              isKurmanji
+                                  ? 'چ سورەت بۆ «${reciter.localizedName(lang)}» نەهاتینە داگرتن'
+                                  : (isKurdish
+                                      ? 'هیچ سوورەتێک بۆ «${reciter.localizedName(lang)}» دانەبەزێنراوە'
+                                      : (lang == 'ar'
+                                          ? 'لا توجد سور محملة لهذا القارئ'
+                                          : 'No Downloaded Surahs for ${reciter.localizedName(lang)}')),
                               textAlign: TextAlign.center,
                               style: isKurdish
                                   ? AppTheme.kurdishTitle(
@@ -412,11 +423,13 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              isKurdish
-                                  ? 'هەر خوێنەرێک فایلەکانی بە جیا دەپارێزرێن. دەتوانیت خوێنەرێکی تر هەڵبژێریت یان لە پەڕەی خوێندنەوە سوورەت داببەزێنیت.'
-                                  : (lang == 'ar'
-                                      ? 'تحميلات كل قارئ مستقلة. يمكنك اختيار قارئ آخر أو تنزيل السور للاستماع إليها دون إنترنت.'
-                                      : 'Downloads are saved per reciter. Switch reciters to see other downloads, or download surahs to listen offline.'),
+                              isKurmanji
+                                  ? 'فایلێن هەر خاندەڤانەکی ب جیا دهێنە پاراستن. دشێی خاندەڤانەکێ دی هەلبژێری یان ل پەڕێ خاندنێ سورەتان داگری.'
+                                  : (isKurdish
+                                      ? 'هەر خوێنەرێک فایلەکانی بە جیا دەپارێزرێن. دەتوانیت خوێنەرێکی تر هەڵبژێریت یان لە پەڕەی خوێندنەوە سوورەت داببەزێنیت.'
+                                      : (lang == 'ar'
+                                          ? 'تحميلات كل قارئ مستقلة. يمكنك اختيار قارئ آخر أو تنزيل السور للاستماع إليها دون إنترنت.'
+                                          : 'Downloads are saved per reciter. Switch reciters to see other downloads, or download surahs to listen offline.')),
                               textAlign: TextAlign.center,
                               style: isKurdish
                                   ? AppTheme.kurdishText(
@@ -437,11 +450,13 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                               icon: Icon(Icons.record_voice_over_rounded,
                                   color: AppColors.gold, size: 18),
                               label: Text(
-                                isKurdish
-                                    ? 'هەڵبژاردنی خوێنەری تر'
-                                    : (lang == 'ar'
-                                        ? 'اختيار قارئ آخر'
-                                        : 'Choose Another Reciter'),
+                                isKurmanji
+                                    ? 'هەلبژارتنا خاندەڤانەکێ دی'
+                                    : (isKurdish
+                                        ? 'هەڵبژاردنی خوێنەری تر'
+                                        : (lang == 'ar'
+                                            ? 'اختيار قارئ آخر'
+                                            : 'Choose Another Reciter')),
                                 style: TextStyle(
                                   color: AppColors.gold,
                                   fontWeight: FontWeight.bold,
@@ -612,7 +627,7 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
     );
   }
 
-  void _confirmClearAll(BuildContext context, bool isKurdish, String lang,
+  void _confirmClearAll(BuildContext context, bool isKurmanji, bool isKurdish, String lang,
       QuranReciter reciter) {
     showDialog(
       context: context,
@@ -620,23 +635,29 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
         backgroundColor: AppColors.darkPanel,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          isKurdish
-              ? 'سڕینەوەی هەموو سورەتەکان'
-              : (lang == 'ar' ? 'حذف جميع السور' : 'Clear All Downloads'),
+          isKurmanji
+              ? 'ژێبرنا هەمی سورەتان'
+              : (isKurdish
+                  ? 'سڕینەوەی هەموو سورەتەکان'
+                  : (lang == 'ar' ? 'حذف جميع السور' : 'Clear All Downloads')),
           style: TextStyle(color: AppColors.gold),
         ),
         content: Text(
-          isKurdish
-              ? 'دڵنیایت لە سڕینەوەی تەواوی فایلە دەنگییە دابەزێنراوەکانی ئەم قورئانخوێنە؟'
-              : (lang == 'ar'
-                  ? 'هل أنت متأكد من حذف جميع الملفات الصوتية المحملة لهذا القارئ؟'
-                  : 'Are you sure you want to delete all downloaded audio files for this reciter?'),
+          isKurmanji
+              ? 'ئەرێ تو پشتڕاستی ژ ژێبرنا هەمی فایلێن دەنگی یێن هاتیە داگرتن بۆ ڤی خاندەڤانی؟'
+              : (isKurdish
+                  ? 'دڵنیایت لە سڕینەوەی تەواوی فایلە دەنگییە دابەزێنراوەکانی ئەم قورئانخوێنە؟'
+                  : (lang == 'ar'
+                      ? 'هل أنت متأكد من حذف جميع الملفات الصوتية المحملة لهذا القارئ؟'
+                      : 'Are you sure you want to delete all downloaded audio files for this reciter?')),
           style: TextStyle(color: AppColors.cream),
         ),
         actions: [
           TextButton(
             child: Text(
-              isKurdish ? 'پاشگەزبوونەوە' : (lang == 'ar' ? 'إلغاء' : 'Cancel'),
+              isKurmanji
+                  ? 'پاشگەزبوون'
+                  : (isKurdish ? 'پاشگەزبوونەوە' : (lang == 'ar' ? 'إلغاء' : 'Cancel')),
               style: TextStyle(color: AppColors.faintText),
             ),
             onPressed: () => Navigator.pop(ctx),
@@ -649,7 +670,7 @@ class _DownloadedSurahsSheetState extends State<DownloadedSurahsSheet> {
                   borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
-                isKurdish ? 'سڕینەوە' : (lang == 'ar' ? 'حذف' : 'Delete')),
+                isKurmanji ? 'ژێبرن' : (isKurdish ? 'سڕینەوە' : (lang == 'ar' ? 'حذف' : 'Delete'))),
             onPressed: () async {
               Navigator.pop(ctx);
               await QuranDownloadService.instance

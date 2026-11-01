@@ -16,7 +16,8 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
 
     return Scaffold(
       backgroundColor: AppColors.darkBg,
@@ -62,13 +63,15 @@ class CategoriesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              loc?.translate('azkar') ?? (isKurdish ? 'زیکر و دوعاکان' : 'Zikr & Duas'),
+                              loc?.translate('azkar') ?? (isKurmanji ? 'زکر و دوعا' : (isKurdish ? 'زیکر و دوعاکان' : 'Zikr & Duas')),
                               style: isKurdish
                                   ? AppTheme.kurdishTitle(fontSize: 20, color: AppColors.gold)
                                   : AppTheme.englishTitle(fontSize: 20, color: AppColors.gold),
                             ),
                              Text(
-                               isKurdish ? 'زیکر و دوعا قورئانی و سوننەتییەکان' : (lang == 'ar' ? 'الأذكار والأدعية من القرآن والسنة' : 'Daily Dhikr & Supplications from Quran & Sunnah'),
+                               isKurmanji
+                                   ? 'زکر و دوعایێن قورئانی و سوننەتێ'
+                                   : (isKurdish ? 'زیکر و دوعا قورئانی و سوننەتییەکان' : (lang == 'ar' ? 'الأذكار والأدعية من القرآن والسنة' : 'Daily Dhikr & Supplications from Quran & Sunnah')),
                                style: isKurdish
                                    ? AppTheme.kurdishText(fontSize: 12, color: AppColors.mutedText)
                                    : AppTheme.arabicText(fontSize: 13, color: AppColors.mutedText),
@@ -155,52 +158,66 @@ class CategoriesScreen extends StatelessWidget {
                                     Text(
                                       () {
                                         if (cat.id == 'ayat_kursi') {
-                                          return isKurdish
-                                              ? '1 ئایەت • ئایەتی کورسی [البقرة: 255]'
-                                              : (lang == 'ar'
-                                                  ? 'آية واحدة • آية الكرسي [البقرة: 255]'
-                                                  : '1 Ayah • Ayat Al-Kursi [Al-Baqarah: 255]');
+                                          return isKurmanji
+                                              ? '١ ئایەت • ئایەتا کورسی [البقرة: 255]'
+                                              : (isKurdish
+                                                  ? '1 ئایەت • ئایەتی کورسی [البقرة: 255]'
+                                                  : (lang == 'ar'
+                                                      ? 'آية واحدة • آية الكرسي [البقرة: 255]'
+                                                      : '1 Ayah • Ayat Al-Kursi [Al-Baqarah: 255]'));
                                         }
                                         if (cat.id == 'surah_mulk') {
-                                          return isKurdish
-                                              ? '30 ئایەت • سوورەتی الملك'
-                                              : (lang == 'ar'
-                                                  ? '30 آية • سورة الملك'
-                                                  : '30 Ayahs • Surah Al-Mulk');
+                                          return isKurmanji
+                                              ? '٣٠ ئایەت • سورەتا الملك'
+                                              : (isKurdish
+                                                  ? '30 ئایەت • سوورەتی الملك'
+                                                  : (lang == 'ar'
+                                                      ? '30 آية • سورة الملك'
+                                                      : '30 Ayahs • Surah Al-Mulk'));
                                         }
                                         if (cat.id == 'surah_kahf') {
-                                          return isKurdish
-                                              ? '110 ئایەت • سوورەتی الكهف'
-                                              : (lang == 'ar'
-                                                  ? '110 آيات • سورة الكهف'
-                                                  : '110 Ayahs • Surah Al-Kahf');
+                                          return isKurmanji
+                                              ? '١١٠ ئایەت • سورەتا الكهف'
+                                              : (isKurdish
+                                                  ? '110 ئایەت • سوورەتی الكهف'
+                                                  : (lang == 'ar'
+                                                      ? '110 آيات • سورة الكهف'
+                                                      : '110 Ayahs • Surah Al-Kahf'));
                                         }
                                         if (cat.id == 'quran') {
-                                          return isKurdish
-                                              ? '$realCount دوعای قورئانی بە تەفسیر'
-                                              : (lang == 'ar'
-                                                  ? '$realCount دعاء قرآني مبارك'
-                                                  : '$realCount Quranic Supplications');
+                                          return isKurmanji
+                                              ? '$realCount دوعایێن قورئانی ب تەفسیر'
+                                              : (isKurdish
+                                                  ? '$realCount دوعای قورئانی بە تەفسیر'
+                                                  : (lang == 'ar'
+                                                      ? '$realCount دعاء قرآني مبارك'
+                                                      : '$realCount Quranic Supplications'));
                                         }
                                         if (cat.id == 'hadith') {
-                                          return isKurdish
-                                              ? '$realCount فەرموودەی نەبەوی پیرۆز'
-                                              : (lang == 'ar'
-                                                  ? '$realCount حديثاً نبوياً شریفاً'
-                                                  : '$realCount Noble Hadiths');
+                                          return isKurmanji
+                                              ? '$realCount فەرموودەیێن پێغەمبەری یێن پیرۆز'
+                                              : (isKurdish
+                                                  ? '$realCount فەرموودەی نەبەوی پیرۆز'
+                                                  : (lang == 'ar'
+                                                      ? '$realCount حديثاً نبوياً شریفاً'
+                                                      : '$realCount Noble Hadiths'));
                                         }
                                         if (cat.id == 'general') {
-                                          return isKurdish
-                                              ? '$realCount دوعای پێغەمبەرانە لە فەرموودە'
-                                              : (lang == 'ar'
-                                                  ? '$realCount دعاء نبوي مأثور من السنة'
-                                                  : '$realCount Prophetic Duas from Sunnah');
+                                          return isKurmanji
+                                              ? '$realCount دوعایێن پێغەمبەری ژ فەرموودان'
+                                              : (isKurdish
+                                                  ? '$realCount دوعای پێغەمبەرانە لە فەرموودە'
+                                                  : (lang == 'ar'
+                                                      ? '$realCount دعاء نبوي مأثور من السنة'
+                                                      : '$realCount Prophetic Duas from Sunnah'));
                                         }
-                                        return isKurdish
-                                            ? '$realCount زیکری پێویست'
-                                            : (lang == 'ar'
-                                                ? '$realCount أذكار'
-                                                : '$realCount Essential Adhkar');
+                                        return isKurmanji
+                                            ? '$realCount زکرێن پێدڤی'
+                                            : (isKurdish
+                                                ? '$realCount زیکری پێویست'
+                                                : (lang == 'ar'
+                                                    ? '$realCount أذكار'
+                                                    : '$realCount Essential Adhkar'));
                                       }(),
                                       style: isKurdish
                                           ? AppTheme.kurdishText(

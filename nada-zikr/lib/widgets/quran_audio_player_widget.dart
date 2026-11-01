@@ -92,21 +92,26 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
       if (!mounted) return;
       final loc = AppLocalizations.of(context);
       final lang = loc?.locale.languageCode ?? 'ku';
-      final isKurdish = lang == 'ku';
+      final isKurmanji = lang == 'kmr';
+      final isKurdish = lang == 'ku' || isKurmanji;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             file != null
-                ? (isKurdish
-                    ? 'سورەتی ${widget.surahName} بە سەرکەوتوویی دابەزی بۆ ئۆفلاین!'
-                    : (lang == 'ar'
-                        ? 'تم تنزيل سورة ${widget.surahName} بنجاح للاستماع دون اتصال!'
-                        : 'Surah ${widget.surahName} downloaded successfully for offline!'))
-                : (isKurdish
-                    ? 'دابەزاندن شکستی هێنا. تکایە هێڵی ئینتەرنێت بپشکنە.'
-                    : (lang == 'ar'
-                        ? 'فشل التنزيل. يرجى التحقق من اتصال الإنترنت.'
-                        : 'Download failed. Please check internet connection.')),
+                ? (isKurmanji
+                    ? 'سورەتا ${widget.surahName} ب سەرکەفتیانە هاتە داگرتن بۆ ئۆفلاین!'
+                    : (isKurdish
+                        ? 'سورەتی ${widget.surahName} بە سەرکەوتوویی دابەزی بۆ ئۆفلاین!'
+                        : (lang == 'ar'
+                            ? 'تم تنزيل سورة ${widget.surahName} بنجاح للاستماع دون اتصال!'
+                            : 'Surah ${widget.surahName} downloaded successfully for offline!')))
+                : (isKurmanji
+                    ? 'داگرتن سەرنەکەفت. هیڤیە هێلا ئینتەرنێتێ بپشکنە.'
+                    : (isKurdish
+                        ? 'دابەزاندن شکستی هێنا. تکایە هێڵی ئینتەرنێت بپشکنە.'
+                        : (lang == 'ar'
+                            ? 'فشل التنزيل. يرجى التحقق من اتصال الإنترنت.'
+                            : 'Download failed. Please check internet connection.'))),
           ),
           backgroundColor: file != null ? AppColors.gold : Colors.redAccent,
           duration: const Duration(seconds: 2),
@@ -125,15 +130,18 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
       });
       final loc = AppLocalizations.of(context);
       final lang = loc?.locale.languageCode ?? 'ku';
-      final isKurdish = lang == 'ku';
+      final isKurmanji = lang == 'kmr';
+      final isKurdish = lang == 'ku' || isKurmanji;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            isKurdish
-                ? 'فایلی ئۆفلاین سڕایەوە.'
-                : (lang == 'ar'
-                    ? 'تم حذف الملف دون اتصال.'
-                    : 'Offline file deleted.'),
+            isKurmanji
+                ? 'فایلێ ئۆفلاین هاتە ژێبرن.'
+                : (isKurdish
+                    ? 'فایلی ئۆفلاین سڕایەوە.'
+                    : (lang == 'ar'
+                        ? 'تم حذف الملف دون اتصال.'
+                        : 'Offline file deleted.')),
           ),
           duration: const Duration(seconds: 2),
         ),
@@ -165,19 +173,24 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
     final reciter = QuranAudioService.instance.selectedReciter;
     final audioService = QuranAudioService.instance;
-    final playbackHint = lang == 'ku'
-        ? 'ئەگەر نیشاندانی ئایەت وەستا یان خوێنەرێکت گۆڕی، کرتە لە وەستاندن و پەخشکردن بکە تا ڕێکخستنەکان دروست ببنەوە.'
-        : lang == 'ar'
-            ? 'إذا توقف تمييز الآية أو غيّرت القارئ، اضغط إيقاف مؤقت ثم تشغيل لمزامنة الإعدادات بشكل صحيح.'
-            : 'If highlighting stops or you change the reciter, press Pause and Play once to sync the settings correctly.';
-    final panelHint = lang == 'ku'
-        ? 'بۆ شاردنەوەی پەنیلی دەنگ، بۆ لای چەپ ڕایبکێشە؛ بۆ گەڕاندنەوە، دەستگرتنەکە بۆ لای ڕاست ڕابکێشە.'
-        : lang == 'ar'
-            ? 'اسحب لوحة الصوت لليسار لإخفائها، واسحب المقبض لليمين لإعادتها.'
-            : 'Swipe the audio panel left to hide it, then drag the handle right to bring it back.';
+    final playbackHint = isKurmanji
+        ? 'ئەگەر دیارکرنا ئایەتێ ڕاوەستا یان تە خاندەڤان گوهۆڕی، دەست ل ڕاوەستاندن و لێدانێ بدە دا کو رێکخستن راست ببنەڤە.'
+        : (lang == 'ku'
+            ? 'ئەگەر نیشاندانی ئایەت وەستا یان خوێنەرێکت گۆڕی، کرتە لە وەستاندن و پەخشکردن بکە تا ڕێکخستنەکان دروست ببنەوە.'
+            : (lang == 'ar'
+                ? 'إذا توقف تمييز الآية أو غيّرت القارئ، اضغط إيقاف مؤقت ثم تشغيل لمزامنة الإعدادات بشكل صحيح.'
+                : 'If highlighting stops or you change the reciter, press Pause and Play once to sync the settings correctly.'));
+    final panelHint = isKurmanji
+        ? 'بۆ ڤەشارتنا پانێلا دەنگی، بەرەڤ چەپێ ڕابکێشە؛ بۆ ڤەگەڕاندنێ، دەستگرتنێ بەرەڤ ڕاستێ ڕابکێشە.'
+        : (lang == 'ku'
+            ? 'بۆ شاردنەوەی پەنیلی دەنگ، بۆ لای چەپ ڕایبکێشە؛ بۆ گەڕاندنەوە، دەستگرتنەکە بۆ لای ڕاست ڕابکێشە.'
+            : (lang == 'ar'
+                ? 'اسحب لوحة الصوت لليسار لإخفائها، واسحب المقبض لليمين لإعادتها.'
+                : 'Swipe the audio panel left to hide it, then drag the handle right to bring it back.'));
 
     return StreamBuilder<PlayerState>(
       stream: audioService.playerStateStream,
@@ -296,16 +309,20 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
                           ),
                           child: Text(
                             audioService.hasExactTimingSupport
-                                ? (isKurdish
-                                    ? '✨ دیاریکردن'
-                                    : (lang == 'ar'
-                                        ? '✨ تمييز'
-                                        : '✨ Highlight'))
-                                : (isKurdish
+                                ? (isKurmanji
+                                    ? '✨ دیارکرن'
+                                    : (isKurdish
+                                        ? '✨ دیاریکردن'
+                                        : (lang == 'ar'
+                                            ? '✨ تمييز'
+                                            : '✨ Highlight')))
+                                : (isKurmanji
                                     ? '📻 دەنگ'
-                                    : (lang == 'ar'
-                                        ? '📻 صوت'
-                                        : '📻 Audio')),
+                                    : (isKurdish
+                                        ? '📻 دەنگ'
+                                        : (lang == 'ar'
+                                            ? '📻 صوت'
+                                            : '📻 Audio'))),
                             style: TextStyle(
                               fontSize: 9.5,
                               fontWeight: FontWeight.bold,
@@ -451,9 +468,11 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
                                         size: 12, color: AppColors.gold),
                                     const SizedBox(width: 4),
                                     Text(
-                                      isKurdish
-                                          ? 'دابەزاندن'
-                                          : (lang == 'ar' ? 'تنزيل' : 'Download'),
+                                      isKurmanji
+                                          ? 'داگرتن'
+                                          : (isKurdish
+                                              ? 'دابەزاندن'
+                                              : (lang == 'ar' ? 'تنزيل' : 'Download')),
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
@@ -543,7 +562,7 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
                         children: [
                           Text(
                             playbackHint,
-                            textDirection: lang == 'ku' || lang == 'ar'
+                            textDirection: isKurdish || lang == 'ar'
                                 ? TextDirection.rtl
                                 : TextDirection.ltr,
                             style: AppTheme.englishText(
@@ -552,7 +571,7 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
                           const SizedBox(height: 8),
                           Text(
                             panelHint,
-                            textDirection: lang == 'ku' || lang == 'ar'
+                            textDirection: isKurdish || lang == 'ar'
                                 ? TextDirection.rtl
                                 : TextDirection.ltr,
                             style: AppTheme.englishText(
@@ -636,21 +655,27 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
                         Text(
                           isPlayingThisSurah
                               ? (playing
-                                  ? (isKurdish
-                                      ? 'تلاوەت دەکرێت...'
-                                      : (lang == 'ar'
-                                          ? 'جارٍ التلاوة...'
-                                          : 'Playing...'))
+                                  ? (isKurmanji
+                                      ? 'تلاوەت دهێتە کرن...'
+                                      : (isKurdish
+                                          ? 'تلاوەت دەکرێت...'
+                                          : (lang == 'ar'
+                                              ? 'جارٍ التلاوة...'
+                                              : 'Playing...')))
+                                  : (isKurmanji
+                                      ? 'هاتیە ڕاوەستاندن'
+                                      : (isKurdish
+                                          ? 'وەستێنراوە'
+                                          : (lang == 'ar'
+                                              ? 'متوقف مؤقتاً'
+                                              : 'Paused'))))
+                              : (isKurmanji
+                                  ? 'گوهێ خۆ بدە تلاوەتێ'
                                   : (isKurdish
-                                      ? 'وەستێنراوە'
+                                      ? 'گوێ لە ڕێبەرایەتی تلاوەت بگرە'
                                       : (lang == 'ar'
-                                          ? 'متوقف مؤقتاً'
-                                          : 'Paused')))
-                              : (isKurdish
-                                  ? 'گوێ لە ڕێبەرایەتی تلاوەت بگرە'
-                                  : (lang == 'ar'
-                                      ? 'استمع إلى التلاوة'
-                                      : 'Listen to recitation')),
+                                          ? 'استمع إلى التلاوة'
+                                          : 'Listen to recitation'))),
                           style: isKurdish
                               ? AppTheme.kurdishText(
                                   fontSize: 11, color: AppColors.faintText)
@@ -695,11 +720,13 @@ class _QuranAudioPlayerWidgetState extends State<QuranAudioPlayerWidget> {
                                         size: 11, color: AppColors.gold),
                                     const SizedBox(width: 3),
                                     Text(
-                                      isKurdish
-                                          ? 'ئایەت $liveAyah'
-                                          : (lang == 'ar'
-                                              ? 'الآية $liveAyah'
-                                              : 'Ayah $liveAyah'),
+                                      isKurmanji
+                                          ? 'ئایەتا $liveAyah'
+                                          : (isKurdish
+                                              ? 'ئایەت $liveAyah'
+                                              : (lang == 'ar'
+                                                  ? 'الآية $liveAyah'
+                                                  : 'Ayah $liveAyah')),
                                       style: isKurdish
                                           ? AppTheme.kurdishText(
                                               fontSize: 10,

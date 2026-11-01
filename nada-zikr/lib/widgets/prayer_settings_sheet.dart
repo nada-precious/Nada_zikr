@@ -67,7 +67,7 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
     _offsets = Map<String, int>.from(StorageService.getPrayerMinuteOffsets());
     _selectedHijriOffset = StorageService.getPrayerHijriOffset();
     _selectedPreAzanMinutes = StorageService.getPreAzanReminderMinutes();
-    _selectedAzanSound = 'makkah';
+    _selectedAzanSound = 'kurdistan';
 
     _loadInitialAzanSound();
     _recalculatePreview();
@@ -161,14 +161,17 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
 
     if (mounted) {
       Navigator.pop(context);
+      final lang = AppLocalizations.languageCode;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            AppLocalizations.languageCode == 'ku'
-                ? 'ڕێکخستنەکان پاشەکەوت کران و کاتەکان نوێکرانەوە'
-                : (AppLocalizations.languageCode == 'ar'
-                    ? 'تم حفظ الإعدادات وتحديث المواقيت بنجاح'
-                    : 'Prayer settings saved & times updated successfully'),
+            lang == 'kmr'
+                ? 'ڕێکخستن هاتنە پاراستن و دەم هاتنە نویژەنکرن'
+                : (lang == 'ku'
+                    ? 'ڕێکخستنەکان پاشەکەوت کران و کاتەکان نوێکرانەوە'
+                    : (lang == 'ar'
+                        ? 'تم حفظ الإعدادات وتحديث المواقيت بنجاح'
+                        : 'Prayer settings saved & times updated successfully')),
             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           backgroundColor: AppColors.darkPanel,
@@ -204,10 +207,12 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
   @override
   Widget build(BuildContext context) {
     final language = AppLocalizations.languageCode;
-    final isKurdish = language == 'ku';
+    final isKurmanji = language == 'kmr';
+    final isKurdish = language == 'ku' || language == 'kmr';
     final isArabic = language == 'ar';
 
-    String loc(String ku, String ar, String en) {
+    String loc(String ku, String ar, String en, [String? kmr]) {
+      if (isKurmanji) return kmr ?? ku;
       return isKurdish ? ku : (isArabic ? ar : en);
     }
 
@@ -254,14 +259,14 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                       children: [
                         Text(
                           loc('ڕێکخستنەکانی کاتی بانگ و ئاگادارکردنەوە',
-                              'إعدادات مواقيت الصلاة والأذان', 'Prayer Times & Azan Settings'),
+                              'إعدادات مواقيت الصلاة والأذان', 'Prayer Times & Azan Settings', 'ڕێکخستنێن دەمێن بانگی و گەهاندنێ'),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTheme.kurdishTitle(fontSize: 18, color: AppColors.gold),
                         ),
                         const SizedBox(height: 3),
                         // Live Engine Status Badge
-                        _buildEngineBadge(isKurdish, isArabic),
+                        _buildEngineBadge(isKurmanji, isKurdish, isArabic),
                       ],
                     ),
                   ),
@@ -293,19 +298,19 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                 tabs: [
                   Tab(
                     icon: const Icon(Icons.tune_rounded, size: 18),
-                    text: loc('دەستکاری', 'التعديل', 'Offsets'),
+                    text: loc('دەستکاری', 'التعديل', 'Offsets', 'دەستکاری'),
                   ),
                   Tab(
                     icon: const Icon(Icons.auto_awesome_rounded, size: 18),
-                    text: loc('حیسابکاری', 'الحساب', 'Method'),
+                    text: loc('حیسابکاری', 'الحساب', 'Method', 'حسابکرن'),
                   ),
                   Tab(
                     icon: const Icon(Icons.notifications_active_rounded, size: 18),
-                    text: loc('ئاگاداری', 'التنبيه', 'Azan'),
+                    text: loc('ئاگاداری', 'التنبيه', 'Azan', 'گەهاندن'),
                   ),
                   Tab(
                     icon: const Icon(Icons.calendar_month_rounded, size: 18),
-                    text: loc('کۆچی', 'الهجري', 'Hijri'),
+                    text: loc('کۆچی', 'الهجري', 'Hijri', 'کۆچی'),
                   ),
                 ],
               ),
@@ -320,13 +325,13 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                       controller: _tabController,
                       children: [
                         // Tab 1: Live Minute Offsets with dynamic time preview
-                        _buildOffsetsTab(isKurdish, isArabic),
+                        _buildOffsetsTab(isKurmanji, isKurdish, isArabic),
                         // Tab 2: Calculation Engine (15 methods, Asr school, high latitude)
-                        _buildCalculationMethodTab(isKurdish, isArabic),
+                        _buildCalculationMethodTab(isKurmanji, isKurdish, isArabic),
                         // Tab 3: Azan Sound & Pre-Azan Reminder
-                        _buildAzanAndRemindersTab(isKurdish, isArabic),
+                        _buildAzanAndRemindersTab(isKurmanji, isKurdish, isArabic),
                         // Tab 4: Hijri Date Calibration
-                        _buildHijriCalibrationTab(isKurdish, isArabic),
+                        _buildHijriCalibrationTab(isKurmanji, isKurdish, isArabic),
                       ],
                     ),
             ),
@@ -358,7 +363,7 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                       const SizedBox(width: 8),
                       Text(
                         loc('پاشەکەوتکردن و چالاککردن', 'حفظ وتفعيل التغييرات',
-                            'Save & Apply Settings'),
+                            'Save & Apply Settings', 'پاراستن و چالاککرن'),
                         style: isKurdish
                             ? AppTheme.kurdishTitle(fontSize: 16, color: Colors.black)
                             : AppTheme.englishTitle(fontSize: 16, color: Colors.black),
@@ -374,7 +379,7 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
     );
   }
 
-  Widget _buildEngineBadge(bool isKurdish, bool isArabic) {
+  Widget _buildEngineBadge(bool isKurmanji, bool isKurdish, bool isArabic) {
     final cityName = _previewCity?.displayName(AppLocalizations.languageCode) ??
         StorageService.getPrayerSelectedCity();
     final tzLabel = _previewTimezoneAbbr ?? 'UTC+3';
@@ -472,11 +477,13 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                 Icon(Icons.bolt_rounded, size: 13, color: AppColors.gold),
                 const SizedBox(width: 3),
                 Text(
-                  isKurdish
-                      ? 'حیسابکاری فەلەکی بێ ئینتەرنێت'
-                      : (isArabic
-                          ? 'حساب فلكي دقيق'
-                          : 'Offline Astronomical Math'),
+                  isKurmanji
+                      ? 'حسابکرنا فەلەکی بێ ئینتەرنێت'
+                      : (isKurdish
+                          ? 'حیسابکاری فەلەکی بێ ئینتەرنێت'
+                          : (isArabic
+                              ? 'حساب فلكي دقيق'
+                              : 'Offline Astronomical Math')),
                   style: TextStyle(
                     fontSize: 11,
                     color: AppColors.gold,
@@ -491,14 +498,14 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
   }
 
   // ================= TAB 1: MINUTE OFFSETS & LIVE TIMES =================
-  Widget _buildOffsetsTab(bool isKurdish, bool isArabic) {
+  Widget _buildOffsetsTab(bool isKurmanji, bool isKurdish, bool isArabic) {
     final prayers = [
-      {'id': 'fajr', 'ku': 'بەیانی', 'ar': 'الفجر', 'en': 'Fajr', 'icon': Icons.wb_twilight_rounded},
-      {'id': 'sunrise', 'ku': 'هەڵاتنی خۆر', 'ar': 'الشروق', 'en': 'Sunrise', 'icon': Icons.wb_sunny_rounded},
-      {'id': 'dhuhr', 'ku': 'نیوەڕۆ', 'ar': 'الظهر', 'en': 'Dhuhr', 'icon': Icons.brightness_high_rounded},
-      {'id': 'asr', 'ku': 'عەسر', 'ar': 'العصر', 'en': 'Asr', 'icon': Icons.wb_cloudy_rounded},
-      {'id': 'maghrib', 'ku': 'مەغریب', 'ar': 'المغرب', 'en': 'Maghrib', 'icon': Icons.nights_stay_rounded},
-      {'id': 'isha', 'ku': 'عیشا', 'ar': 'العشاء', 'en': 'Isha', 'icon': Icons.bedtime_rounded},
+      {'id': 'fajr', 'ku': 'بەیانی', 'kmr': 'سپێدە', 'ar': 'الفجر', 'en': 'Fajr', 'icon': Icons.wb_twilight_rounded},
+      {'id': 'sunrise', 'ku': 'هەڵاتنی خۆر', 'kmr': 'ڕۆژهەلات', 'ar': 'الشروق', 'en': 'Sunrise', 'icon': Icons.wb_sunny_rounded},
+      {'id': 'dhuhr', 'ku': 'نیوەڕۆ', 'kmr': 'نیڤروو', 'ar': 'الظهر', 'en': 'Dhuhr', 'icon': Icons.brightness_high_rounded},
+      {'id': 'asr', 'ku': 'عەسر', 'kmr': 'ئێڤاری', 'ar': 'العصر', 'en': 'Asr', 'icon': Icons.wb_cloudy_rounded},
+      {'id': 'maghrib', 'ku': 'مەغریب', 'kmr': 'مەغریب', 'ar': 'المغرب', 'en': 'Maghrib', 'icon': Icons.nights_stay_rounded},
+      {'id': 'isha', 'ku': 'عیشا', 'kmr': 'عەشا', 'ar': 'العشاء', 'en': 'Isha', 'icon': Icons.bedtime_rounded},
     ];
 
     final hasCustomOffsets = _offsets.values.any((v) => v != 0);
@@ -510,34 +517,44 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isKurdish
-                  ? 'دەستکاری خولەک بە خولەکی کاتەکان'
-                  : (isArabic ? 'تعديل دقائق المواقيت بدقة' : 'Minute-by-Minute Tuning'),
-              style: AppTheme.kurdishTitle(fontSize: 14, color: AppColors.cream),
+              isKurmanji
+                  ? 'دەستکاریکرنا خولەک ب خولەک یا دەمان'
+                  : (isKurdish
+                      ? 'دەستکاری خولەک بە خولەکی کاتەکان'
+                      : (isArabic ? 'تعديل دقائق المواقيت بدقة' : 'Minute-by-Minute Tuning')),
+              style: isKurdish
+                  ? AppTheme.kurdishTitle(fontSize: 14, color: AppColors.cream)
+                  : AppTheme.englishTitle(fontSize: 14, color: AppColors.cream),
             ),
             if (hasCustomOffsets)
               TextButton.icon(
                 onPressed: _resetOffsets,
                 icon: const Icon(Icons.refresh_rounded, size: 16, color: Colors.orangeAccent),
                 label: Text(
-                  isKurdish ? 'ڕێکخستنەوە بۆ ٠' : (isArabic ? 'إعادة ضبط' : 'Reset to 0'),
+                  isKurmanji
+                      ? 'زڤڕاندن بۆ ٠'
+                      : (isKurdish ? 'ڕێکخستنەوە بۆ ٠' : (isArabic ? 'إعادة ضبط' : 'Reset to 0')),
                   style: const TextStyle(color: Colors.orangeAccent, fontSize: 12),
                 ),
               ),
           ],
         ),
         Text(
-          isKurdish
-              ? 'گۆڕانکارییەکان دەستبەجێ لە کاتە ڕاستەقینەکاندا دەردەکەون'
-              : (isArabic
-                  ? 'تنعكس التعديلات مباشرة على المواقيت الحالية المعروضة'
-                  : 'Time updates adjust dynamically on each card in real time'),
+          isKurmanji
+              ? 'گوهۆڕین ئێکسەر د دەمێن ڕاستەقینەدا دیار دبن'
+              : (isKurdish
+                  ? 'گۆڕانکارییەکان دەستبەجێ لە کاتە ڕاستەقینەکاندا دەردەکەون'
+                  : (isArabic
+                      ? 'تنعكس التعديلات مباشرة على المواقيت الحالية المعروضة'
+                      : 'Time updates adjust dynamically on each card in real time')),
           style: AppTheme.englishText(fontSize: 11, color: AppColors.faintText),
         ),
         const SizedBox(height: 12),
         ...prayers.map((p) {
           final id = p['id'] as String;
-          final name = isKurdish ? p['ku'] as String : (isArabic ? p['ar'] as String : p['en'] as String);
+          final name = isKurmanji
+              ? p['kmr'] as String
+              : (isKurdish ? p['ku'] as String : (isArabic ? p['ar'] as String : p['en'] as String));
           final icon = p['icon'] as IconData;
           final currentDt = _previewTimes?[id];
           final offset = _offsets[id] ?? 0;
@@ -647,25 +664,31 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
   }
 
   // ================= TAB 2: CALCULATION ENGINE =================
-  Widget _buildCalculationMethodTab(bool isKurdish, bool isArabic) {
+  Widget _buildCalculationMethodTab(bool isKurmanji, bool isKurdish, bool isArabic) {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       children: [
         // 1. Asr School Section
         _buildSectionHeader(
           icon: Icons.balance_rounded,
-          title: isKurdish
-              ? 'مەزهەبی کاتی عەسر (کاتی پڕی سێبەر)'
-              : (isArabic ? 'المذهب الفقهي لحساب وقت العصر' : 'Asr Juristic School'),
+          title: isKurmanji
+              ? 'مەزهەبێ دەمێ ئێڤاریێ (دەمێ تێرا سیبەری)'
+              : (isKurdish
+                  ? 'مەزهەبی کاتی عەسر (کاتی پڕی سێبەر)'
+                  : (isArabic ? 'المذهب الفقهي لحساب وقت العصر' : 'Asr Juristic School')),
         ),
         const SizedBox(height: 8),
         _buildRadioSelection(
-          title: isKurdish
-              ? 'شافعی، مالیکی، حەنبەلی، جەعفەری (کاتی فەرمی)'
-              : (isArabic ? 'الشافعي، المالكي، الحنبلي، الجعفري' : 'Shafi, Maliki, Hanbali, Ja\'fari'),
-          subtitle: isKurdish
-              ? 'سێبەری شتەکە یەکسان بێت بە درێژییەکەی (فاکتەری ١)'
-              : (isArabic ? 'ظل الشيء يساوي طوله (المعيار السائد)' : 'Shadow length equals object length (Factor 1)'),
+          title: isKurmanji
+              ? 'شافعی، مالیکی، حەنبەلی، جەعفەری (دەمێ فەرمی)'
+              : (isKurdish
+                  ? 'شافعی، مالیکی، حەنبەلی، جەعفەری (کاتی فەرمی)'
+                  : (isArabic ? 'الشافعي، المالكي، الحنبلي، الجعفري' : 'Shafi, Maliki, Hanbali, Ja\'fari')),
+          subtitle: isKurmanji
+              ? 'سیبەرا تشتی یەکسان بیت ب درێژیا وی (فاکتەرێ ١)'
+              : (isKurdish
+                  ? 'سێبەری شتەکە یەکسان بێت بە درێژییەکەی (فاکتەری ١)'
+                  : (isArabic ? 'ظل الشيء يساوي طوله (المعيار السائد)' : 'Shadow length equals object length (Factor 1)')),
           value: 'shafi',
           groupValue: _selectedAsrSchool,
           onSelected: (val) {
@@ -675,9 +698,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
         ),
         _buildRadioSelection(
           title: isKurdish ? 'حەنەفی' : (isArabic ? 'الحنفي' : 'Hanafi'),
-          subtitle: isKurdish
-              ? 'سێبەری شتەکە دوو ئەوەندەی درێژییەکەیەتی (فاکتەری ٢)'
-              : (isArabic ? 'ظل الشيء يساوي مثليه (عصر متأخر)' : 'Shadow length is twice object length (Factor 2)'),
+          subtitle: isKurmanji
+              ? 'سیبەرا تشتی دوو قاتێ درێژیا وی بیت (فاکتەرێ ٢)'
+              : (isKurdish
+                  ? 'سێبەری شتەکە دوو ئەوەندەی درێژییەکەیەتی (فاکتەری ٢)'
+                  : (isArabic ? 'ظل الشيء يساوي مثليه (عصر متأخر)' : 'Shadow length is twice object length (Factor 2)')),
           value: 'hanafi',
           groupValue: _selectedAsrSchool,
           onSelected: (val) {
@@ -691,16 +716,22 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
         // 2. High Latitude Rule
         _buildSectionHeader(
           icon: Icons.public_rounded,
-          title: isKurdish
-              ? 'یاسای ناوچە بەرزەکان (ئەورووپا و وڵاتانی باکوور)'
-              : (isArabic ? 'قاعدة خطوط العرض العليا' : 'High Latitude Rule'),
+          title: isKurmanji
+              ? 'یاسایا دەڤەرێن بلند (ئەوروپا و وەلاتێن باکوور)'
+              : (isKurdish
+                  ? 'یاسای ناوچە بەرزەکان (ئەورووپا و وڵاتانی باکوور)'
+                  : (isArabic ? 'قاعدة خطوط العرض العليا' : 'High Latitude Rule')),
         ),
         const SizedBox(height: 8),
         _buildRadioSelection(
-          title: isKurdish ? 'نیوەی شەو (Middle of the night)' : (isArabic ? 'منتصف الليل' : 'Middle of Night'),
-          subtitle: isKurdish
-              ? 'کاتی فەجر و عیشا لە نیوەی شەودا سنووردار دەکرێن'
-              : (isArabic ? 'تحديد الشفق بمنتصف الليل' : 'Cap twilight duration by half of night'),
+          title: isKurmanji
+              ? 'نیڤا شەڤێ (Middle of the night)'
+              : (isKurdish ? 'نیوەی شەو (Middle of the night)' : (isArabic ? 'منتصف الليل' : 'Middle of Night')),
+          subtitle: isKurmanji
+              ? 'دەمێ سپێدێ و عەشایێ ل نیڤا شەڤێ دهێنە سنووردارکرن'
+              : (isKurdish
+                  ? 'کاتی فەجر و عیشا لە نیوەی شەودا سنووردار دەکرێن'
+                  : (isArabic ? 'تحديد الشفق بمنتصف الليل' : 'Cap twilight duration by half of night')),
           value: 'night_middle',
           groupValue: _selectedHighLatRule,
           onSelected: (val) {
@@ -709,10 +740,14 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
           },
         ),
         _buildRadioSelection(
-          title: isKurdish ? 'یەک لە حەوت (1/7th of Night)' : (isArabic ? 'سُبع الليل' : 'One Seventh'),
-          subtitle: isKurdish
-              ? 'کاتی تاریکی بە یەک لە حەوتی شەو سنووردار دەکرێت'
-              : (isArabic ? 'تحديد وقت الفجر والعشاء بسبع الليل' : 'Cap twilight by 1/7th of night'),
+          title: isKurmanji
+              ? 'ئێک ژ حەفت (1/7th of Night)'
+              : (isKurdish ? 'یەک لە حەوت (1/7th of Night)' : (isArabic ? 'سُبع الليل' : 'One Seventh')),
+          subtitle: isKurmanji
+              ? 'دەمێ تاریاتیێ ب ئێک ژ حەفتێ شەڤێ دهێتە سنووردارکرن'
+              : (isKurdish
+                  ? 'کاتی تاریکی بە یەک لە حەوتی شەو سنووردار دەکرێت'
+                  : (isArabic ? 'تحديد وقت الفجر والعشاء بسبع الليل' : 'Cap twilight by 1/7th of night')),
           value: 'one_seventh',
           groupValue: _selectedHighLatRule,
           onSelected: (val) {
@@ -721,10 +756,14 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
           },
         ),
         _buildRadioSelection(
-          title: isKurdish ? 'بەپێی گۆشە (Angle-Based Rule)' : (isArabic ? 'حسب الزاوية النسبية' : 'Angle Based'),
-          subtitle: isKurdish
-              ? 'سنووردانان بەپێی گۆشەی حیسابکراوی فەلەکی'
-              : (isArabic ? 'تحديد نسبي دقيق لدرجات الفجر والعشاء' : 'Proportional angle calculation'),
+          title: isKurmanji
+              ? 'ل دویڤ گۆشەیێ (Angle-Based Rule)'
+              : (isKurdish ? 'بەپێی گۆشە (Angle-Based Rule)' : (isArabic ? 'حسب الزاوية النسبية' : 'Angle Based')),
+          subtitle: isKurmanji
+              ? 'سنووردارکرن ل دویڤ گۆشەیێ هاتیە هژمارتن یێ فەلەکی'
+              : (isKurdish
+                  ? 'سنووردانان بەپێی گۆشەی حیسابکراوی فەلەکی'
+                  : (isArabic ? 'تحديد نسبي دقيق لدرجات الفجر والعشاء' : 'Proportional angle calculation')),
           value: 'angle_based',
           groupValue: _selectedHighLatRule,
           onSelected: (val) {
@@ -738,9 +777,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
         // 3. Calculation Method Picker
         _buildSectionHeader(
           icon: Icons.explore_rounded,
-          title: isKurdish
-              ? 'دەستەی دیاریکردنی گۆشەی فەلەکی'
-              : (isArabic ? 'طريقة وهيئة الحساب الفلكي' : 'Calculation Method Standard'),
+          title: isKurmanji
+              ? 'دەستەیا دیاریکردنا گۆشەیێ فەلەکی'
+              : (isKurdish
+                  ? 'دەستەی دیاریکردنی گۆشەی فەلەکی'
+                  : (isArabic ? 'طريقة وهيئة الحساب الفلكي' : 'Calculation Method Standard')),
         ),
         const SizedBox(height: 8),
         ...CalculationMethod.allMethods.map((method) {
@@ -789,7 +830,23 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                       ),
                     ),
                   ),
-                  if (isKurdistan)
+                  if (method.id == 'auto')
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.gold.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        isKurdish ? 'پێشنیارکراو' : (isArabic ? 'موصى به' : 'Recommended'),
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.gold,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  else if (isKurdistan)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
@@ -808,7 +865,13 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                 ],
               ),
               subtitle: Text(
-                'Fajr: ${method.fajrAngle}° | Isha: ${method.ishaIntervalMinutes != null ? "+${method.ishaIntervalMinutes}m" : "${method.ishaAngle}°"}',
+                method.id == 'auto'
+                    ? (isKurdish
+                        ? 'هەڵبژاردنی خۆکاری ڕێگای حیساب بەپێی شار و وڵات'
+                        : (isArabic
+                            ? 'تحديد تلقائي لطريقة الحساب المعتمدة حسب البلد'
+                            : 'Automatically selects standard method for your location'))
+                    : 'Fajr: ${method.fajrAngle}° | Isha: ${method.ishaIntervalMinutes != null ? "+${method.ishaIntervalMinutes}m" : "${method.ishaAngle}°"}',
                 style: AppTheme.englishText(fontSize: 11, color: AppColors.faintText),
               ),
             ),
@@ -819,20 +882,21 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
   }
 
   // ================= TAB 3: AZAN & PRE-AZAN REMINDERS =================
-  Widget _buildAzanAndRemindersTab(bool isKurdish, bool isArabic) {
+  Widget _buildAzanAndRemindersTab(bool isKurmanji, bool isKurdish, bool isArabic) {
     const reminderOptions = [0, 5, 10, 15, 20, 30];
 
     const azanSounds = [
-      {'id': 'makkah', 'nameKu': 'بانگی مەککەی پیرۆز', 'nameAr': 'أذان مكة المكرمة', 'nameEn': 'Makkah Adhan'},
-      {'id': 'madinah', 'nameKu': 'بانگی مەدینەی منەوەرە', 'nameAr': 'أذان المدينة المنورة', 'nameEn': 'Madinah Adhan'},
-      {'id': 'aqsa', 'nameKu': 'بانگی مزگەوتی ئەقسا', 'nameAr': 'أذان المسجد الأقصى', 'nameEn': 'Al-Aqsa Adhan'},
-      {'id': 'abdulbasit', 'nameKu': 'شێخ عەبدولباست عەبدولسەمەد', 'nameAr': 'الشيخ عبدالباسط', 'nameEn': 'Abdul Basit'},
-      {'id': 'mishary', 'nameKu': 'میشاری ڕاشد ئەلعەفاسی', 'nameAr': 'مشاري العفاسي', 'nameEn': 'Mishary Alafasy'},
-      {'id': 'haram_classic', 'nameKu': 'بانگی کلاسیکی حەڕەم', 'nameAr': 'أذان الحرم الكلاسيكي', 'nameEn': 'Haram Classic'},
-      {'id': 'riyadh', 'nameKu': 'بانگی مزگەوتەکانی ڕیاز', 'nameAr': 'أذان الرياض', 'nameEn': 'Riyadh Adhan'},
-      {'id': 'dubai', 'nameKu': 'بانگی مزگەوتی گەورەی دوبەی', 'nameAr': 'أذان دبي', 'nameEn': 'Dubai Adhan'},
-      {'id': 'azan_short', 'nameKu': 'بانگی کورتی ئەلعەفاسی (تەنها دێڕێک)', 'nameAr': 'أذان قصير', 'nameEn': 'Short Adhan (Tone)'},
-      {'id': 'azan_fajr', 'nameKu': 'بانگی تایبەتی بەیانی (الصلاة خير من النوم)', 'nameAr': 'أذان الفجر الخاص', 'nameEn': 'Melodic Fajr Adhan'},
+      {'id': 'kurdistan', 'nameKmr': 'بانگێ کوردستانێ (ئەوقاف)', 'nameKu': 'بانگی کوردستان (ئەوقاف)', 'nameAr': 'أذان كردستان (الأوقاف الموحد)', 'nameEn': 'Kurdistan Adhan (Awqaf)'},
+      {'id': 'makkah', 'nameKmr': 'بانگێ مەککەیا پیرۆز', 'nameKu': 'بانگی مەککەی پیرۆز', 'nameAr': 'أذان مكة المكرمة', 'nameEn': 'Makkah Adhan'},
+      {'id': 'madinah', 'nameKmr': 'بانگێ مەدینەیا منەوەرە', 'nameKu': 'بانگی مەدینەی منەوەرە', 'nameAr': 'أذان المدينة المنورة', 'nameEn': 'Madinah Adhan'},
+      {'id': 'aqsa', 'nameKmr': 'بانگێ مزگەفتا ئەقسا', 'nameKu': 'بانگی مزگەوتی ئەقسا', 'nameAr': 'أذان المسجد الأقصى', 'nameEn': 'Al-Aqsa Adhan'},
+      {'id': 'abdulbasit', 'nameKmr': 'شێخ عەبدولباست عەبدولسەمەد', 'nameKu': 'شێخ عەبدولباست عەبدولسەمەد', 'nameAr': 'الشيخ عبدالباسط', 'nameEn': 'Abdul Basit'},
+      {'id': 'mishary', 'nameKmr': 'میشاری ڕاشد ئەلعەفاسی', 'nameKu': 'میشاری ڕاشد ئەلعەفاسی', 'nameAr': 'مشاري العفاسي', 'nameEn': 'Mishary Alafasy'},
+      {'id': 'haram_classic', 'nameKmr': 'بانگێ کلاسیکی یێ حەرەم', 'nameKu': 'بانگی کلاسیکی حەڕەم', 'nameAr': 'أذان الحرم الكلاسيكي', 'nameEn': 'Haram Classic'},
+      {'id': 'riyadh', 'nameKmr': 'بانگێ مزگەفتێن ڕیاز', 'nameKu': 'بانگی مزگەوتەکانی ڕیاز', 'nameAr': 'أذان الرياض', 'nameEn': 'Riyadh Adhan'},
+      {'id': 'dubai', 'nameKmr': 'بانگێ مزگەفتا مەزن یا دوبەی', 'nameKu': 'بانگی مزگەوتی گەورەی دوبەی', 'nameAr': 'أذان دبي', 'nameEn': 'Dubai Adhan'},
+      {'id': 'azan_short', 'nameKmr': 'بانگێ کورت یێ ئەلعەفاسی (تەنێ دێڕەک)', 'nameKu': 'بانگی کورتی ئەلعەفاسی (تەنها دێڕێک)', 'nameAr': 'أذان قصير', 'nameEn': 'Short Adhan (Tone)'},
+      {'id': 'azan_fajr', 'nameKmr': 'بانگێ تایبەت یێ سپێدێ (الصلاة خير من النوم)', 'nameKu': 'بانگی تایبەتی بەیانی (الصلاة خير من النوم)', 'nameAr': 'أذان الفجر الخاص', 'nameEn': 'Melodic Fajr Adhan'},
     ];
 
     return ListView(
@@ -841,17 +905,21 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
         // 1. Pre-Azan Reminder Section
         _buildSectionHeader(
           icon: Icons.alarm_rounded,
-          title: isKurdish
-              ? 'ئاگادارکردنەوەی پێش بانگ (بۆ دەستنوێژ و ئامادەکاری)'
-              : (isArabic ? 'تنبيه قبل الأذان (للوضوء والاستعداد)' : 'Pre-Azan Reminder (Wudu Alert)'),
+          title: isKurmanji
+              ? 'گەهاندنا پێش بانگی (بۆ دەستنڤێژ و بەرهەڤیێ)'
+              : (isKurdish
+                  ? 'ئاگادارکردنەوەی پێش بانگ (بۆ دەستنوێژ و ئامادەکاری)'
+                  : (isArabic ? 'تنبيه قبل الأذان (للوضوء والاستعداد)' : 'Pre-Azan Reminder (Wudu Alert)')),
         ),
         const SizedBox(height: 6),
         Text(
-          isKurdish
-              ? 'ئاگاداری پێشوەختە وەردەگریت پێش گەیشتنی کاتی بانگ'
-              : (isArabic
-                  ? 'يرسل التطبيق تنبيهاً لطيفاً للاستعداد قبل دخول وقت الصلاة'
-                  : 'Receive a gentle reminder before the actual prayer time arrives'),
+          isKurmanji
+              ? 'گەهاندنەکا پێشوەخت وەردگری بەری دەمێ بانگی بهێت'
+              : (isKurdish
+                  ? 'ئاگاداری پێشوەختە وەردەگریت پێش گەیشتنی کاتی بانگ'
+                  : (isArabic
+                      ? 'يرسل التطبيق تنبيهاً لطيفاً للاستعداد قبل دخول وقت الصلاة'
+                      : 'Receive a gentle reminder before the actual prayer time arrives')),
           style: AppTheme.englishText(fontSize: 11, color: AppColors.faintText),
         ),
         const SizedBox(height: 12),
@@ -861,8 +929,10 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
           children: reminderOptions.map((mins) {
             final isSelected = _selectedPreAzanMinutes == mins;
             final label = mins == 0
-                ? (isKurdish ? 'ناچالاکە' : (isArabic ? 'معطل' : 'Off'))
-                : (isKurdish ? '$mins خولەک پێشتر' : (isArabic ? '$mins دقائق قبل' : '$mins min before'));
+                ? (isKurmanji ? 'ناچالاکە' : (isKurdish ? 'ناچالاکە' : (isArabic ? 'معطل' : 'Off')))
+                : (isKurmanji
+                    ? '$mins خولەک بەری هینگێ'
+                    : (isKurdish ? '$mins خولەک پێشتر' : (isArabic ? '$mins دقائق قبل' : '$mins min before')));
 
             return ChoiceChip(
               label: Text(
@@ -894,18 +964,22 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
         // 2. Global Azan Voice Selector with Instant Audio Preview
         _buildSectionHeader(
           icon: Icons.volume_up_rounded,
-          title: isKurdish
-              ? 'دەنگی گشتی بانگ (پێشبینین و هەڵبژاردن)'
-              : (isArabic ? 'صوت الأذان العام (معاينة واختيار)' : 'Azan Audio Selection & Preview'),
+          title: isKurmanji
+              ? 'دەنگێ گشتی یێ بانگی (پێشبینین و هەلبژارتن)'
+              : (isKurdish
+                  ? 'دەنگی گشتی بانگ (پێشبینین و هەڵبژاردن)'
+                  : (isArabic ? 'صوت الأذان العام (معاينة واختيار)' : 'Azan Audio Selection & Preview')),
         ),
         const SizedBox(height: 10),
         ...azanSounds.map((sound) {
           final id = sound['id'] as String;
           final isSelected = _selectedAzanSound == id;
           final isPlaying = _previewPlayingSound == id;
-          final title = isKurdish
-              ? sound['nameKu']!
-              : (isArabic ? sound['nameAr']! : sound['nameEn']!);
+          final title = isKurmanji
+              ? (sound['nameKmr'] ?? sound['nameKu']!)
+              : (isKurdish
+                  ? sound['nameKu']!
+                  : (isArabic ? sound['nameAr']! : sound['nameEn']!));
 
           return Container(
             margin: const EdgeInsets.only(bottom: 8),
@@ -971,9 +1045,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
         // 3. Sound & Notification Reliability Section
         _buildSectionHeader(
           icon: Icons.verified_user_rounded,
-          title: isKurdish
-              ? 'دڵنیابوونەوە لە کات و دەنگی بانگ'
-              : (isArabic ? 'التحقق من دقة الأذان والإشعارات' : 'Notification & Sound Reliability'),
+          title: isKurmanji
+              ? 'دڵنیابوون ژ دەم و دەنگێ بانگی'
+              : (isKurdish
+                  ? 'دڵنیابوونەوە لە کات و دەنگی بانگ'
+                  : (isArabic ? 'التحقق من دقة الأذان والإشعارات' : 'Notification & Sound Reliability')),
         ),
         const SizedBox(height: 8),
         Container(
@@ -987,11 +1063,13 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isKurdish
-                    ? 'دەتوانیت تاقیکردنەوە بکەیت بۆ دڵنیابوون لە دەنگ و ڕۆیشتنی ئاگادارکردنەوە:'
-                    : (isArabic
-                        ? 'يمكنك تجربة وصول الإشعار للتأكد من عمل الصوت والنظام بشكل سليم:'
-                        : 'Test your device sound and notification delivery immediately:'),
+                isKurmanji
+                    ? 'تۆ دشێی تاقیکرنێ بکەی بۆ دڵنیابوونێ ژ دەنگ و چوونا گەهاندنێ:'
+                    : (isKurdish
+                        ? 'دەتوانیت تاقیکردنەوە بکەیت بۆ دڵنیابوون لە دەنگ و ڕۆیشتنی ئاگادارکردنەوە:'
+                        : (isArabic
+                            ? 'يمكنك تجربة وصول الإشعار للتأكد من عمل الصوت والنظام بشكل سليم:'
+                            : 'Test your device sound and notification delivery immediately:')),
                 style: AppTheme.englishText(fontSize: 12, color: AppColors.faintText),
               ),
               const SizedBox(height: 12),
@@ -1008,9 +1086,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                   ),
                   icon: const Icon(Icons.notifications_active_rounded, size: 20),
                   label: Text(
-                    isKurdish
-                        ? 'ناردنی ئاگادارکردنەوەی تاقیکردنەوە'
-                        : (isArabic ? 'إرسال إشعار تجريبي الآن' : 'Send Test Prayer Alert'),
+                    isKurmanji
+                        ? 'هنارتنا گەهاندنا تاقیکرنێ'
+                        : (isKurdish
+                            ? 'ناردنی ئاگادارکردنەوەی تاقیکردنەوە'
+                            : (isArabic ? 'إرسال إشعار تجريبي الآن' : 'Send Test Prayer Alert')),
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   onPressed: () async {
@@ -1019,9 +1099,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            isKurdish
-                                ? 'ئاگادارکردنەوەی تاقیکردنەوە نێردرا'
-                                : (isArabic ? 'تم إرسال الإشعار التجريبي' : 'Test notification sent'),
+                            isKurmanji
+                                ? 'گەهاندنا تاقیکرنێ هاتە هنارتن'
+                                : (isKurdish
+                                    ? 'ئاگادارکردنەوەی تاقیکردنەوە نێردرا'
+                                    : (isArabic ? 'تم إرسال الإشعار التجريبي' : 'Test notification sent')),
                             style: const TextStyle(color: Colors.white),
                           ),
                           backgroundColor: AppColors.darkPanel,
@@ -1043,9 +1125,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isKurdish
-                                ? 'بەخشین لە پاتری (گرنگە بۆ سامسۆنگ و شاومی)'
-                                : (isArabic ? 'استثناء تحسين البطارية' : 'Battery Saver Exclusion'),
+                            isKurmanji
+                                ? 'بەخشین ژ پاتریێ (گرنگە بۆ سامسۆنگ و شاومی)'
+                                : (isKurdish
+                                    ? 'بەخشین لە پاتری (گرنگە بۆ سامسۆنگ و شاومی)'
+                                    : (isArabic ? 'استثناء تحسين البطارية' : 'Battery Saver Exclusion')),
                             style: AppTheme.kurdishText(
                               fontSize: 12,
                               color: AppColors.cream,
@@ -1054,11 +1138,13 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            isKurdish
-                                ? 'ڕێگری دەکات لە بێدەنگکردنی بانگ لە کاتی قفڵبوون'
-                                : (isArabic
-                                    ? 'يمنع النظام من إيقاف الأذان عند إغلاق الهاتف'
-                                    : 'Prevents OS from suppressing Azan while locked'),
+                            isKurmanji
+                                ? 'ڕێگریێ ل بێدەنگکرنا بانگی دکەت دەمێ تەلەفۆن قفل بیت'
+                                : (isKurdish
+                                    ? 'ڕێگری دەکات لە بێدەنگکردنی بانگ لە کاتی قفڵبوون'
+                                    : (isArabic
+                                        ? 'يمنع النظام من إيقاف الأذان عند إغلاق الهاتف'
+                                        : 'Prevents OS from suppressing Azan while locked')),
                             style: AppTheme.englishText(fontSize: 10, color: AppColors.faintText),
                           ),
                         ],
@@ -1072,7 +1158,7 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () => NotificationService.requestBatteryOptimizationExclusion(),
-                      child: Text(isKurdish ? 'ڕێکخستن' : (isArabic ? 'تعديل' : 'Fix')),
+                      child: Text(isKurmanji ? 'دەستکاری' : (isKurdish ? 'ڕێکخستن' : (isArabic ? 'تعديل' : 'Fix'))),
                     ),
                   ],
                 ),
@@ -1085,23 +1171,27 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
   }
 
   // ================= TAB 4: HIJRI DATE CALIBRATION =================
-  Widget _buildHijriCalibrationTab(bool isKurdish, bool isArabic) {
+  Widget _buildHijriCalibrationTab(bool isKurmanji, bool isKurdish, bool isArabic) {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       children: [
         _buildSectionHeader(
           icon: Icons.nightlight_round,
-          title: isKurdish
-              ? 'تەعدیلی مێژووی کۆچی (ڕوانینی مانگ)'
-              : (isArabic ? 'تعديل التقويم الهجري (رؤية الهلال)' : 'Hijri Calendar Correction'),
+          title: isKurmanji
+              ? 'دەستکاریکرنا مێژوویا کۆچی (دیتنا هەیڤێ)'
+              : (isKurdish
+                  ? 'تەعدیلی مێژووی کۆچی (ڕوانینی مانگ)'
+                  : (isArabic ? 'تعديل التقويم الهجري (رؤية الهلال)' : 'Hijri Calendar Correction')),
         ),
         const SizedBox(height: 6),
         Text(
-          isKurdish
-              ? 'بەهۆی جیاوازی دەرکەوتنی مانگ لە نێوان وڵاتان، دەتوانیت ڕۆژی کۆچی بە دەستی لە نێوان -٢ بۆ +٢ ڕۆژ بگۆڕیت.'
-              : (isArabic
-                  ? 'بسبب اختلاف رؤية الهلال، يمكنك تقديم أو تأخير التاريخ الهجري يدوياً بين -2 إلى +2 يوم.'
-                  : 'Due to lunar sighting variations, you can adjust the Hijri calendar by -2 to +2 days.'),
+          isKurmanji
+              ? 'ژ بەر جوداهیا دیاربوونا هەیڤێ د ناڤبەرا وەلاتاندا، تۆ دشێی ڕۆژا کۆچی ب دەستی د ناڤبەرا -٢ بۆ +٢ ڕۆژان بگوهۆڕی.'
+              : (isKurdish
+                  ? 'بەهۆی جیاوازی دەرکەوتنی مانگ لە نێوان وڵاتان، دەتوانیت ڕۆژی کۆچی بە دەستی لە نێوان -٢ بۆ +٢ ڕۆژ بگۆڕیت.'
+                  : (isArabic
+                      ? 'بسبب اختلاف رؤية الهلال، يمكنك تقديم أو تأخير التاريخ الهجري يدوياً بين -2 إلى +2 يوم.'
+                      : 'Due to lunar sighting variations, you can adjust the Hijri calendar by -2 to +2 days.')),
           style: AppTheme.englishText(fontSize: 11, color: AppColors.faintText),
         ),
         const SizedBox(height: 20),
@@ -1124,9 +1214,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
               Icon(Icons.auto_awesome, color: AppColors.gold, size: 28),
               const SizedBox(height: 8),
               Text(
-                isKurdish
-                    ? 'مێژووی کۆچی هەڵبژێردراو بۆ ئەمڕۆ:'
-                    : (isArabic ? 'التاريخ الهجري المعتمد لليوم:' : 'Active Hijri Date for Today:'),
+                isKurmanji
+                    ? 'مێژوویا کۆچی یا هەلبژارتی بۆ ئەڤڕۆ:'
+                    : (isKurdish
+                        ? 'مێژووی کۆچی هەڵبژێردراو بۆ ئەمڕۆ:'
+                        : (isArabic ? 'التاريخ الهجري المعتمد لليوم:' : 'Active Hijri Date for Today:')),
                 style: AppTheme.kurdishText(fontSize: 12, color: AppColors.mutedText),
               ),
               const SizedBox(height: 6),
@@ -1157,9 +1249,11 @@ class _PrayerSettingsSheetState extends State<PrayerSettingsSheet>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                isKurdish
-                    ? 'تەعدیلی ڕۆژەکان:'
-                    : (isArabic ? 'تعديل الأيام:' : 'Day Offset:'),
+                isKurmanji
+                    ? 'دەستکاریکرنا ڕۆژان:'
+                    : (isKurdish
+                        ? 'تەعدیلی ڕۆژەکان:'
+                        : (isArabic ? 'تعديل الأيام:' : 'Day Offset:')),
                 style: AppTheme.kurdishText(
                   fontSize: 14,
                   color: AppColors.cream,

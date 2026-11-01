@@ -35,6 +35,24 @@ class Mood {
   }
 
   String getDisplay(String lang) {
+    if (lang == 'kmr') {
+      switch (id) {
+        case 'grateful':
+          return 'سوپاسدار';
+        case 'anxious':
+          return 'نەئارام';
+        case 'hopeful':
+          return 'ب هێڤی';
+        case 'tired':
+          return 'مەندی';
+        case 'joyful':
+          return 'دلخۆش';
+        case 'sad':
+          return 'خەمگین';
+        default:
+          return kurdish;
+      }
+    }
     if (lang == 'ku') return kurdish;
     if (lang == 'en') return english;
     return label;
@@ -90,6 +108,34 @@ class AzkarCategory {
   }
 
   String getTitle(String lang) {
+    if (lang == 'kmr') {
+      switch (id) {
+        case 'morning':
+          return 'زکرێن سپێدێ';
+        case 'evening':
+          return 'زکرێن ئێڤاری';
+        case 'sleep':
+          return 'زکرێن پێش نڤستنێ';
+        case 'wakeup':
+          return 'زکرێن ژ خەو ڕابوونێ';
+        case 'prayer':
+          return 'زکرێن پشتی نڤێژێ';
+        case 'quran':
+          return 'دوعایێن قورئانا پیرۆز';
+        case 'ayat_kursi':
+          return 'ئایەتا کورسی';
+        case 'surah_mulk':
+          return 'سوورەتا مولک';
+        case 'surah_kahf':
+          return 'سوورەتا کەهف';
+        case 'hadith':
+          return 'فەرموودەیێن پێغەمبەری ﷺ';
+        case 'general':
+          return 'دوعایێن گشتی و ڕۆژانە';
+        default:
+          return kurdish;
+      }
+    }
     if (lang == 'ku') return kurdish;
     if (lang == 'en') return english;
     return label;
@@ -121,9 +167,137 @@ class Azkar {
   String get repeatLabel => repeat.toString();
 
   String getTranslation(String lang) {
-    if (lang == 'ku') return kurdishTranslation;
+    if (lang == 'ku' || lang == 'kmr') return kurdishTranslation;
     if (lang == 'ar') return kurdishTranslation;
     return translation.isNotEmpty ? translation : kurdishTranslation;
+  }
+
+  /// Returns true when this Azkar is a Quranic Ayah or Surah
+  bool get isQuranAyah {
+    final sOrig = source;
+    final s = sOrig.toLowerCase();
+    if (sOrig.contains('البقرة') ||
+        sOrig.contains('الإخلاص') ||
+        sOrig.contains('الاخلاص') ||
+        sOrig.contains('الفلق') ||
+        sOrig.contains('الناس') ||
+        sOrig.contains('الملك') ||
+        sOrig.contains('الملک') ||
+        sOrig.contains('الكهف') ||
+        sOrig.contains('عمران') ||
+        sOrig.contains('سوورەت') ||
+        sOrig.contains('سورة') ||
+        sOrig.contains('ئایەت') ||
+        sOrig.contains('آية') ||
+        sOrig.contains('قورئان') ||
+        sOrig.contains('القرآن') ||
+        s.contains('quran') ||
+        s.contains('surah') ||
+        s.contains('ayah') ||
+        s.contains('baqarah') ||
+        s.contains('ikhlas') ||
+        s.contains('falaq') ||
+        s.contains('nas') ||
+        s.contains('mulk') ||
+        s.contains('kahf') ||
+        s.contains('kursi')) {
+      return true;
+    }
+
+    final ar = arabic;
+    if (ar.contains('۝') || ar.contains('۞') || ar.contains('﴿')) {
+      return true;
+    }
+    if (ar.contains('الْحَيُّ الْقَيُّومُ') ||
+        ar.contains('لا اله الا هو الحي القيوم') ||
+        ar.contains('لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ')) {
+      return true;
+    }
+    if (ar.contains('قُلْ هُوَ اللَّهُ أَحَدٌ') ||
+        ar.contains('قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ') ||
+        ar.contains('قُلْ أَعُوذُ بِرَبِّ النَّاسِ')) {
+      return true;
+    }
+    if (ar.contains('آمَنَ الرَّسُولُ') || ar.contains('امَنَ الرَّسُولُ')) {
+      return true;
+    }
+    if (ar.contains('إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ')) {
+      return true;
+    }
+    if (ar.contains('تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ') ||
+        ar.contains('تَبَٰرَكَ ٱلَّذِي بِيَدِهِ ٱلۡمُلۡكُ')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /// Returns a clean header title for Quran verses/surahs
+  String? getQuranTitle(String lang) {
+    if (!isQuranAyah) return null;
+    final ar = arabic;
+    final sOrig = source;
+
+    final isKurdish = lang == 'ku' || lang == 'kmr';
+    final isEnglish = lang == 'en';
+
+    // 1. Ayat Al-Kursi
+    if (ar.contains('الْحَيُّ الْقَيُّومُ') || sOrig.contains('کورسی') || sOrig.contains('الكرسي') || sOrig.contains('kursi')) {
+      if (isKurdish) return 'ئایەتی کورسی • [البقرة: 255]';
+      if (isEnglish) return 'Ayat Al-Kursi • [Al-Baqarah: 255]';
+      return 'آيَةُ الكُرْسِيّ • [البقرة: 255]';
+    }
+
+    // 2. Amanar-Rasul (Al-Baqarah 285-286)
+    if (ar.contains('آمَنَ الرَّسُولُ') || sOrig.contains('285')) {
+      if (isKurdish) return 'کۆتایی سوورەتی بەقەرە • [285-286]';
+      if (isEnglish) return 'End of Surah Al-Baqarah • [285-286]';
+      return 'خَوَاتِيمُ سُورَةِ البَقَرَة • [285-286]';
+    }
+
+    // 3. Surah Al-Ikhlas
+    if (ar.contains('قُلْ هُوَ اللَّهُ أَحَدٌ') || sOrig.contains('ئیخڵاس') || sOrig.contains('الإخلاص')) {
+      if (isKurdish) return 'سوورەتی ئیخڵاس';
+      if (isEnglish) return 'Surah Al-Ikhlas';
+      return 'سُورَةُ الإِخْلَاص';
+    }
+
+    // 4. Surah Al-Falaq
+    if (ar.contains('قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ') || sOrig.contains('فەلەق') || sOrig.contains('الفلق')) {
+      if (isKurdish) return 'سوورەتی فەلەق';
+      if (isEnglish) return 'Surah Al-Falaq';
+      return 'سُورَةُ الفَلَق';
+    }
+
+    // 5. Surah An-Nas
+    if (ar.contains('قُلْ أَعُوذُ بِرَبِّ النَّاسِ') || sOrig.contains('ناس') || sOrig.contains('الناس')) {
+      if (isKurdish) return 'سوورەتی ناس';
+      if (isEnglish) return 'Surah An-Nas';
+      return 'سُورَةُ النَّاس';
+    }
+
+    // 6. Surah Al-Mulk
+    if (ar.contains('تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ') || ar.contains('تَبَٰرَكَ ٱلَّذِي بِيَدِهِ ٱلۡمُلۡكُ') || sOrig.contains('الملك') || sOrig.contains('الملک')) {
+      if (isKurdish) return 'سوورەتی الملوک';
+      if (isEnglish) return 'Surah Al-Mulk';
+      return 'سُورَةُ المُلْك';
+    }
+
+    // 7. Ali 'Imran 190-200
+    if (ar.contains('إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ') || sOrig.contains('عمران')) {
+      if (isKurdish) return 'دە ئایەتی کۆتایی ئالی عیمران • [190-200]';
+      if (isEnglish) return 'End of Surah Ali \'Imran • [190-200]';
+      return 'سُورَةُ آلِ عِمْرَان • [190-200]';
+    }
+
+    // 8. If source specifies a Surah name
+    if (sOrig.contains('سوورەت') || sOrig.contains('سورة') || sOrig.contains('Surah')) {
+      return sOrig;
+    }
+
+    if (isKurdish) return 'ئایەتی پیرۆزی قورئان';
+    if (isEnglish) return 'Noble Quran Verse';
+    return 'آيَةٌ مِنَ القُرْآنِ الكَرِيمِ';
   }
 
   static String _stripRepeatSuffix(String value) {
@@ -155,7 +329,7 @@ class NameOfAllah {
   });
 
   String getMeaning(String lang) {
-    if (lang == 'ku') return kurdish;
+    if (lang == 'ku' || lang == 'kmr') return kurdish;
     if (lang == 'ar') return arabic;
     return english;
   }

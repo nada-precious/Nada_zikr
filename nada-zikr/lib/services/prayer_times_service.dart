@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class PrayerTimesService {
-  static const assetPath = 'node_modules/imanikurd-prayer/data/prayer_times.json';
+  static const assetPath = 'assets/data/prayer_times.json';
 
   static Future<PrayerTimesCatalog> load() async {
     final raw = await rootBundle.loadString(assetPath);

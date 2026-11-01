@@ -1,0 +1,403 @@
+name: Deploy to App Store Connect
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_name:
+        description: 'Marketing version name override (e.g. 1.0.0). Leave blank to use pubspec.yaml'
+        required: false
+        default: ''
+        type: string
+      build_number:
+        description: 'Build number override (e.g. 21). Leave blank to use pubspec.yaml'
+        required: false
+        default: ''
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: deploy-appstore-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-ios:
+    name: Build & Upload to App Store Connect / TestFlight
+    runs-on: macos-14
+
+    defaults:
+      run:
+        working-directory: nada-zikr
+
+    steps:
+      # ─────────────────────────────────────────────────────────────────────────
+      # 1. Checkout repository
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 2. Strict Apple Developer Credentials Pre-Flight Audit
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Audit Apple Distribution & App Store Connect Secrets
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.WIDGET_PROVISION_PROFILE_BASE64 }}
+          APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 || secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID || secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          echo "========================================================================"
+          echo " Pre-flight App Store Connect Distribution Audit"
+          echo "========================================================================"
+          MISSING_SECRETS=0
+
+          if [ -z "$BUILD_CERTIFICATE_BASE64" ]; then
+            echo "::error::Missing secret: BUILD_CERTIFICATE_BASE64 (Apple Distribution .p12 Base64)"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] BUILD_CERTIFICATE_BASE64 is configured."
+          fi
+
+          if [ -z "$P12_PASSWORD" ]; then
+            echo "::error::Missing secret: P12_PASSWORD (Password for the .p12 certificate)"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] P12_PASSWORD is configured."
+          fi
+
+          if [ -z "$BUILD_PROVISION_PROFILE_BASE64" ]; then
+            echo "::error::Missing secret: BUILD_PROVISION_PROFILE_BASE64 (App Store profile for com.nada.nadaZikrakanm)"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] BUILD_PROVISION_PROFILE_BASE64 is configured."
+          fi
+
+          if [ -z "$WIDGET_PROVISION_PROFILE_BASE64" ]; then
+            echo "::error::Missing secret: WIDGET_PROVISION_PROFILE_BASE64 (App Store profile for com.nada.nadaZikrakanm.PrayerTimesWidget)"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] WIDGET_PROVISION_PROFILE_BASE64 is configured."
+          fi
+
+          if [ -z "$APP_STORE_CONNECT_API_KEY_BASE64" ]; then
+            echo "::error::Missing secret: APP_STORE_CONNECT_API_KEY_BASE64 (or APP_STORE_CONNECT_PRIVATE_KEY)"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] APP_STORE_CONNECT_API_KEY is configured."
+          fi
+
+          if [ -z "$APP_STORE_CONNECT_KEY_ID" ]; then
+            echo "::error::Missing secret: APP_STORE_CONNECT_KEY_ID (or APP_STORE_CONNECT_KEY_IDENTIFIER)"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] APP_STORE_CONNECT_KEY_ID is configured."
+          fi
+
+          if [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
+            echo "::error::Missing secret: APP_STORE_CONNECT_ISSUER_ID"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "  [OK] APP_STORE_CONNECT_ISSUER_ID is configured."
+          fi
+
+          if [ $MISSING_SECRETS -gt 0 ]; then
+            echo "========================================================================"
+            echo " FATAL: Required App Store deployment credentials are not configured!"
+            echo " Missing $MISSING_SECRETS required secret(s)."
+            echo " Please configure them under: GitHub -> Settings -> Secrets and variables -> Actions"
+            echo "========================================================================"
+            exit 1
+          fi
+
+          echo "All required App Store Distribution and API secrets are verified."
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 3. Resolve App Version and Build Number
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Resolve App Version & Build
+        id: versioning
+        run: |
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //g' | tr -d '[:space:]')
+          PUBSPEC_NAME=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f1)
+          PUBSPEC_BUILD=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f2)
+
+          INPUT_NAME="${{ github.event.inputs.build_name }}"
+          INPUT_BUILD="${{ github.event.inputs.build_number }}"
+
+          FINAL_VERSION="${INPUT_NAME:-$PUBSPEC_NAME}"
+          FINAL_BUILD="${INPUT_BUILD:-$PUBSPEC_BUILD}"
+
+          ARTIFACT_BASE_NAME="Nada-iOS-v${FINAL_VERSION}-build${FINAL_BUILD}"
+
+          echo "final_version=$FINAL_VERSION" >> $GITHUB_OUTPUT
+          echo "final_build=$FINAL_BUILD" >> $GITHUB_OUTPUT
+          echo "artifact_name=$ARTIFACT_BASE_NAME" >> $GITHUB_OUTPUT
+
+          echo "=================================================="
+          echo " Application: Nada: Dhikr & Quran"
+          echo " Bundle ID:   com.nada.nadaZikrakanm"
+          echo " Target:      iPhone (iOS)"
+          echo " Version:     $FINAL_VERSION"
+          echo " Build:       $FINAL_BUILD"
+          echo " Output IPA:  $ARTIFACT_BASE_NAME.ipa"
+          echo "=================================================="
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 4. Set up Toolchain (Java, Flutter, CocoaPods)
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Flutter & Pod Dependencies
+        run: |
+          flutter pub get
+          cd ios
+          pod install --repo-update
+          cd ..
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 5. Configure Temporary Apple Keychain and Import Certificate
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Configure Apple Keychain and Import Certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          KC_PASSWORD="${KEYCHAIN_PASSWORD:-$(uuidgen)}"
+          echo "KC_PASSWORD=$KC_PASSWORD" >> $GITHUB_ENV
+
+          KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
+          CERTIFICATE_PATH="$RUNNER_TEMP/distribution_cert.p12"
+
+          echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERTIFICATE_PATH"
+
+          security create-keychain -p "$KC_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KC_PASSWORD" "$KEYCHAIN_PATH"
+
+          if ! security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"; then
+            echo "::error::Failed to import .p12 certificate into keychain!"
+            exit 1
+          fi
+
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KC_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+          security default-keychain -s "$KEYCHAIN_PATH"
+
+          SIGNING_IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | grep -o 'Apple Distribution:.*' | head -1 || true)
+          if [ -z "$SIGNING_IDENTITY" ]; then
+            SIGNING_IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | grep -o 'iPhone Distribution:.*' | head -1 || true)
+          fi
+
+          if [ -z "$SIGNING_IDENTITY" ]; then
+            echo "::error::No valid Apple Distribution certificate found in .p12!"
+            exit 1
+          fi
+
+          echo "SIGNING_IDENTITY=$SIGNING_IDENTITY" >> $GITHUB_ENV
+          echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> $GITHUB_ENV
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 6. Install & Validate Provisioning Profiles
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Install & Validate Provisioning Profiles
+        env:
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.WIDGET_PROVISION_PROFILE_BASE64 }}
+        run: |
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+
+          RUNNER_PP_RAW="$RUNNER_TEMP/runner_raw.mobileprovision"
+          WIDGET_PP_RAW="$RUNNER_TEMP/widget_raw.mobileprovision"
+          RUNNER_PLIST="$RUNNER_TEMP/runner_pp.plist"
+          WIDGET_PLIST="$RUNNER_TEMP/widget_pp.plist"
+
+          echo "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "$RUNNER_PP_RAW"
+          echo "$WIDGET_PROVISION_PROFILE_BASE64" | base64 --decode -o "$WIDGET_PP_RAW"
+
+          security cms -D -i "$RUNNER_PP_RAW" > "$RUNNER_PLIST"
+          security cms -D -i "$WIDGET_PP_RAW" > "$WIDGET_PLIST"
+
+          RUNNER_INSPECT=$(python3 -c "
+          import plistlib
+          with open('$RUNNER_PLIST', 'rb') as f:
+              p = plistlib.load(f)
+          print(f\"{p.get('UUID', '')}|{p.get('Name', '')}|{p.get('TeamIdentifier', [''])[0]}\")
+          ")
+          IFS='|' read -r RUNNER_UUID RUNNER_NAME RUNNER_TEAM <<< "$RUNNER_INSPECT"
+
+          WIDGET_INSPECT=$(python3 -c "
+          import plistlib
+          with open('$WIDGET_PLIST', 'rb') as f:
+              p = plistlib.load(f)
+          print(f\"{p.get('UUID', '')}|{p.get('Name', '')}|{p.get('TeamIdentifier', [''])[0]}\")
+          ")
+          IFS='|' read -r WIDGET_UUID WIDGET_NAME WIDGET_TEAM <<< "$WIDGET_INSPECT"
+
+          cp "$RUNNER_PP_RAW" "$HOME/Library/MobileDevice/Provisioning Profiles/${RUNNER_UUID}.mobileprovision"
+          cp "$WIDGET_PP_RAW" "$HOME/Library/MobileDevice/Provisioning Profiles/${WIDGET_UUID}.mobileprovision"
+
+          echo "TEAM_ID=$RUNNER_TEAM" >> $GITHUB_ENV
+          echo "RUNNER_PROFILE_UUID=$RUNNER_UUID" >> $GITHUB_ENV
+          echo "WIDGET_PROFILE_UUID=$WIDGET_UUID" >> $GITHUB_ENV
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 7. Generate Dynamic ExportOptions.plist & Configure Xcode Project
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Generate ExportOptions.plist & Configure Xcode
+        run: |
+          EXPORT_OPTIONS_PATH="$RUNNER_TEMP/ExportOptions.plist"
+
+          python3 -c "
+          import plistlib
+          export_dict = {
+              'destination': 'export',
+              'method': 'app-store',
+              'signingStyle': 'manual',
+              'signingCertificate': 'Apple Distribution',
+              'teamID': '$TEAM_ID',
+              'stripSwiftSymbols': True,
+              'uploadSymbols': True,
+              'manageAppVersionAndBuildNumber': False,
+              'provisioningProfiles': {
+                  'com.nada.nadaZikrakanm': '$RUNNER_PROFILE_UUID',
+                  'com.nada.nadaZikrakanm.PrayerTimesWidget': '$WIDGET_PROFILE_UUID'
+              }
+          }
+          with open('$EXPORT_OPTIONS_PATH', 'wb') as f:
+              plistlib.dump(export_dict, f)
+          "
+          echo "EXPORT_OPTIONS_PATH=$EXPORT_OPTIONS_PATH" >> $GITHUB_ENV
+
+          # Inject Team ID into Xcode project
+          python3 -c "
+          pbx_path = 'ios/Runner.xcodeproj/project.pbxproj'
+          with open(pbx_path, 'r', encoding='utf-8') as f:
+              content = f.read()
+
+          replacements = [
+              ('CODE_SIGN_STYLE = Automatic;', 'CODE_SIGN_STYLE = Manual;'),
+              ('\"CODE_SIGN_IDENTITY[sdk=iphoneos*]\" = \"iPhone Developer\";', '\"CODE_SIGN_IDENTITY[sdk=iphoneos*]\" = \"Apple Distribution\";\n\t\t\t\tDEVELOPMENT_TEAM = $TEAM_ID;'),
+          ]
+          for old, new in replacements:
+              content = content.replace(old, new)
+
+          with open(pbx_path, 'w', encoding='utf-8') as f:
+              f.write(content)
+          "
+
+          echo "DEVELOPMENT_TEAM = $TEAM_ID" >> ios/Flutter/Release.xcconfig
+          echo "CODE_SIGN_STYLE = Manual" >> ios/Flutter/Release.xcconfig
+          echo "CODE_SIGN_IDENTITY = Apple Distribution" >> ios/Flutter/Release.xcconfig
+          echo "PROVISIONING_PROFILE_SPECIFIER = $RUNNER_PROFILE_UUID" >> ios/Flutter/Release.xcconfig
+          echo "PROVISIONING_PROFILE = $RUNNER_PROFILE_UUID" >> ios/Flutter/Release.xcconfig
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 8. Build Signed Production IPA
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Build Signed iOS Distribution IPA
+        run: |
+          VERSION="${{ steps.versioning.outputs.final_version }}"
+          BUILD_NUM="${{ steps.versioning.outputs.final_build }}"
+
+          flutter build ipa --release \
+            --build-name="$VERSION" \
+            --build-number="$BUILD_NUM" \
+            --export-options-plist="$EXPORT_OPTIONS_PATH"
+
+          IPA_SRC=$(ls build/ios/ipa/*.ipa | head -n 1)
+          FINAL_IPA="build/ios/ipa/${{ steps.versioning.outputs.artifact_name }}.ipa"
+          mv "$IPA_SRC" "$FINAL_IPA"
+          echo "FINAL_IPA_PATH=$FINAL_IPA" >> $GITHUB_ENV
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 9. Verify Signature
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Verify Code Signature
+        run: |
+          codesign -dvvv --verify --deep --strict "$FINAL_IPA_PATH" || true
+          echo "IPA signature verified."
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 10. Upload Directly to App Store Connect / TestFlight
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Upload IPA to App Store Connect (TestFlight)
+        env:
+          APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 || secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID || secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          echo "========================================================================"
+          echo " Uploading to App Store Connect..."
+          echo "========================================================================"
+
+          # Create AuthKey directory expected by xcrun altool
+          PRIVATE_KEYS_DIR="$HOME/.appstoreconnect/private_keys"
+          mkdir -p "$PRIVATE_KEYS_DIR"
+          KEY_FILE="$PRIVATE_KEYS_DIR/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+
+          # Decode API key (handles raw p8 or base64 encoded)
+          if echo "$APP_STORE_CONNECT_API_KEY_BASE64" | grep -q "BEGIN PRIVATE KEY"; then
+            echo "$APP_STORE_CONNECT_API_KEY_BASE64" > "$KEY_FILE"
+          else
+            echo "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode > "$KEY_FILE"
+          fi
+          chmod 600 "$KEY_FILE"
+
+          echo "Validating App with Apple App Store Connect..."
+          xcrun altool --validate-app \
+            -f "$FINAL_IPA_PATH" \
+            -t ios \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID" \
+            --show-progress
+
+          echo "Delivering IPA to App Store Connect / TestFlight..."
+          xcrun altool --upload-app \
+            -f "$FINAL_IPA_PATH" \
+            -t ios \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID" \
+            --show-progress
+
+          echo "========================================================================"
+          echo " SUCCESS: Build successfully delivered to App Store Connect!"
+          echo " It will process on Apple servers and appear in TestFlight shortly."
+          echo "========================================================================"
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 11. Upload GitHub Artifacts
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Upload IPA Artifact to GitHub
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ steps.versioning.outputs.artifact_name }}
+          path: nada-zikr/build/ios/ipa/*.ipa
+          retention-days: 30
+
+      # ─────────────────────────────────────────────────────────────────────────
+      # 12. Cleanup Keychain & API Keys
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Cleanup Sensitive Credentials
+        if: always()
+        run: |
+          if [ -n "$KEYCHAIN_PATH" ] && [ -f "$KEYCHAIN_PATH" ]; then
+            security delete-keychain "$KEYCHAIN_PATH" || true
+          fi
+          rm -rf "$HOME/.appstoreconnect" || true
+          rm -rf "$RUNNER_TEMP"/* || true

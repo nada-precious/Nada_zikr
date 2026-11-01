@@ -42,16 +42,17 @@ class PrayerWidgetService {
   /// Helper: save a string value.
   static Future<void> _save(String key, String value) async {
     try {
-      await HomeWidget.saveWidgetData<String>(key, value);
+      await HomeWidget.saveWidgetData<String>(key, value, appGroupId: appGroupId);
     } catch (e) {
       debugPrint('PrayerWidgetService save($key) error: $e');
     }
   }
 
-  /// Helper: save a double value.
+  /// Helper: save a double value (both as double and string for universal native compatibility).
   static Future<void> _saveDouble(String key, double value) async {
     try {
-      await HomeWidget.saveWidgetData<double>(key, value);
+      await HomeWidget.saveWidgetData<double>(key, value, appGroupId: appGroupId);
+      await HomeWidget.saveWidgetData<String>('${key}_str', value.toString(), appGroupId: appGroupId);
     } catch (e) {
       debugPrint('PrayerWidgetService saveDouble($key) error: $e');
     }
@@ -78,10 +79,11 @@ class PrayerWidgetService {
   /// current prayer period we are (used by the iOS progress ring).
   static double _calcPrayerProgress(
     PrayerTimeItem? current,
-    PrayerTimeItem? next,
-  ) {
+    PrayerTimeItem? next, [
+    DateTime? cityNow,
+  ]) {
     if (current == null || next == null) return 0.0;
-    final now = DateTime.now();
+    final now = cityNow ?? DateTime.now();
     final periodStart = current.time;
     final periodEnd = next.time;
     final totalMs = periodEnd.difference(periodStart).inMilliseconds;
@@ -90,18 +92,58 @@ class PrayerWidgetService {
     return (elapsedMs / totalMs).clamp(0.0, 1.0);
   }
 
+  /// Immediately saves active theme key and refreshes native Android & iOS widgets.
+  static Future<void> updateTheme([String? themeKey]) async {
+    try {
+      await _ensureInit();
+      String key = themeKey ?? AppThemeController.instance.palette.key;
+      if (key.isEmpty) {
+        final stored = await StorageService.readSetting('appTheme', defaultValue: 'nuri');
+        key = stored?.toString() ?? 'nuri';
+      }
+      final currentPalette = AppPalettes.byKey(key);
+      await _save('theme_key', currentPalette.key);
+      await _save('theme_is_dark', currentPalette.isDark ? '1' : '0');
+
+      await HomeWidget.updateWidget(
+        name: androidWidgetProvider,
+        androidName: androidWidgetProvider,
+        qualifiedAndroidName: 'com.nada.zikrakanm.PrayerTimesWidgetProvider',
+        iOSName: iOSWidgetName,
+      );
+    } catch (e) {
+      debugPrint('PrayerWidgetService updateTheme error: $e');
+    }
+  }
+
   /// Pushes the latest calculated prayer times to native Android and iOS widgets.
   static Future<void> updateWidgets({String? specificCityId}) async {
     try {
       // Always ensure the App Group is registered before writing anything
       await _ensureInit();
 
+      // Ensure theme key is saved upfront so widget theme is never stale
+      try {
+        final activePalette = AppThemeController.instance.palette;
+        String themeKey = activePalette.key;
+        if (themeKey.isEmpty) {
+          final stored = await StorageService.readSetting('appTheme', defaultValue: 'nuri');
+          themeKey = stored?.toString() ?? 'nuri';
+        }
+        final currentPalette = AppPalettes.byKey(themeKey);
+        await _save('theme_key', currentPalette.key);
+        await _save('theme_is_dark', currentPalette.isDark ? '1' : '0');
+      } catch (e) {
+        debugPrint('PrayerWidgetService upfront theme saving error: $e');
+      }
+
       final schedule = await PrayerRepository.getPrayerScheduleForDate(
         date: DateTime.now(),
       );
 
       final lang = AppLocalizations.languageCode;
-      final isKurdish = lang == 'ku';
+      final isKurmanji = lang == 'kmr';
+      final isKurdish = lang == 'ku' || isKurmanji;
       final isArabic = lang == 'ar';
 
       final items = schedule['items'] as List<PrayerTimeItem>? ?? [];
@@ -116,6 +158,9 @@ class PrayerWidgetService {
                   'Kurdistan'));
       final hijriInfo = schedule['hijriDate'] as HijriDateInfo?;
 
+      final scheduleNextId = schedule['nextId'] as String? ?? 'fajr';
+      final scheduleNextTime = schedule['nextTime'] as DateTime?;
+
       // Find the next upcoming prayer (and the one before it, for progress)
       PrayerTimeItem? nextItem;
       PrayerTimeItem? currentItem; // prayer currently in progress (just before next)
@@ -126,8 +171,11 @@ class PrayerWidgetService {
           break;
         }
       }
-      nextItem ??= items.isNotEmpty ? items.first : null;
-      currentItem ??= items.length > 1 ? items[items.length - 1] : null;
+
+      // If all prayers today passed (e.g. after Isha), next prayer is tomorrow's Fajr
+      final effectiveNextTime = nextItem?.time ?? scheduleNextTime;
+      final effectiveNextId = nextItem?.id ?? scheduleNextId;
+      currentItem ??= items.isNotEmpty ? items.last : null;
 
       // Extract individual prayer times (Clean 2-digit formatted: '04:12')
       String fajr = '--:--';
@@ -161,31 +209,51 @@ class PrayerWidgetService {
         }
       }
 
-      final nextPrayerName = nextItem?.localizedName(lang) ?? (isKurdish ? 'بانگ' : 'Prayer');
-      final nextPrayerTime = nextItem != null ? _fullTime(nextItem.time) : '--:--';
-      final nextPrayerId = nextItem?.id ?? 'fajr';
+      final nextPrayerName = nextItem?.localizedName(lang) ??
+          (effectiveNextId == 'fajr'
+              ? (isKurdish ? 'بەیانی' : (isArabic ? 'الفجر' : 'Fajr'))
+              : (isKurdish ? 'بانگ' : 'Prayer'));
+      final nextPrayerTime = effectiveNextTime != null ? _fullTime(effectiveNextTime) : '--:--';
+      final nextPrayerId = effectiveNextId;
 
-      // Calculate time difference
+      final targetUtcOffset = (schedule['targetUtcOffset'] as num?)?.toDouble() ?? 3.0;
+      final targetCityUtc = DateTime.now().toUtc().add(Duration(minutes: (targetUtcOffset * 60).round()));
+      final targetCityNow = DateTime(
+        targetCityUtc.year,
+        targetCityUtc.month,
+        targetCityUtc.day,
+        targetCityUtc.hour,
+        targetCityUtc.minute,
+        targetCityUtc.second,
+      );
+
+      // Calculate time difference relative to the target city's current local time
       String remainingText = '';
-      if (nextItem != null) {
-        final diff = nextItem.time.difference(DateTime.now());
+      if (effectiveNextTime != null) {
+        final diff = effectiveNextTime.difference(targetCityNow);
         if (diff.isNegative) {
-          remainingText = isKurdish
-              ? 'کاتی بانگە'
-              : (isArabic ? 'حان وقت الأذان' : 'Prayer Time');
+          remainingText = isKurmanji
+              ? 'دەما بانگیە'
+              : (isKurdish
+                  ? 'کاتی بانگە'
+                  : (isArabic ? 'حان وقت الأذان' : 'Prayer Time'));
         } else {
           final hours = diff.inHours;
           final minutes = diff.inMinutes % 60;
           if (hours > 0) {
-            remainingText = isKurdish
-                ? '$hours کاتژمێر و $minutes خولەک ماوە'
-                : (isArabic
-                    ? 'باقي $hours ساعة و $minutes دقيقة'
-                    : 'in $hours hrs $minutes mins');
+            remainingText = isKurmanji
+                ? '$hours دەمژمێر و $minutes خولەک ماینە'
+                : (isKurdish
+                    ? '$hours کاتژمێر و $minutes خولەک ماوە'
+                    : (isArabic
+                        ? 'باقي $hours ساعة و $minutes دقيقة'
+                        : 'in $hours hrs $minutes mins'));
           } else {
-            remainingText = isKurdish
-                ? '$minutes خولەک ماوە'
-                : (isArabic ? 'باقي $minutes دقيقة' : 'in $minutes mins');
+            remainingText = isKurmanji
+                ? '$minutes خولەک ماینە'
+                : (isKurdish
+                    ? '$minutes خولەک ماوە'
+                    : (isArabic ? 'باقي $minutes دقيقة' : 'in $minutes mins'));
           }
         }
       }
@@ -195,9 +263,27 @@ class PrayerWidgetService {
           : '';
 
       // Progress fraction for iOS ring (0.0 = just started, 1.0 = prayer arrived)
-      final prayerProgress = _calcPrayerProgress(currentItem, nextItem);
+      final prayerProgress = _calcPrayerProgress(currentItem, nextItem, targetCityNow);
 
       // ── Save all data (App Group set above for iOS) ──
+      final lat = (schedule['latitude'] as num?)?.toDouble() ?? 36.1911;
+      final lng = (schedule['longitude'] as num?)?.toDouble() ?? 44.0092;
+      await _saveDouble('city_lat', lat);
+      await _saveDouble('city_lng', lng);
+
+      final currentCity = schedule['city'] as WorldCity?;
+      if (currentCity != null) {
+        await _save('city_id', currentCity.id);
+        await _save('city_name_en', currentCity.nameEn);
+        await _save('city_name_ku', currentCity.nameKu);
+        await _save('city_name_ar', currentCity.nameAr);
+        await _save('widget_selected_city_id', currentCity.id);
+        await _saveDouble('city_update_timestamp', DateTime.now().millisecondsSinceEpoch.toDouble());
+        if (currentCity.datasetKey != null) {
+          await _save('city_dataset_key', currentCity.datasetKey!);
+        }
+      }
+
       await _saveDouble('prayer_progress', prayerProgress);
       await _save('city_name', cityName);
       await _save('hijri_date', hijriDateFormatted);
@@ -214,12 +300,35 @@ class PrayerWidgetService {
       await _save('selected_prayer_id', nextPrayerId);
       await _save('current_prayer_id', nextPrayerId);
 
-      // Unix seconds of the next prayer — iOS widget reads this to compute
-      // an always-accurate countdown at SwiftUI render time (never stale).
-      if (nextItem != null) {
+      await _saveDouble('city_utc_offset', targetUtcOffset);
+      await _save('city_timezone_id', schedule['timezoneId'] as String? ?? 'Asia/Baghdad');
+
+      // Save exact Unix seconds timestamp in UTC for every prayer so iOS WidgetKit can
+      // schedule precision timeline switches throughout the day without string guessing.
+      for (final item in items) {
+        final prayerUtc = DateTime.utc(
+          item.time.year,
+          item.time.month,
+          item.time.day,
+          item.time.hour,
+          item.time.minute,
+        ).subtract(Duration(minutes: (targetUtcOffset * 60).round()));
+        final sec = prayerUtc.millisecondsSinceEpoch / 1000.0;
+        await _saveDouble('${item.id}_timestamp', sec);
+        await _save('${item.id}_full_time', _fullTime(item.time));
+      }
+
+      if (effectiveNextTime != null) {
+        final nextUtc = DateTime.utc(
+          effectiveNextTime.year,
+          effectiveNextTime.month,
+          effectiveNextTime.day,
+          effectiveNextTime.hour,
+          effectiveNextTime.minute,
+        ).subtract(Duration(minutes: (targetUtcOffset * 60).round()));
         await _saveDouble(
           'next_prayer_timestamp',
-          nextItem.time.millisecondsSinceEpoch / 1000.0,
+          nextUtc.millisecondsSinceEpoch / 1000.0,
         );
       }
 
@@ -256,6 +365,8 @@ class PrayerWidgetService {
       // Trigger native widget refresh
       await HomeWidget.updateWidget(
         name: androidWidgetProvider,
+        androidName: androidWidgetProvider,
+        qualifiedAndroidName: 'com.nada.zikrakanm.PrayerTimesWidgetProvider',
         iOSName: iOSWidgetName,
       );
     } catch (e) {

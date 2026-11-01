@@ -64,7 +64,8 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)?.locale.languageCode ?? 'ku';
-    final isKurdish = locale == 'ku';
+    final isKurmanji = locale == 'kmr';
+    final isKurdish = locale == 'ku' || isKurmanji;
     return Scaffold(
       backgroundColor: AppColors.darkBg,
       body: Container(
@@ -90,7 +91,7 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context)?.translate('savedCards') ?? 'کارتە هەڵگیراوەکانم',
+                        AppLocalizations.of(context)?.translate('savedCards') ?? (isKurmanji ? 'کارتێن پاراستی' : (isKurdish ? 'کارتە هەڵگیراوەکانم' : 'Saved Cards')),
                         textDirection: isKurdish ? TextDirection.rtl : TextDirection.ltr,
                         style: isKurdish
                           ? AppTheme.kurdishTitle(fontSize: 24, color: AppColors.gold)
@@ -99,7 +100,7 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
                     ),
                     if (_cards.isNotEmpty)
                       IconButton(
-                        tooltip: isKurdish ? 'سڕینەوەی هەمووی' : 'Clear all',
+                        tooltip: isKurmanji ? 'ژێبرنا هەمیان' : (isKurdish ? 'سڕینەوەی هەمووی' : 'Clear all'),
                         icon: const Icon(Icons.delete_sweep_rounded),
                         color: AppColors.faintText,
                         onPressed: () async {
@@ -109,21 +110,21 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
                               backgroundColor: AppColors.darkPanel,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               title: Text(
-                                isKurdish ? 'سڕینەوەی هەموو کارتەکان' : 'Clear All Saved Cards',
+                                isKurmanji ? 'ژێبرنا هەمی کارتان' : (isKurdish ? 'سڕینەوەی هەموو کارتەکان' : 'Clear All Saved Cards'),
                                 style: isKurdish ? AppTheme.kurdishTitle(color: AppColors.gold) : AppTheme.englishTitle(color: AppColors.gold),
                               ),
                               content: Text(
-                                isKurdish ? 'دڵنیایت لە سڕینەوەی هەموو کارتە پاشەکەوتکراوەکان؟' : 'Are you sure you want to clear all saved cards?',
+                                isKurmanji ? 'تۆ پشتڕاستی ژ ژێبرنا هەمی کارتێن پاراستی؟' : (isKurdish ? 'دڵنیایت لە سڕینەوەی هەموو کارتە پاشەکەوتکراوەکان؟' : 'Are you sure you want to clear all saved cards?'),
                                 style: isKurdish ? AppTheme.kurdishText(color: AppColors.cream) : AppTheme.englishText(color: AppColors.cream),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(ctx, false),
-                                  child: Text(isKurdish ? 'نەخێر' : 'Cancel', style: TextStyle(color: AppColors.faintText)),
+                                  child: Text(isKurmanji ? 'نەخێر' : (isKurdish ? 'نەخێر' : 'Cancel'), style: TextStyle(color: AppColors.faintText)),
                                 ),
                                 TextButton(
                                   onPressed: () => Navigator.pop(ctx, true),
-                                  child: Text(isKurdish ? 'بەڵێ، بسڕەوە' : 'Clear All', style: const TextStyle(color: Colors.redAccent)),
+                                  child: Text(isKurmanji ? 'بەڵێ، ژێببە' : (isKurdish ? 'بەڵێ، بسڕەوە' : 'Clear All'), style: const TextStyle(color: Colors.redAccent)),
                                 ),
                               ],
                             ),
@@ -158,7 +159,7 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
                               padding: const EdgeInsets.all(24),
                               child: Text(
                                 AppLocalizations.of(context)?.translate('emptySavedCards') ??
-                                  'هیچ کارتێکی هەڵگیراو نییە. لە باری دەروونیتەوە یەکێک دروست بکە.',
+                                  (isKurmanji ? 'چ کارتێن پاراستی نینن. ژ بارودۆخێ دەروونی یێ خۆ کارتەکێ دروست بکە.' : (isKurdish ? 'هیچ کارتێکی هەڵگیراو نییە. لە باری دەروونیتەوە یەکێک دروست بکە.' : 'No saved cards yet.')),
                                 textDirection: isKurdish ? TextDirection.rtl : TextDirection.ltr,
                                 textAlign: TextAlign.center,
                                 style: isKurdish
@@ -191,16 +192,20 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
 
                                   if (!context.mounted) return;
 
-                                  final deletedText = locale == 'ku'
-                                      ? 'کارتەکە سڕایەوە'
-                                      : locale == 'ar'
-                                          ? 'تمت إزالة البطاقة'
-                                          : 'Card removed';
-                                  final undoText = locale == 'ku'
-                                      ? 'گەڕاندنەوە'
-                                      : locale == 'ar'
-                                          ? 'تراجع'
-                                          : 'Undo';
+                                  final deletedText = locale == 'kmr'
+                                      ? 'کارت هاتە ژێبرن'
+                                      : (locale == 'ku'
+                                          ? 'کارتەکە سڕایەوە'
+                                          : (locale == 'ar'
+                                              ? 'تمت إزالة البطاقة'
+                                              : 'Card removed'));
+                                  final undoText = locale == 'kmr'
+                                      ? 'ڤەگەڕاندن'
+                                      : (locale == 'ku'
+                                          ? 'گەڕاندنەوە'
+                                          : (locale == 'ar'
+                                              ? 'تراجع'
+                                              : 'Undo'));
 
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -215,7 +220,7 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
                                           Expanded(
                                             child: Text(
                                               deletedText,
-                                              style: locale == 'ku'
+                                              style: (locale == 'ku' || locale == 'kmr')
                                                   ? AppTheme.kurdishText(color: AppColors.cream, fontSize: 13)
                                                   : AppTheme.englishText(color: AppColors.cream, fontSize: 13),
                                             ),
@@ -272,9 +277,9 @@ class _FavoriteMoodCardsScreenState extends State<FavoriteMoodCardsScreen> {
     for (final item in verses) {
       final verse = Map<String, dynamic>.from(item);
       lines.add(
-          '${loc?.translate('surah') ?? 'سورەت'} ${verse['surah']}:${verse['ayah']}');
+          '${loc?.translate('surah') ?? (locale == 'kmr' ? 'سورەتا' : 'سورەت')} ${verse['surah']}:${verse['ayah']}');
       lines.add(verse['arabicText']?.toString() ?? '');
-      lines.add(locale == 'ku'
+      lines.add((locale == 'ku' || locale == 'kmr')
           ? (verse['kurdishMeaning']?.toString() ??
               verse['englishMeaning']?.toString() ??
               '')
@@ -308,7 +313,8 @@ class _MoodCardTile extends StatelessWidget {
     final verses = (data['verses'] as List?) ?? const <Map<String, dynamic>>[];
     final moodId = (data['moodId'] ?? 'grateful').toString();
     final tone = QuranMoodService.instance.themeFor(moodId);
-    final isKurdish = locale == 'ku';
+    final isKurmanji = locale == 'kmr';
+    final isKurdish = locale == 'ku' || isKurmanji;
     final isRtl = isKurdish || locale == 'ar';
     final isAyahCard = data['cardType'] == 'ayah' ||
         data['id']?.toString().startsWith('ayah_') == true ||
@@ -371,11 +377,13 @@ class _MoodCardTile extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               IconButton(
-                tooltip: locale == 'ku'
-                    ? 'لە هەڵگیراوەکان بیسڕەوە'
-                    : locale == 'ar'
-                        ? 'إزالة من المحفوظات'
-                        : 'Remove from saved cards',
+                tooltip: isKurmanji
+                    ? 'ژ پاراستیان دەربینە'
+                    : (locale == 'ku'
+                        ? 'لە هەڵگیراوەکان بیسڕەوە'
+                        : (locale == 'ar'
+                            ? 'إزالة من المحفوظات'
+                            : 'Remove from saved cards')),
                 onPressed: onDelete,
                 icon: const Icon(Icons.bookmark_remove_rounded),
                 color: AppColors.gold,
@@ -426,7 +434,7 @@ class _MoodCardTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${AppLocalizations.of(context)?.translate('surah') ?? 'سورەت'} ${map['surah']}:${map['ayah']}',
+                        '${AppLocalizations.of(context)?.translate('surah') ?? (isKurmanji ? 'سورەتا' : 'سورەت')} ${map['surah']}:${map['ayah']}',
                         textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                         style: (isRtl
                             ? AppTheme.kurdishText(color: AppColors.gold, fontSize: 11, fontWeight: FontWeight.w700)
@@ -454,7 +462,7 @@ class _MoodCardTile extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '📖 مانای کوردی',
+                                isKurmanji ? '📖 ڕامانا کوردی' : '📖 مانای کوردی',
                                 style: AppTheme.kurdishText(
                                   fontSize: 9,
                                   color: AppColors.gold,
@@ -517,7 +525,7 @@ class _MoodCardTile extends StatelessWidget {
             child: TextButton.icon(
               onPressed: onShare,
               icon: const Icon(Icons.share_rounded),
-              label: Text(AppLocalizations.of(context)?.translate('share') ?? 'هاوبەشکردن'),
+              label: Text(AppLocalizations.of(context)?.translate('share') ?? (isKurmanji ? 'پارڤەکرن' : 'هاوبەشکردن')),
             ),
           ),
         ],

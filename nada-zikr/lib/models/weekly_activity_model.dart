@@ -1,9 +1,11 @@
 class DailyActivitySummary {
   final DateTime date;
   final String dayNameKu;
+  final String? dayNameKmr;
   final String dayNameAr;
   final String dayNameEn;
   final String dayShortKu;
+  final String? dayShortKmr;
   final String dayShortAr;
   final String dayShortEn;
   final int totalCount;
@@ -15,9 +17,11 @@ class DailyActivitySummary {
   const DailyActivitySummary({
     required this.date,
     required this.dayNameKu,
+    this.dayNameKmr,
     required this.dayNameAr,
     required this.dayNameEn,
     required this.dayShortKu,
+    this.dayShortKmr,
     required this.dayShortAr,
     required this.dayShortEn,
     required this.totalCount,
@@ -28,12 +32,14 @@ class DailyActivitySummary {
   });
 
   String getDayName(String lang) {
+    if (lang == 'kmr') return dayNameKmr ?? dayNameKu;
     if (lang == 'ku') return dayNameKu;
     if (lang == 'ar') return dayNameAr;
     return dayNameEn;
   }
 
   String getDayShort(String lang) {
+    if (lang == 'kmr') return dayShortKmr ?? dayShortKu;
     if (lang == 'ku') return dayShortKu;
     if (lang == 'ar') return dayShortAr;
     return dayShortEn;
@@ -49,6 +55,7 @@ class WeeklyActivityReport {
   final int maxDayCount;
   final int bestDayIndex;
   final String bestDayNameKu;
+  final String? bestDayNameKmr;
   final String bestDayNameAr;
   final String bestDayNameEn;
   final int consistencyPercent;
@@ -62,12 +69,14 @@ class WeeklyActivityReport {
     required this.maxDayCount,
     required this.bestDayIndex,
     required this.bestDayNameKu,
+    this.bestDayNameKmr,
     required this.bestDayNameAr,
     required this.bestDayNameEn,
     required this.consistencyPercent,
   });
 
   String getBestDayName(String lang) {
+    if (lang == 'kmr') return bestDayNameKmr ?? bestDayNameKu;
     if (lang == 'ku') return bestDayNameKu;
     if (lang == 'ar') return bestDayNameAr;
     return bestDayNameEn;

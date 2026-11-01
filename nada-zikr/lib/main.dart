@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:home_widget/home_widget.dart';
 import 'app_localizations.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/main_app_screen.dart';
@@ -30,8 +31,6 @@ Future<void> _initializeApp() async {
   await PrayerRepository.preload();
   await LocationService.getCurrentLocation(forceGps: false);
 
-  // Prompt location permission at app launch
-  await LocationService.requestStartupPermission();
   await NotificationService.initialize();
   // NOTE: Battery optimization exclusion is requested AFTER the UI is visible
   // (see _MyAppState.initState post-frame callback), not here during cold startup.
@@ -126,6 +125,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  StreamSubscription<Uri?>? _widgetClickSubscription;
+
+  /// Index of the tab that should be shown initially or after a widget tap.
+  /// 1 = Prayer Times.  Exposed via a [ValueNotifier] so [MainAppScreen] can
+  /// react without being rebuilt from scratch.
+  final ValueNotifier<int> _initialTabNotifier = ValueNotifier<int>(0);
+
   @override
   void initState() {
     super.initState();
@@ -139,11 +145,43 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // showing it again on every launch.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _requestBatteryOptOnce();
+      // Check whether the app was cold-launched by tapping the prayer widget.
+      _checkInitialWidgetLaunch();
     });
+
+    // Listen for widget taps while the app is already running (warm launch).
+    _widgetClickSubscription = HomeWidget.widgetClicked.listen(_handleWidgetUri);
+  }
+
+  /// Called when a widget tap URI arrives while the app is in the foreground
+  /// or background (warm launch via [HomeWidget.widgetClicked] stream).
+  void _handleWidgetUri(Uri? uri) {
+    if (uri == null) return;
+    final isPrayerWidget = (uri.host == 'open' && uri.pathSegments.firstOrNull == 'prayer_times') ||
+        uri.host == 'prayer-times' ||
+        uri.path.contains('prayer_times') ||
+        uri.path.contains('prayer-times');
+
+    if (isPrayerWidget) {
+      _initialTabNotifier.value = 1; // Prayer Times tab
+    }
+  }
+
+  /// Called once on first frame — checks if the app was cold-started by a
+  /// widget tap and pre-selects the correct tab.
+  Future<void> _checkInitialWidgetLaunch() async {
+    try {
+      final uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
+      if (uri != null) {
+        _handleWidgetUri(uri);
+      }
+    } catch (_) {}
   }
 
   @override
   void dispose() {
+    _widgetClickSubscription?.cancel();
+    _initialTabNotifier.dispose();
     WidgetsBinding.instance.removeObserver(this);
     AppThemeController.instance.removeListener(_refresh);
     AppLocalizations.languageCodeNotifier
@@ -196,7 +234,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final isDark = palette.isDark;
     final onSurface = isDark ? AppColors.cream : AppColors.darkBg;
     final lang = AppLocalizations.languageCode;
-    final isRtl = lang == 'ku' || lang == 'ar';
+    final isRtl = lang == 'ku' || lang == 'ar' || lang == 'kmr';
 
     return MaterialApp(
         title: 'نەدا: قورئان و یادی خوا',
@@ -207,6 +245,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         locale: Locale(lang),
         supportedLocales: const [
           Locale('ku'),
+          Locale('kmr'),
           Locale('en'),
           Locale('ar'),
         ],
@@ -279,7 +318,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               return const OnboardingScreen();
             }
 
-            return const MainAppScreen();
+            // Pass the tabNotifier so the prayer-widget tap can switch tabs
+            // without reconstructing the entire screen tree.
+            return MainAppScreen(tabNotifier: _initialTabNotifier);
           },
         ),
       );
@@ -290,11 +331,13 @@ class _MaterialLocalizationsDelegate extends LocalizationsDelegate<MaterialLocal
   const _MaterialLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['ku', 'en', 'ar'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['ku', 'kmr', 'en', 'ar'].contains(locale.languageCode);
 
   @override
   Future<MaterialLocalizations> load(Locale locale) {
-    final frameworkLocale = locale.languageCode == 'ku' ? const Locale('en') : locale;
+    final frameworkLocale = (locale.languageCode == 'ku' || locale.languageCode == 'kmr')
+        ? const Locale('en')
+        : locale;
     return GlobalMaterialLocalizations.delegate.load(frameworkLocale);
   }
 
@@ -306,12 +349,14 @@ class _WidgetsLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocaliz
   const _WidgetsLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['ku', 'en', 'ar'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['ku', 'kmr', 'en', 'ar'].contains(locale.languageCode);
 
   @override
   Future<WidgetsLocalizations> load(Locale locale) {
-    // Map Kurdish to Arabic so Flutter treats it as RTL
-    final frameworkLocale = locale.languageCode == 'ku' ? const Locale('ar') : locale;
+    // Map Kurdish (Sorani & Kurmanji) to Arabic so Flutter treats it as RTL
+    final frameworkLocale = (locale.languageCode == 'ku' || locale.languageCode == 'kmr')
+        ? const Locale('ar')
+        : locale;
     return GlobalWidgetsLocalizations.delegate.load(frameworkLocale);
   }
 
@@ -323,11 +368,13 @@ class _CupertinoLocalizationsDelegate extends LocalizationsDelegate<CupertinoLoc
   const _CupertinoLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['ku', 'en', 'ar'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['ku', 'kmr', 'en', 'ar'].contains(locale.languageCode);
 
   @override
   Future<CupertinoLocalizations> load(Locale locale) {
-    final frameworkLocale = locale.languageCode == 'ku' ? const Locale('en') : locale;
+    final frameworkLocale = (locale.languageCode == 'ku' || locale.languageCode == 'kmr')
+        ? const Locale('en')
+        : locale;
     return GlobalCupertinoLocalizations.delegate.load(frameworkLocale);
   }
 

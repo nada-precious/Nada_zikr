@@ -9,14 +9,14 @@ class DuaCardGeneratorDialog extends StatelessWidget {
 
   const DuaCardGeneratorDialog({Key? key, required this.azkar}) : super(key: key);
 
-  void _shareDuaCard(BuildContext context, String lang, bool isKurdish) {
+  void _shareDuaCard(BuildContext context, String lang, bool isKurmanji, bool isKurdish) {
     final buffer = StringBuffer();
     buffer.writeln('✦ نه‌دا • NADA ✦');
     buffer.writeln();
     buffer.writeln(azkar.arabic);
     buffer.writeln();
     if (azkar.kurdishTranslation.isNotEmpty) {
-      buffer.writeln('📖 مانای کوردی:');
+      buffer.writeln(isKurmanji ? '📖 ڕامانا کوردی:' : '📖 مانای کوردی:');
       buffer.writeln(azkar.kurdishTranslation);
       buffer.writeln();
     }
@@ -30,7 +30,11 @@ class DuaCardGeneratorDialog extends StatelessWidget {
       buffer.writeln('— ${azkar.source}');
       buffer.writeln();
     }
-    buffer.writeln('لە ڕێگەی ئەپی نەدا (Nada) بۆ زیکر و دوعاکان 🌟');
+    buffer.writeln(isKurmanji
+        ? 'ب ڕێکا بەرنامەیێ نەدا (Nada) بۆ زکر و دوعایان 🌟'
+        : (isKurdish
+            ? 'لە ڕێگەی ئەپی نەدا (Nada) بۆ زیکر و دوعاکان 🌟'
+            : 'Via Nada App for Azkar & Supplications 🌟'));
 
     AppShareService.share(context, buffer.toString());
   }
@@ -39,7 +43,9 @@ class DuaCardGeneratorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final lang = loc?.locale.languageCode ?? 'ku';
+    final isKurmanji = lang == 'kmr';
     final isKurdish = lang == 'ku';
+    final isKurdishAny = isKurmanji || isKurdish;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -70,10 +76,13 @@ class DuaCardGeneratorDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      loc?.translate('shareCard') ?? 'کارتی زیکر',
+                      loc?.translate('shareCard') ??
+                          (isKurmanji
+                              ? 'کارتا زکری'
+                              : (isKurdish ? 'کارتی زیکر' : 'Dua Card')),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: isKurdish ? AppTheme.kurdishTitle(fontSize: 18, color: AppColors.gold) : AppTheme.englishTitle(fontSize: 18, color: AppColors.gold),
+                      style: isKurdishAny ? AppTheme.kurdishTitle(fontSize: 18, color: AppColors.gold) : AppTheme.englishTitle(fontSize: 18, color: AppColors.gold),
                     ),
                   ),
                   IconButton(
@@ -104,7 +113,9 @@ class DuaCardGeneratorDialog extends StatelessWidget {
                         Text(
                           azkar.arabic,
                           textAlign: TextAlign.center,
-                          style: AppTheme.arabicTitle(fontSize: 20, color: AppColors.cream),
+                          style: azkar.isQuranAyah
+                              ? AppTheme.quranAyahText(fontSize: 22, color: AppColors.cream, height: 2.1)
+                              : AppTheme.zikrText(fontSize: 22, color: AppColors.cream, height: 2.05),
                           textDirection: TextDirection.rtl,
                         ),
                         const SizedBox(height: 14),
@@ -154,12 +165,14 @@ class DuaCardGeneratorDialog extends StatelessWidget {
                   label: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      isKurdish ? 'بڵاوکردنەوەی کارتی زیکر' : 'Share Dua Card',
-                      style: isKurdish ? AppTheme.kurdishTitle(fontSize: 14, color: AppColors.darkBg) : AppTheme.englishTitle(fontSize: 14, color: AppColors.darkBg),
+                      isKurmanji
+                          ? 'پارڤەکرنا کارتا زکری'
+                          : (isKurdish ? 'بڵاوکردنەوەی کارتی زیکر' : 'Share Dua Card'),
+                      style: isKurdishAny ? AppTheme.kurdishTitle(fontSize: 14, color: AppColors.darkBg) : AppTheme.englishTitle(fontSize: 14, color: AppColors.darkBg),
                     ),
                   ),
                   onPressed: () {
-                    _shareDuaCard(context, lang, isKurdish);
+                    _shareDuaCard(context, lang, isKurmanji, isKurdish);
                   },
                 ),
               ),

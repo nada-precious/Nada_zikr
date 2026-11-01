@@ -1,0 +1,258 @@
+name: Deploy iOS to App Store & TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Custom iOS Build Number (Leave blank to auto-increment, e.g. 9, 10...)'
+        required: false
+        default: ''
+        type: string
+      app_version:
+        description: 'App version string (e.g. 1.0.0). Leave blank to use pubspec.yaml'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: deploy-appstore-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-ios:
+    name: Build & Upload iOS to TestFlight
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Newest Xcode
+        run: |
+          echo "Available Xcode installations:"
+          ls -d /Applications/Xcode*.app || true
+          NEWEST_XCODE=$(find /Applications -maxdepth 1 -name "Xcode*.app" | sort -V | tail -n 1)
+          if [ -n "$NEWEST_XCODE" ]; then
+            echo "Selecting: $NEWEST_XCODE"
+            sudo xcode-select -s "$NEWEST_XCODE/Contents/Developer"
+          fi
+          xcodebuild -version
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Codemagic CLI Tools
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install codemagic-cli-tools
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Resolve App Version & Build Number
+        id: versioning
+        run: |
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //g' | tr -d '[:space:]')
+          DEFAULT_VERSION_NAME=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f1)
+          DEFAULT_BUILD_NUM=$(echo "$PUBSPEC_VERSION" | cut -d'+' -f2)
+
+          INPUT_VERSION="${{ github.event.inputs.app_version }}"
+          INPUT_BUILD="${{ github.event.inputs.build_number }}"
+
+          if [ -n "$INPUT_VERSION" ]; then
+            VERSION_NAME="$INPUT_VERSION"
+          else
+            VERSION_NAME="$DEFAULT_VERSION_NAME"
+          fi
+
+          if [ -n "$INPUT_BUILD" ]; then
+            BUILD_NUM="$INPUT_BUILD"
+          else
+            # Ensure unique auto-incrementing build number to avoid Apple ITMS-90189 duplicates
+            BUILD_NUM=$((DEFAULT_BUILD_NUM + GITHUB_RUN_NUMBER))
+          fi
+
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "build_num=$BUILD_NUM" >> $GITHUB_OUTPUT
+
+          echo "=================================================="
+          echo " Target Version: $VERSION_NAME"
+          echo " Target Build Number: $BUILD_NUM"
+          echo "=================================================="
+
+      - name: Initialize Keychain for Code Signing
+        run: |
+          keychain initialize
+
+      - name: Fetch Apple Signing Certificates & Profiles
+        env:
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER || secrets.APP_STORE_CONNECT_KEY_ID || secrets.APPSTORE_KEY_ID || secrets.KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID || secrets.APPSTORE_ISSUER_ID || secrets.ISSUER_ID }}
+          PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY || secrets.APP_STORE_CONNECT_API_KEY || secrets.APPSTORE_PRIVATE_KEY || secrets.PRIVATE_KEY }}
+          CERTIFICATE_PRIVATE_KEY: ${{ secrets.CERTIFICATE_PRIVATE_KEY }}
+        run: |
+          # Check that required secrets are set
+          if [ -z "$KEY_ID" ] || [ -z "$ISSUER_ID" ] || [ -z "$PRIVATE_KEY" ]; then
+            echo "::error::Missing App Store Connect credentials in GitHub Secrets!"
+            echo "Please go to: GitHub Repo -> Settings -> Secrets and variables -> Actions -> Repository Secrets"
+            [ -z "$KEY_ID" ] && echo "  ❌ APP_STORE_CONNECT_KEY_IDENTIFIER is empty or missing"
+            [ -z "$ISSUER_ID" ] && echo "  ❌ APP_STORE_CONNECT_ISSUER_ID is empty or missing"
+            [ -z "$PRIVATE_KEY" ] && echo "  ❌ APP_STORE_CONNECT_PRIVATE_KEY is empty or missing"
+            echo "NOTE: Make sure secrets are added under 'Repository secrets', NOT 'Environment secrets'!"
+            exit 1
+          fi
+
+          export APP_STORE_CONNECT_KEY_IDENTIFIER="$KEY_ID"
+          export APP_STORE_CONNECT_ISSUER_ID="$ISSUER_ID"
+          export APP_STORE_CONNECT_PRIVATE_KEY="$PRIVATE_KEY"
+
+          # If no CERTIFICATE_PRIVATE_KEY secret is provided, generate a 2048-bit RSA key dynamically
+          if [ -z "$CERTIFICATE_PRIVATE_KEY" ]; then
+            echo "Generating temporary RSA 2048 key for certificate..."
+            openssl genrsa -out cert_key.pem 2048
+            export CERTIFICATE_PRIVATE_KEY=$(cat cert_key.pem)
+          fi
+
+          export CERTIFICATE_PRIVATE_KEY="$CERTIFICATE_PRIVATE_KEY"
+
+          echo "Fetching code signing files for Main App..."
+          app-store-connect fetch-signing-files "com.nada.nadaZikrakanm" \
+            --type IOS_APP_STORE \
+            --key-id "$KEY_ID" \
+            --issuer-id "$ISSUER_ID" \
+            --private-key "$PRIVATE_KEY" \
+            --certificate-key "@env:CERTIFICATE_PRIVATE_KEY" \
+            --create
+
+          echo "Fetching code signing files for Prayer Times Widget Extension..."
+          app-store-connect fetch-signing-files "com.nada.nadaZikrakanm.PrayerTimesWidget" \
+            --type IOS_APP_STORE \
+            --key-id "$KEY_ID" \
+            --issuer-id "$ISSUER_ID" \
+            --private-key "$PRIVATE_KEY" \
+            --certificate-key "@env:CERTIFICATE_PRIVATE_KEY" \
+            --create
+
+      - name: Add Certificates to Keychain
+        run: |
+          keychain add-certificates
+
+      - name: Install Provisioning Profiles to System (MobileDevice)
+        run: |
+          PROFILES_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PROFILES_DIR"
+
+          for f in "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"/*.mobileprovision; do
+            [ -f "$f" ] || continue
+            echo "Installing profile: $f"
+            cp -f "$f" "$PROFILES_DIR/" || true
+            
+            UUID=$(security cms -D -i "$f" 2>/dev/null | grep -A1 '<key>UUID</key>' | grep '<string>' | sed -E 's/.*<string>(.*)<\/string>.*/\1/' || true)
+            NAME=$(security cms -D -i "$f" 2>/dev/null | grep -A1 '<key>Name</key>' | grep '<string>' | sed -E 's/.*<string>(.*)<\/string>.*/\1/' || true)
+
+            if [ -n "$UUID" ]; then
+              echo "  -> Mapped UUID: $UUID"
+              cp -f "$f" "$PROFILES_DIR/${UUID}.mobileprovision" || true
+            fi
+            if [ -n "$NAME" ]; then
+              echo "  -> Mapped Name: $NAME"
+              cp -f "$f" "$PROFILES_DIR/${NAME}.mobileprovision" || true
+            fi
+          done
+
+          echo "Provisioning Profiles in $PROFILES_DIR:"
+          ls -lah "$PROFILES_DIR" || true
+
+      - name: Apply Provisioning Profiles to Xcode Project
+        run: |
+          xcode-project use-profiles --export-options-plist=$HOME/export_options.plist
+
+          # Re-sync any profiles to MobileDevice folder
+          PROFILES_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
+          for f in "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"/*.mobileprovision; do
+            [ -f "$f" ] || continue
+            cp -f "$f" "$PROFILES_DIR/" || true
+            UUID=$(security cms -D -i "$f" 2>/dev/null | grep -A1 '<key>UUID</key>' | grep '<string>' | sed -E 's/.*<string>(.*)<\/string>.*/\1/' || true)
+            NAME=$(security cms -D -i "$f" 2>/dev/null | grep -A1 '<key>Name</key>' | grep '<string>' | sed -E 's/.*<string>(.*)<\/string>.*/\1/' || true)
+            [ -n "$UUID" ] && cp -f "$f" "$PROFILES_DIR/${UUID}.mobileprovision" || true
+            [ -n "$NAME" ] && cp -f "$f" "$PROFILES_DIR/${NAME}.mobileprovision" || true
+          done
+
+      - name: Install Flutter Dependencies
+        run: |
+          flutter pub get
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install --repo-update
+          cd ..
+
+      - name: Build Flutter Release IPA
+        run: |
+          flutter build ipa --release \
+            --build-name="${{ steps.versioning.outputs.version_name }}" \
+            --build-number="${{ steps.versioning.outputs.build_num }}" \
+            --export-options-plist=$HOME/export_options.plist
+
+      - name: Upload IPA to GitHub Artifacts (Backup)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nada-Zikr-AppStore-v${{ steps.versioning.outputs.version_name }}+${{ steps.versioning.outputs.build_num }}
+          path: build/ios/ipa/*.ipa
+          retention-days: 14
+
+      - name: Upload to Apple App Store Connect / TestFlight
+        env:
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER || secrets.APP_STORE_CONNECT_KEY_ID || secrets.APPSTORE_KEY_ID || secrets.KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID || secrets.APPSTORE_ISSUER_ID || secrets.ISSUER_ID }}
+          PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY || secrets.APP_STORE_CONNECT_API_KEY || secrets.APPSTORE_PRIVATE_KEY || secrets.PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys ~/.private_keys
+          printf "%s\n" "$PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${KEY_ID}.p8
+          printf "%s\n" "$PRIVATE_KEY" > ~/.private_keys/AuthKey_${KEY_ID}.p8
+          chmod 600 ~/.appstoreconnect/private_keys/AuthKey_${KEY_ID}.p8 ~/.private_keys/AuthKey_${KEY_ID}.p8
+
+          IPA_PATH=$(find build/ios/ipa -name "*.ipa" | head -n 1)
+          if [ -z "$IPA_PATH" ]; then
+            echo "❌ No IPA file found in build/ios/ipa!"
+            exit 1
+          fi
+
+          echo "🚀 Uploading $IPA_PATH to App Store Connect / TestFlight via xcrun altool..."
+          xcrun altool --upload-app \
+            -f "$IPA_PATH" \
+            -t ios \
+            --apiKey "$KEY_ID" \
+            --apiIssuer "$ISSUER_ID"
+
+      - name: Workflow Summary
+        if: always()
+        run: |
+          cat << 'EOF' >> $GITHUB_STEP_SUMMARY
+          # 🚀 Apple TestFlight Upload Complete!
+
+          Your iOS app has been compiled, code-signed, and dispatched to **App Store Connect / TestFlight**!
+
+          ### 📱 Build Details:
+          - **Version:** `${{ steps.versioning.outputs.version_name }}`
+          - **Build Number:** `${{ steps.versioning.outputs.build_num }}`
+          - **Main Bundle ID:** `com.nada.nadaZikrakanm`
+          - **Widget Bundle ID:** `com.nada.nadaZikrakanm.PrayerTimesWidget`
+
+          ---
+          ### ⏳ Next Steps in App Store Connect:
+          1. Open [App Store Connect](https://appstoreconnect.apple.com/) -> **Apps** -> **Nada Dhikr**.
+          2. Check the **TestFlight** tab: Apple takes ~5 to 15 minutes to process newly uploaded builds.
+          3. Once processing finishes, the build will be ready for internal/external testing and ready to submit to App Store Review!
+          EOF

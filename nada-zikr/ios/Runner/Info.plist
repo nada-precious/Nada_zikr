@@ -6,6 +6,13 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ku</string>
+		<string>kmr</string>
+		<string>ar</string>
+		<string>en</string>
+	</array>
 	<key>CFBundleDisplayName</key>
 	<string>Nada</string>
 	<key>CFBundleExecutable</key>
@@ -24,6 +31,19 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.nada.nadaZikrakanm</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>nadazikr</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -34,6 +54,18 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is used to calculate accurate prayer times and determine the Qibla direction for your area.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is used to calculate accurate prayer times and determine the Qibla direction for your area.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is used to calculate accurate prayer times and determine the Qibla direction for your area.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires access to the camera to allow you to take a photo for your profile avatar.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to your photo library to allow you to select a photo for your profile avatar.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -64,15 +96,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

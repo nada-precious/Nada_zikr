@@ -67,46 +67,57 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
 
-  String _tr(String lang, {required String ku, required String ar, required String en}) {
+  String _tr(String lang, {required String ku, required String ar, required String en, String? kmr}) {
+    if (lang == 'kmr') return kmr ?? ku;
     if (lang == 'ku') return ku;
     if (lang == 'ar') return ar;
     return en;
   }
 
   void _shareSpiritualProgress(_DetailedStats data, String lang) {
-    final isKurdish = lang == 'ku';
+    final isKurmanji = lang == 'kmr';
+    final isKurdish = lang == 'ku' || isKurmanji;
     final isArabic = lang == 'ar';
     final rank = _getSpiritualRank(data.totalDhikrCount, data.appStats.totalSessions, lang);
     final userName = data.profile != null && data.profile!.name.trim().isNotEmpty
         ? '${data.profile!.name} • '
         : '';
 
-    final text = isKurdish
-        ? '📿 ئامارە ڕۆحییەکانم لە بەرنامەی (نەدا - Nada):\n\n'
-            '✨ ناوی شایستە: $userName${rank.title}\n'
+    final text = isKurmanji
+        ? '📿 ئامارێن من یێن ڕۆحی د بەرنامەیێ (نەدا - Nada) دا:\n\n'
+            '✨ ناڤێ شایستە: $userName${rank.title}\n'
             '🎖️ پلە: ${rank.tierBadge}\n'
             '📌 مەرج: ${rank.requirementText}\n'
             '🔥 بەردەوامی: ${data.appStats.currentStreak} ڕۆژ\n'
-            '📿 کۆی یادەکان: ${data.totalDhikrCount} جار\n'
+            '📿 کۆیا زکران: ${data.totalDhikrCount} جار\n'
             '🏆 باشترین تۆمار: ${data.appStats.bestStreak} ڕۆژ\n\n'
-            'یاوەری ڕۆحی بۆ یاد و دوعاکانی ڕۆژانە 🌟'
-        : isArabic
-            ? '📿 إحصائياتي الإيمانية في تطبيق (نَدَى - Nada):\n\n'
-                '✨ اللقب الإيماني: $userName${rank.title}\n'
-                '🎖️ الرتبة: ${rank.tierBadge}\n'
-                '📌 المتطلب: ${rank.requirementText}\n'
-                '🔥 السلسلة الحالية: ${data.appStats.currentStreak} أيام\n'
-                '📿 إجمالي الأذكار: ${data.totalDhikrCount} ذكر\n'
-                '🏆 أفضل مواظبة: ${data.appStats.bestStreak} أيام\n\n'
-                'رفيقك الإيماني للأذكار والدعاء 🌟'
-            : '📿 My Spiritual Progress on Nada App:\n\n'
-                '✨ Spiritual Title: $userName${rank.title}\n'
-                '🎖️ Tier: ${rank.tierBadge}\n'
-                '📌 Requirement: ${rank.requirementText}\n'
-                '🔥 Current Streak: ${data.appStats.currentStreak} Days\n'
-                '📿 Total Dhikrs: ${data.totalDhikrCount}\n'
-                '🏆 Best Streak: ${data.appStats.bestStreak} Days\n\n'
-                'Daily Dhikr & Quran Companion 🌟';
+            'هەڤالێ ڕۆحی بۆ زکر و دوعایێن ڕۆژانە 🌟'
+        : isKurdish
+            ? '📿 ئامارە ڕۆحییەکانم لە بەرنامەی (نەدا - Nada):\n\n'
+                '✨ ناوی شایستە: $userName${rank.title}\n'
+                '🎖️ پلە: ${rank.tierBadge}\n'
+                '📌 مەرج: ${rank.requirementText}\n'
+                '🔥 بەردەوامی: ${data.appStats.currentStreak} ڕۆژ\n'
+                '📿 کۆی یادەکان: ${data.totalDhikrCount} جار\n'
+                '🏆 باشترین تۆمار: ${data.appStats.bestStreak} ڕۆژ\n\n'
+                'یاوەری ڕۆحی بۆ یاد و دوعاکانی ڕۆژانە 🌟'
+            : isArabic
+                ? '📿 إحصائياتي الإيمانية في تطبيق (نَدَى - Nada):\n\n'
+                    '✨ اللقب الإيماني: $userName${rank.title}\n'
+                    '🎖️ الرتبة: ${rank.tierBadge}\n'
+                    '📌 المتطلب: ${rank.requirementText}\n'
+                    '🔥 السلسلة الحالية: ${data.appStats.currentStreak} أيام\n'
+                    '📿 إجمالي الأذكار: ${data.totalDhikrCount} ذكر\n'
+                    '🏆 أفضل مواظبة: ${data.appStats.bestStreak} أيام\n\n'
+                    'رفيقك الإيماني للأذكار والدعاء 🌟'
+                : '📿 My Spiritual Progress on Nada App:\n\n'
+                    '✨ Spiritual Title: $userName${rank.title}\n'
+                    '🎖️ Tier: ${rank.tierBadge}\n'
+                    '📌 Requirement: ${rank.requirementText}\n'
+                    '🔥 Current Streak: ${data.appStats.currentStreak} Days\n'
+                    '📿 Total Dhikrs: ${data.totalDhikrCount}\n'
+                    '🏆 Best Streak: ${data.appStats.bestStreak} Days\n\n'
+                    'Daily Dhikr & Quran Companion 🌟';
 
     AppShareService.share(context, text);
   }
@@ -114,7 +125,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.languageCode;
-    final isKurdish = lang == 'ku';
+    final isKurdish = lang == 'ku' || lang == 'kmr';
     final isArabic = lang == 'ar';
 
     return Scaffold(
@@ -127,7 +138,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          _tr(lang, ku: 'ئامارە ڕۆحییەکان', ar: 'الإحصائيات الإيمانية', en: 'Statistics'),
+          _tr(lang, ku: 'ئامارە ڕۆحییەکان', kmr: 'ئامارێن ڕۆحی', ar: 'الإحصائيات الإيمانية', en: 'Statistics'),
           style: isKurdish
               ? AppTheme.kurdishTitle(fontSize: 20, color: AppColors.gold)
               : AppTheme.englishTitle(fontSize: 20, color: AppColors.gold),
@@ -393,17 +404,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${data.totalDhikrCount} / ${rankInfo.targetProgress} ${_tr(lang, ku: 'یاد', ar: 'ذكر', en: 'dhikr')}',
+                                  '${data.totalDhikrCount} / ${rankInfo.targetProgress} ${_tr(lang, ku: 'یاد', kmr: 'زکر', ar: 'ذكر', en: 'dhikr')}',
                                   style: AppTheme.englishText(fontSize: 11, color: AppColors.mutedText),
                                 ),
                                 if (!rankInfo.isMaxLevel && rankInfo.nextRankTitle != null)
                                   Flexible(
                                     child: Text(
-                                      isKurdish
-                                          ? '${rankInfo.remainingToNext} یادت ماوە بۆ «${rankInfo.nextRankTitle}»'
-                                          : (isArabic
-                                              ? 'باقي ${rankInfo.remainingToNext} ذكر لبلوغ «${rankInfo.nextRankTitle}»'
-                                              : '${rankInfo.remainingToNext} dhikrs to «${rankInfo.nextRankTitle}»'),
+                                      lang == 'kmr'
+                                          ? '${rankInfo.remainingToNext} زکر ماینە بۆ «${rankInfo.nextRankTitle}»'
+                                          : (isKurdish
+                                              ? '${rankInfo.remainingToNext} یادت ماوە بۆ «${rankInfo.nextRankTitle}»'
+                                              : (isArabic
+                                                  ? 'باقي ${rankInfo.remainingToNext} ذكر لبلوغ «${rankInfo.nextRankTitle}»'
+                                                  : '${rankInfo.remainingToNext} dhikrs to «${rankInfo.nextRankTitle}»')),
                                       style: TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
@@ -415,7 +428,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                   )
                                 else
                                   Text(
-                                    _tr(lang, ku: 'لوتکەی پلەی یاد بەدەستهێنرا 👑', ar: 'بلغت أعلى المراتب 👑', en: 'Pinnacle achieved 👑'),
+                                    _tr(lang, ku: 'لوتکەی پلەی یاد بەدەستهێنرا 👑', kmr: 'بلندترین ئاستێ زکری هاتە دەستڤەئینان 👑', ar: 'بلغت أعلى المراتب 👑', en: 'Pinnacle achieved 👑'),
                                     style: TextStyle(
                                       fontSize: 11,
                                       fontWeight: FontWeight.bold,
@@ -444,6 +457,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                   Text(
                                     _tr(lang,
                                         ku: 'بینینی هەموو ٨ ئاستەکە و مەرجەکانیان',
+                                        kmr: 'دیتنا هەمی ٨ ئاستان و مەرجێن وان',
                                         ar: 'عرض جميع الرتب الـ 8 وشروط بلوغها',
                                         en: 'View all 8 ranks & how to unlock them'),
                                     style: TextStyle(
@@ -478,30 +492,30 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       childAspectRatio: 1.5,
                       children: [
                         _buildStatCard(
-                          _tr(lang, ku: 'کۆی زیکرەکان', ar: 'إجمالي الأذكار', en: 'Total Dhikrs'),
+                          _tr(lang, ku: 'کۆی زیکرەکان', kmr: 'کۆیا زکران', ar: 'إجمالي الأذكار', en: 'Total Dhikrs'),
                           '$totalDhikr',
-                          _tr(lang, ku: 'دەنک زیکر', ar: 'ذكر', en: 'recitations'),
+                          _tr(lang, ku: 'دەنک زیکر', kmr: 'جارێن زکری', ar: 'ذكر', en: 'recitations'),
                           Icons.touch_app_rounded,
                           isKurdish,
                         ),
                         _buildStatCard(
-                          _tr(lang, ku: 'بەردەوامیی ئێستا', ar: 'المواظبة الحالية', en: 'Current Streak'),
+                          _tr(lang, ku: 'بەردەوامیی ئێستا', kmr: 'بەردەوامییا نوکە', ar: 'المواظبة الحالية', en: 'Current Streak'),
                           '$currentStreak',
-                          _tr(lang, ku: 'ڕۆژی بەردەوام', ar: 'أيام متتالية', en: 'consecutive days'),
+                          _tr(lang, ku: 'ڕۆژی بەردەوام', kmr: 'ڕۆژێن بەردەوام', ar: 'أيام متتالية', en: 'consecutive days'),
                           Icons.local_fire_department_rounded,
                           isKurdish,
                         ),
                         _buildStatCard(
-                          _tr(lang, ku: 'باشترین بەردەوامی', ar: 'أفضل مواظبة', en: 'Best Streak'),
+                          _tr(lang, ku: 'باشترین بەردەوامی', kmr: 'باشترین بەردەوامی', ar: 'أفضل مواظبة', en: 'Best Streak'),
                           '$bestStreak',
-                          _tr(lang, ku: 'تۆماری پێشوو', ar: 'رقم قياسي', en: 'days record'),
+                          _tr(lang, ku: 'تۆماری پێشوو', kmr: 'تۆمارا بەرێ', ar: 'رقم قياسي', en: 'days record'),
                           Icons.emoji_events_rounded,
                           isKurdish,
                         ),
                         _buildStatCard(
-                          _tr(lang, ku: 'کۆی دانیشتنەکان', ar: 'الجلسات المكتملة', en: 'Completed Sessions'),
+                          _tr(lang, ku: 'کۆی دانیشتنەکان', kmr: 'کۆیا ڕوونشتنان', ar: 'الجلسات المكتملة', en: 'Completed Sessions'),
                           '$totalSessions',
-                          _tr(lang, ku: 'تەواوکاری', ar: 'جلسة مكتملة', en: 'sessions done'),
+                          _tr(lang, ku: 'تەواوکاری', kmr: 'تەواوکرن', ar: 'جلسة مكتملة', en: 'sessions done'),
                           Icons.task_alt_rounded,
                           isKurdish,
                         ),
@@ -1800,15 +1814,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'first_step',
         category: 'journey',
         categoryKu: 'گەشتی سەرەتا',
+        categoryKmr: 'دەستپێکا گەشتێ',
         categoryAr: 'بداية الرحلة',
         categoryEn: 'Journey',
         titleKu: 'سەرەتای نوور',
+        titleKmr: 'دەستپێکا نوورێ',
         titleAr: 'فجر البداية',
         titleEn: 'Dawn of Light',
         descKu: 'تەواوکردنی یەکەمین دانیشتنی زیکر و پاڕانەوە لە ئەپەکەدا',
+        descKmr: 'بدووماهیکئینانا ئێکەمین ڕوونشتنا زکر و پارانەڤەیێ د ئەپیدا',
         descAr: 'إكمال أول جلسة ذكر واستغفار في التطبيق',
         descEn: 'Complete your first dhikr session in Nada',
         hadithKu: '«خۆشەویستترین کردەوە لای خوا ئەوەیە کە بەردەوام بێت هەرچەندە کەمیش بێت.»',
+        hadithKmr: '«حەزژێکریترین کریار دەف خودێ ئەوە یا کو بەردەوام بیت، هەروەسا ئەگەر کێم ژی بیت.»',
         hadithAr: '«أحب الأعمال إلى الله أدومها وإن قل»',
         hadithEn: '“The most beloved of deeds to Allah are those that are consistent, even if small.”',
         icon: Icons.eco_rounded,
@@ -1824,15 +1842,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'daily_companion',
         category: 'journey',
         categoryKu: 'گەشتی سەرەتا',
+        categoryKmr: 'دەستپێکا گەشتێ',
         categoryAr: 'بداية الرحلة',
         categoryEn: 'Journey',
         titleKu: 'هاوڕێی ڕۆژانە',
+        titleKmr: 'هەڤالێ ڕۆژانە',
         titleAr: 'الرفيق اليومي',
         titleEn: 'Daily Companion',
         descKu: 'ئەنجامدانی 5 دانیشتنی پڕ بەرەکەتی زیکر و نزا',
+        descKmr: 'ئەنجامدانا 5 ڕوونشتنێن تژی بەرەکەت یێن زکر و دوعایان',
         descAr: 'إتمام 5 جلسات ذكر ودعاء لله تعالى',
         descEn: 'Complete 5 mindful sessions of dhikr and supplication',
         hadithKu: '«پەروەردگارت لە بەیانیان و ئێواراندا بە دڵسۆزییەوە یاد بکە.»',
+        hadithKmr: '«پەروەردگارێ خۆ ل سپێدە و ئێڤاران ب دلسۆزی و نزماتی بیر بینە.»',
         hadithAr: '«وَاذْكُر رَّبَّكَ فِي نَفْسِكَ تَضَرُّعًا وَخِيفَةً»',
         hadithEn: '“And remember your Lord within yourself in humility and awe.”',
         icon: Icons.auto_stories_rounded,
@@ -1848,15 +1870,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'sessions_25',
         category: 'journey',
         categoryKu: 'گەشتی سەرەتا',
+        categoryKmr: 'دەستپێکا گەشتێ',
         categoryAr: 'بداية الرحلة',
         categoryEn: 'Journey',
         titleKu: 'کۆڕی دڵئارامی',
+        titleKmr: 'کۆڕێ ئارامییا دلی',
         titleAr: 'مجلس السكينة',
         titleEn: '25 Mindful Sessions',
         descKu: 'ئەنجامدانی 25 دانیشتنی تەواوی زیکر و پاڕانەوە',
+        descKmr: 'ئەنجامدانا 25 ڕوونشتنێن تەمام یێن زکر و پارانەڤەیێ',
         descAr: 'إتمام 25 جلسة ذكر مباركة عامرة بالسكينة',
         descEn: 'Complete 25 heartfelt dhikr sessions',
         hadithKu: '«هیچ کۆمەڵێک دانانیشن یادی خودا بکەن ئیللا فریشتەکان دەوریان دەدەن و ئارامییان بەسەردا دەبارێت.»',
+        hadithKmr: '«چ کۆم ناڕوونن کو زکرێ خودێ بکەن ئیلا فرشتە دەوروبەرێن وان دگرن و دلۆڤانی ب سەر واندا دباریت.»',
         hadithAr: '«مَا اجْتَمَعَ قَوْمٌ يَذْكُرُونَ اللَّهَ إِلَّا حَفَّتْهُمُ الْمَلَائِكَةُ وَغَشِيَتْهُمُ الرَّحْمَةُ»',
         hadithEn: '“No people sit remembering Allah without the angels surrounding them and mercy covering them.”',
         icon: Icons.spa_rounded,
@@ -1872,15 +1898,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'sessions_50',
         category: 'journey',
         categoryKu: 'گەشتی سەرەتا',
+        categoryKmr: 'دەستپێکا گەشتێ',
         categoryAr: 'بداية الرحلة',
         categoryEn: 'Journey',
         titleKu: 'پەیمانی نەبڕاوە',
+        titleKmr: 'پەیمانا نەبڕاوە',
         titleAr: 'العهد المبارك',
         titleEn: '50 Devotional Circles',
         descKu: 'تەواوکردنی 50 دانیشتنی خاشعانە لە یادی پەروەردگاردا',
+        descKmr: 'بدووماهیکئینانا 50 ڕوونشتنێن خاشعانە د بیرئینانا پەروەردگاریدا',
         descAr: 'إتمام 50 جلسة خاشعة في رحاب ذكر المولى عز وجل',
         descEn: 'Achieve 50 consistent sessions in remembrance of Allah',
         hadithKu: '«یادی من بکەن تا یادتان بکەم، و سوپاسگوزارم بن و سوپاسناپێزان مەبن.»',
+        hadithKmr: '«بیر ل من بینن داکو ئەز ژی بیر ل هەوە بینم، و سوپاسگوزار بن و نەسوپاسگوزار نەبن.»',
         hadithAr: '«فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ»',
         hadithEn: '“Remember Me; I will remember you. And be grateful to Me and do not deny Me.”',
         icon: Icons.military_tech_rounded,
@@ -1896,15 +1926,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'sessions_100',
         category: 'journey',
         categoryKu: 'گەشتی سەرەتا',
+        categoryKmr: 'دەستپێکا گەشتێ',
         categoryAr: 'بداية الرحلة',
         categoryEn: 'Journey',
         titleKu: 'مێوانداری فریشتەکان',
+        titleKmr: 'مێڤاندارییا فرشتەیان',
         titleAr: 'مرافقة الملائكة',
         titleEn: '100 Circles of Grace',
         descKu: 'تۆمارکردنی 100 دانیشتنی پڕ لە نوور و تەسبیحات',
+        descKmr: 'تۆمارکرنا 100 ڕوونشتنێن تژی ژ نوور و تەسبیحان',
         descAr: 'بلوغ 100 جلسة ذكر وتسبيح ودعاء مسجلة بالكامل',
         descEn: 'Record 100 spiritual and prayer sessions',
         hadithKu: '«خوا دەفەرموێت: من لەگەڵ بەندەکەمم مادام یادم بکات و لێوەکانی بە یادم بجوڵێنێت.»',
+        hadithKmr: '«خودێ دبێژیت: ئەز دگەل بەندەیێ خۆمە هەتا بیر ل من بینیت و لێڤێن وی ب ناڤێ من بلڤن.»',
         hadithAr: '«أَنَا مَعَ عَبْدِي مَا ذَكَرَنِي وَتَحَرَّكَتْ بِي شَفَتَاهُ»',
         hadithEn: '“I am with My servant when he remembers Me and his lips move with My mention.”',
         icon: Icons.workspace_premium_rounded,
@@ -1920,15 +1954,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'flame_3',
         category: 'streak',
         categoryKu: 'بەردەوامی',
+        categoryKmr: 'بەردەوامی',
         categoryAr: 'المواظبة',
         categoryEn: 'Streak',
         titleKu: 'پریشکی بەردەوامی',
+        titleKmr: 'پڕیشکا بەردەوامیێ',
         titleAr: 'شعلة الاستمرار',
         titleEn: 'Spark of Consistency',
         descKu: 'پاراستنی زنجیرەی زیکری ڕۆژانە بۆ 3 ڕۆژی بەردەوام',
+        descKmr: 'پاراستنا زنجیرا زکرێ ڕۆژانە بۆ 3 ڕۆژێن بەردەوام',
         descAr: 'المواظبة على الأذكار لمدة 3 أيام متتالية دون انقطاع',
         descEn: 'Maintain a 3-day unbroken streak of daily dhikr',
         hadithKu: '«سەرکەوتن لە بەردەوامی دایە لەسەر چاکە و یادکردنەوە.»',
+        hadithKmr: '«سەرکەفتن د بەردەوامیێ دایە ل سەر چاکیێ و بیرئینانێ.»',
         hadithAr: '«سددوا وقاربوا، واعلموا أن خير أعمالكم أدومها»',
         hadithEn: '“Follow the right course, be steadfast, and know consistency is virtue.”',
         icon: Icons.whatshot_rounded,
@@ -1944,15 +1982,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'flame_7',
         category: 'streak',
         categoryKu: 'بەردەوامی',
+        categoryKmr: 'بەردەوامی',
         categoryAr: 'المواظبة',
         categoryEn: 'Streak',
         titleKu: 'شەوقی حەوت ڕۆژ',
+        titleKmr: 'شەوقا حەفت ڕۆژان',
         titleAr: 'سلسلة الأسبوع الذهبية',
         titleEn: '7-Day Golden Flame',
         descKu: 'هەفتەیەکی تەواو (7 ڕۆژ) بێ پچڕان لە یادی پەروەردگاردا',
+        descKmr: 'حەفتییەکا تەمام (7 ڕۆژ) بێ بڕین د بیرئینانا پەروەردگاریدا',
         descAr: 'أسبوع كامل من الذكر والمواظبة اليومية المستمرة',
         descEn: 'Complete a full 7-day continuous streak of remembrance',
         hadithKu: '«وێنەی ئەوەی یادی پەروەردگاری دەکات و ئەوەی یاد ناکات، وەک زیندوو و مردوو وایە.»',
+        hadithKmr: '«میناکێ وی کەسێ زکرێ پەروەردگارێ خۆ دکەت و یێ ناکەت، وەکی یێ ساخ و مرییە.»',
         hadithAr: '«مَثَلُ الَّذِي يَذْكُرُ رَبَّهُ وَالَّذِي لا يَذْكُرُ رَبَّهُ مَثَلُ الْحَيِّ وَالْمَيِّتِ»',
         hadithEn: '“The comparison between one who remembers their Lord and one who does not is like the living and the dead.”',
         icon: Icons.local_fire_department_rounded,
@@ -1968,15 +2010,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'flame_14',
         category: 'streak',
         categoryKu: 'بەردەوامی',
+        categoryKmr: 'بەردەوامی',
         categoryAr: 'المواظبة',
         categoryEn: 'Streak',
         titleKu: 'شەوی چواردەی بەردەوامی',
+        titleKmr: 'هەیڤا چاردا یا بەردەوامیێ',
         titleAr: 'بدر الأسبوعين',
         titleEn: '14-Day Full Moon Streak',
         descKu: 'دوو هەفتەی تەواو (14 ڕۆژ) بەردەوامیی بێ پچڕان لەسەر زیکر',
+        descKmr: 'دوو حەفتیێن تەمام (14 ڕۆژ) بەردەوامییا بێ بڕین ل سەر زکران',
         descAr: 'المواظبة لمدة 14 يوماً متتالياً من النور والأذكار',
         descEn: 'Achieve a 14-day continuous streak of remembrance',
         hadithKu: '«خوای گەورە حەز دەکات کاتێک بەندە کارێک دەکات پوخت و بەردەوام بێت.»',
+        hadithKmr: '«خودایێ مەزن حەز دکەت دەمێ بەندە کارەکی دکەت ب جوانی و موکومی بکەت.»',
         hadithAr: '«إِنَّ اللَّهَ يُحِبُّ إِذَا عَمِلَ أَحَدُكُمْ عَمَلًا أَنْ يُتْقِنَهُ»',
         hadithEn: '“Indeed Allah loves that when one does a deed, they do it with consistency and care.”',
         icon: Icons.brightness_medium_rounded,
@@ -1992,15 +2038,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'month_steadfast',
         category: 'streak',
         categoryKu: 'بەردەوامی',
+        categoryKmr: 'بەردەوامی',
         categoryAr: 'المواظبة',
         categoryEn: 'Streak',
         titleKu: 'سەروەری 30 ڕۆژ',
+        titleKmr: 'سەروەرییا 30 ڕۆژان',
         titleAr: 'ثبات الشهر المبارك',
         titleEn: 'Steadfast Month',
         descKu: 'مانگێکی تەواو (30 ڕۆژ) پڕ لە سەقامگیری و ڕۆشنایی دڵ',
+        descKmr: 'هەیڤەکا تەمام (30 ڕۆژ) تژی ژ موکومی و ڕووناهییا دلی',
         descAr: 'المواظبة المستمرة لمدة شهر كامل (30 يوماً) في رحاب الطاعة',
         descEn: '30 consecutive days of devotion, dhikr, and consistency',
         hadithKu: '«ئیماندار لەسەر چاکە و گوێڕایەڵی خودا سەقامگیر و پتەوە.»',
+        hadithKmr: '«ئیماندار ل سەر چاکیێ و گوهداریکرنا خودێ جێگیر و موکومە.»',
         hadithAr: '«إِنَّ أَحَبَّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ»',
         hadithEn: '“Indeed, the most beloved of deeds to Allah are those sustained consistently.”',
         icon: Icons.verified_rounded,
@@ -2016,15 +2066,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'flame_60',
         category: 'streak',
         categoryKu: 'بەردەوامی',
+        categoryKmr: 'بەردەوامی',
         categoryAr: 'المواظبة',
         categoryEn: 'Streak',
         titleKu: 'سەروەری بەردەوامی',
+        titleKmr: 'سەروەرییا بەردەوامیێ',
         titleAr: 'سلسلة الستين يوماً',
         titleEn: '60 Days of Steadfast Light',
         descKu: 'دوو مانگی تەواو (60 ڕۆژ) بەردەوامی لەسەر یادی خوای گەورە',
+        descKmr: 'دوو هەیڤێن تەمام (60 ڕۆژ) بەردەوامی ل سەر زکرێ خودایێ مەزن',
         descAr: 'شهران كاملان (60 يوماً) من الالتزام الإيماني المستمر',
         descEn: '60 unbroken days of steadfast remembrance',
         hadithKu: '«بڵێ باوەڕم بە خوا هێنا و دواتر لەسەری بەردەوام و چەسپاو بە.»',
+        hadithKmr: '«بێژە من باوەری ب خودێ ئینا و پاشی ل سەر بەردەوام و جێگیر بە.»',
         hadithAr: '«قُلْ: آمَنْتُ بِاللَّهِ، ثُمَّ اسْتَقِمْ»',
         hadithEn: '“Say: I believe in Allah, and then remain steadfast upon the right path.”',
         icon: Icons.local_fire_department_rounded,
@@ -2040,15 +2094,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'flame_100',
         category: 'streak',
         categoryKu: 'بەردەوامی',
+        categoryKmr: 'بەردەوامی',
         categoryAr: 'المواظبة',
         categoryEn: 'Streak',
         titleKu: 'تاجی سەد ڕۆژەی بەردەوامی',
+        titleKmr: 'تاجێ سەد ڕۆژێن بەردەوامیێ',
         titleAr: 'تاج المئة يوم',
         titleEn: 'Centennial of Devotion',
         descKu: '100 ڕۆژی بەردەوامی و نەپچڕاو لەسەر زیکر و نزاکانی ڕۆژانە',
+        descKmr: '100 ڕۆژێن بەردەوام و بێنەبڕ ل سەر زکر و دوعایێن ڕۆژانە',
         descAr: '100 يوم متواصل من الذكر والاستغفار والمواظبة الخالصة',
         descEn: '100 unbroken days of daily remembrance and prayer',
         hadithKu: '«خۆشەویستترین کردەوە لای خوا ئەوەیە کە بەردەوام بێت هەرچەند کەمیش بێت.»',
+        hadithKmr: '«حەزژێکریترین کریار دەف خودێ ئەوە یا کو بەردەوام بیت، هەروەسا ئەگەر کێم ژی بیت.»',
         hadithAr: '«أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ»',
         hadithEn: '“The deeds most beloved to Allah are those most consistent, even if modest.”',
         icon: Icons.diamond_rounded,
@@ -2064,15 +2122,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'tasbih_100',
         category: 'dhikr',
         categoryKu: 'تەسبیحات',
+        categoryKmr: 'تەسبیحات',
         categoryAr: 'الأذكار',
         categoryEn: 'Tasbih',
         titleKu: '100 تەسبیحات',
+        titleKmr: '100 تەسبیحات',
         titleAr: '100 تسبيحة',
         titleEn: 'Centurion of Praise',
         descKu: 'تەواوکردنی 100 زیکر و تەسبیحی پیرۆز بۆ خودا',
+        descKmr: 'بدووماهیکئینانا 100 زکر و تەسبیحێن پیرۆز ژ بۆ خودێ',
         descAr: 'إكمال 100 ذكر وتسبيح خالص لوجه الله تعالى',
         descEn: 'Record 100 total sacred dhikrs and tasbihs',
         hadithKu: '«دوو وشە لەسەر زمان سووک و لەسەر تەرازوو قورسن: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ.»',
+        hadithKmr: '«دوو پەیڤ ل سەر ئەزمانی سڤکن و د تەرازیێدا گرانن: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.»',
         hadithAr: '«كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ»',
         hadithEn: '“Two words are light on the tongue, heavy in the scale: SubhanAllah wa bihamdihi, SubhanAllahil-Azim.”',
         icon: Icons.toll_rounded,
@@ -2088,15 +2150,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'tasbih_300',
         category: 'dhikr',
         categoryKu: 'تەسبیحات',
+        categoryKmr: 'تەسبیحات',
         categoryAr: 'الأذكار',
         categoryEn: 'Tasbih',
         titleKu: '300 تەسبیحی پیرۆز',
+        titleKmr: '300 تەسبیحێن پیرۆز',
         titleAr: '300 تسبيحة مباركة',
         titleEn: '300 Sacred Tasbihs',
         descKu: 'تەواوکردنی 300 زیکر و تەسبیحی خودا لە تەرازووی چاکەکانت',
+        descKmr: 'بدووماهیکئینانا 300 زکر و تەسبیحان د تەرازییا چاکیێن تە دا',
         descAr: 'إكمال 300 ذكر وتسبيح في ميزان حسناتك',
         descEn: 'Reach 300 praises of Allah in your daily tasbih',
         hadithKu: '«سُبْحَانَ اللَّهِ عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ.»',
+        hadithKmr: '«سُبْحَانَ اللَّهِ عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ.»',
         hadithAr: '«سُبْحَانَ اللَّهِ عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ»',
         hadithEn: '“Glory be to Allah according to the number of His creation and the weight of His Throne.”',
         icon: Icons.flare_rounded,
@@ -2112,15 +2178,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'tasbih_1000',
         category: 'dhikr',
         categoryKu: 'تەسبیحات',
+        categoryKmr: 'تەسبیحات',
         categoryAr: 'الأذكار',
         categoryEn: 'Tasbih',
         titleKu: '1,000 گەوهەری چاکە',
+        titleKmr: '1,000 گەوهەرێن چاکیێ',
         titleAr: '1,000 حسنة مباركة',
         titleEn: '1,000 Jewels of Reward',
         descKu: 'تۆمارکردنی 1,000 زیکری پاک لە تەرازووی چاکەکانت',
+        descKmr: 'تۆمارکرنا 1,000 زکرێن پاقژ د تەرازییا چاکیێن تە دا',
         descAr: 'بلوغ 1,000 تسبيحة وذكر مسجل في التطبيق',
         descEn: 'Accumulate 1,000 dhikr repetitions on your counter',
         hadithKu: '«ئایا ناتوانن ڕۆژانە هەزار چاکە بەدەستبهێنن؟ 100 جار تەسبیح بکەن، هەزار چاکەتان بۆ دەنوسرێت.»',
+        hadithKmr: '«ئەرێ هوون نەشێن ڕۆژانە هزار چاکییان بدەستڤەبینن؟ 100 جاران تەسبیحان بکەن، هزار چاکی دێ بۆ هەوە هێنە نڤیسین.»',
         hadithAr: '«أَيَعْجِزُ أَحَدُكُمْ أَنْ يَكْسِبَ كُلَّ يَوْمٍ أَلْفَ حَسَنَةٍ؟ يُسَبِّحُ مِائَةَ تَسْبِيحَةٍ، فَيُكْتَبُ لَهُ أَلْفُ حَسَنَةٍ»',
         hadithEn: '“Can any one of you not earn 1,000 good deeds daily? Glorify Allah 100 times, and 1,000 rewards are written.”',
         icon: Icons.diamond_rounded,
@@ -2136,15 +2206,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'tasbih_5000',
         category: 'dhikr',
         categoryKu: 'تەسبیحات',
+        categoryKmr: 'تەسبیحات',
         categoryAr: 'الأذكار',
         categoryEn: 'Tasbih',
         titleKu: 'خەزێنەی بەهەشت',
+        titleKmr: 'خەزینا بەهەشتێ',
         titleAr: 'كنز من كنوز الجنة',
         titleEn: '5,000 Heavenly Treasures',
         descKu: 'گەیشتن بە 5,000 یادی خودای بەخشندە و دلۆڤان',
+        descKmr: 'گەهشتن ب 5,000 بیرئینانێن خودایێ بەخشیندە و دلۆڤان',
         descAr: 'الوصول إلى 5,000 ذكر وتسبيح خالصاً لوجه الله',
         descEn: 'Reach 5,000 total dhikr praises in your lifetime journal',
         hadithKu: '«لا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ، خەزێنەیەکە لە خەزێنەکانی بەهەشت.»',
+        hadithKmr: '«لا حَوْلَ وَلا قُوَّةَ إِلَّا بِاللَّهِ، خەزینەیەکە ژ خەزینەیێن بەهەشتێ.»',
         hadithAr: '«لا حَوْلَ وَلا قُوَّةَ إِلَّا بِاللَّهِ كَنْزٌ مِنْ كُنُوزِ الْجَنَّةِ»',
         hadithEn: '“La hawla wa la quwwata illa billah is a treasure from the treasures of Paradise.”',
         icon: Icons.stars_rounded,
@@ -2160,15 +2234,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'tasbih_10000',
         category: 'dhikr',
         categoryKu: 'تەسبیحات',
+        categoryKmr: 'تەسبیحات',
         categoryAr: 'الأذكار',
         categoryEn: 'Tasbih',
         titleKu: 'خاوەنی دە هەزار چاکە',
+        titleKmr: 'خودانێ دەهـ هزار چاکییان',
         titleAr: 'صاحب العشرة آلاف',
         titleEn: '10,000 Divine Praises',
         descKu: 'گەیشتن بە 10,000 زیکری پڕ لە نوور و پاداشت لە گەشتە ڕۆحییەکەتدا',
+        descKmr: 'گەهشتن ب 10,000 زکرێن تژی ژ نوور و خێرێ د گەشتێ دا',
         descAr: 'بلوغ 10,000 تسبيحة وذكر خالص مسجل في صحيفتك المباركة',
         descEn: 'Surpass 10,000 total sacred dhikrs in your lifetime journey',
         hadithKu: '«ئایا هەواڵتان پێ بدەم بە باشترین و پاکترین کردەوەتان لای پەروەردگارتان؟ یادی خوای گەورەیە.»',
+        hadithKmr: '«ئەرێ هوین حەز دکەن هەوە ژ باشترین و پاقژترین کریارێ دەف پەروەردگارێ هەوە ئاگەهدار بکەم؟ زکرێ خودایێ مەزنە.»',
         hadithAr: '«أَلَا أُنَبِّئُكُمْ بِخَيْرِ أَعْمَالِكُمْ، وَأَزْكَاهَا عِنْدَ مَلِيكِكُمْ؟ ذِكْرُ اللَّهِ تَعَالَى»',
         hadithEn: '“Shall I not inform you of the best and purest of your deeds before your Lord? The remembrance of Allah.”',
         icon: Icons.auto_awesome_rounded,
@@ -2184,15 +2262,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'tasbih_25000',
         category: 'dhikr',
         categoryKu: 'تەسبیحات',
+        categoryKmr: 'تەسبیحات',
         categoryAr: 'الأذكار',
         categoryEn: 'Tasbih',
         titleKu: 'یاقووتی زیکر',
+        titleKmr: 'یاقووتێ زکران',
         titleAr: 'ياقوت الذاكرين',
         titleEn: 'Ruby of the Praisers',
         descKu: 'تۆمارکردنی 25,000 زیکر و سوپاسگوزاریی بەردەوام بۆ پەروەردگار',
+        descKmr: 'تۆمارکرنا 25,000 زکر و سوپاسگوزارییا بەردەوام بۆ پەروەردگاری',
         descAr: 'الارتقاء إلى 25,000 ذكر مسجل بلسان رطب بذكر الله',
         descEn: 'Attain 25,000 recorded praises and supplications',
         hadithKu: '«پێشبڕکێکەران پێشکەوتن! وتیان: کێن ئەی پێغەمبەری خوا؟ فەرمووی: ئەو ژن و پیاوانەی کە زۆر یادی خوا دەکەن.»',
+        hadithKmr: '«پێشبڕکێکەر پێشکەفتن! گۆتن: کی نە ئەوان یا پێغەمبەرێ خودێ؟ فەرموو: ئەو زەلام و ژنێن کو گەلەک زکرێ خودێ دکەن.»',
         hadithAr: '«سَبَقَ الْمُفَرِّدُونَ، قَالُوا: وَمَا الْمُفَرِّدُونَ يَا رَسُولَ اللَّهِ؟ قَالَ: الذَّاكِرُونَ اللَّهَ كَثِيرًا وَالذَّاكِرَاتُ»',
         hadithEn: '“The foremost have outpaced the rest! They asked: Who are they? He said: The men and women who remember Allah abundantly.”',
         icon: Icons.workspace_premium_rounded,
@@ -2208,15 +2290,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'quran_solace',
         category: 'quran',
         categoryKu: 'قورئان و دەروون',
+        categoryKmr: 'قورئان و دەروون',
         categoryAr: 'القرآن والسكينة',
         categoryEn: 'Quran & Solace',
         titleKu: 'دڵنەوایی قورئان',
+        titleKmr: 'ئارامییا قورئانێ',
         titleAr: 'شفاء وراحة القلوب',
         titleEn: 'Solace of Quran',
         descKu: 'پاشەکەوتکردنی کارتی ئارامیی دڵ لە بەشی هەستەکان و قورئان',
+        descKmr: 'پاراستنا کارتا ئارامییا دلی ژ پشکێ هەستان و قورئانێ',
         descAr: 'حفظ بطاقة تأمل قرآنية من قسم خواطر وسكينة القرآن',
         descEn: 'Bookmark your favorite Quran mood reflection card',
         hadithKu: '«قورئان شیفایە بۆ ئەوەی لە سینە و دڵەکاندایە.»',
+        hadithKmr: '«قورئان چارەسەری و شیفایە بۆ تشتا د سینگ و دلاندا.»',
         hadithAr: '«وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِّلْمُؤْمِنِينَ»',
         hadithEn: '“And We send down of the Quran that which is healing and mercy for the believers.”',
         icon: Icons.bookmarks_rounded,
@@ -2232,15 +2318,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'quran_favorites_3',
         category: 'quran',
         categoryKu: 'قورئان و دەروون',
+        categoryKmr: 'قورئان و دەروون',
         categoryAr: 'القرآن والسكينة',
         categoryEn: 'Quran & Solace',
         titleKu: 'کۆکەرەوەی ئایەتەکان',
+        titleKmr: 'کۆکەرێ ئایەتان',
         titleAr: 'جامع الآيات المباركة',
         titleEn: 'Collector of Verses',
         descKu: 'پاشەکەوتکردنی 3 کارتی ئارامی و هیدایەتی قورئانی بۆ کاتە پێویستەکان',
+        descKmr: 'پاراستنا 3 کارتێن ئارامی و ڕێبەریا قورئانی بۆ دەمێن پێدڤی',
         descAr: 'حفظ 3 بطاقات قرآنية ملهمة ومطمئنة للقلب',
         descEn: 'Save 3 inspiring Quran guidance cards in your favorites',
         hadithKu: '«ئەوەی بە شارەزایی قورئان دەخوێنێت لەگەڵ فریشتە بەڕێز و چاکەکاردایە.»',
+        hadithKmr: '«ئەو کەسێ ب شارەزایی قورئانێ دخوینیت دگەل فرشتەیێن بڕێز و چاکارە.»',
         hadithAr: '«الَّذِي يَقْرَأُ القُرْآنَ وَهُوَ مَاهِرٌ بِهِ مَعَ السَّفَرَةِ الكِرَامِ البَرَرَةِ»',
         hadithEn: '“The one who recites the Quran skillfully is with the noble and honorable angels.”',
         icon: Icons.collections_bookmark_rounded,
@@ -2256,15 +2346,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         id: 'quran_favorites_10',
         category: 'quran',
         categoryKu: 'قورئان و دەروون',
+        categoryKmr: 'قورئان و دەروون',
         categoryAr: 'القرآن والسكينة',
         categoryEn: 'Quran & Solace',
         titleKu: 'باخچەی قورئان',
+        titleKmr: 'باخچێ قورئانێ',
         titleAr: 'بستان الهدى والسكينة',
         titleEn: 'Garden of Guidance',
         descKu: 'کۆکردنەوەی 10 ئایەتی دڵنەوایی بۆ بەهێزکردنی باوەڕ و ڕووناککردنەوەی ناخ',
+        descKmr: 'کۆکرنا 10 ئایەتێن ئارامبەخش بۆ بهێزکرنا باوەریێ و ڕووناهییا ناخی',
         descAr: 'جمع 10 بطاقات قرآنية مباركة لتثبيت الإيمان وإنارة القلب',
         descEn: 'Collect 10 Quranic wisdom cards for spiritual clarity',
         hadithKu: '«بەڕاستی ئەم قورئانە ڕێنموونی دەکات بۆ ئەو ڕێگایەی کە لە هەمووی ڕاست و پتەوترە.»',
+        hadithKmr: '«ب ڕاستی ئەڤ قورئانە ڕێبەریکرنێ دکەت بۆ وێ ڕێکێ یا کو ژ هەمییان ڕاستتر و موکومترە.»',
         hadithAr: '«إِنَّ هَذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ وَيُبَشِّرُ الْمُؤْمِنِينَ»',
         hadithEn: '“Indeed, this Quran guides to that which is most upright and gives good tidings to believers.”',
         icon: Icons.menu_book_rounded,
@@ -2336,6 +2430,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         Text(
                           _tr(lang,
                               ku: 'ڕێبەری پلە ڕۆحییەکان',
+                              kmr: 'ڕێبەرێ پلەیێن ڕۆحی',
                               ar: 'دليل الرتب الإيمانية',
                               en: 'Spiritual Ranks Roadmap'),
                           maxLines: 1,
@@ -2348,6 +2443,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         Text(
                           _tr(lang,
                               ku: 'ناوی شایستە و چۆنیەتی بەدەستهێنانی هەر ئاستێک',
+                              kmr: 'ناڤێ شایستە و چەوانیا بدەستڤەئینانا هەر ئاستەکی',
                               ar: 'الألقاب المباركة وشروط بلوغ كل رتبة',
                               en: 'Honorific titles and requirements for each tier'),
                           maxLines: 1,
@@ -2472,10 +2568,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                       ),
                                       child: Text(
                                         isCurrent
-                                            ? _tr(lang, ku: 'ئاستی ئێستات 🌟', ar: 'رتبتك الحالية 🌟', en: 'Current 🌟')
+                                            ? _tr(lang, ku: 'ئاستی ئێستات 🌟', kmr: 'ئاستێ تە یێ نوکە 🌟', ar: 'رتبتك الحالية 🌟', en: 'Current 🌟')
                                             : (isUnlocked
-                                                ? _tr(lang, ku: 'بەدەستهاتووە ✅', ar: 'تم بلوغها ✅', en: 'Unlocked ✅')
-                                                : _tr(lang, ku: 'داخراوە 🔒', ar: 'مغلقة 🔒', en: 'Locked 🔒')),
+                                                ? _tr(lang, ku: 'بەدەستهاتووە ✅', kmr: 'هاتییە ڤەکرن ✅', ar: 'تم بلوغها ✅', en: 'Unlocked ✅')
+                                                : _tr(lang, ku: 'داخراوە 🔒', kmr: 'گرتییە 🔒', ar: 'مغلقة 🔒', en: 'Locked 🔒')),
                                         style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
@@ -2521,7 +2617,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        '${_tr(lang, ku: 'مەرج: ', ar: 'المتطلب: ', en: 'Req: ')}${rankDef.getRequirement(lang)}',
+                                        '${_tr(lang, ku: 'مەرج: ', kmr: 'مەرج: ', ar: 'المتطلب: ', en: 'Req: ')}${rankDef.getRequirement(lang)}',
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
@@ -2537,6 +2633,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                   Text(
                                     _tr(lang,
                                         ku: 'هێشتا $remainingDhikr یادت ماوە بۆ ئەم پلەیە',
+                                        kmr: 'هێشتا $remainingDhikr زکر ماینە بۆ ڤێ پلەیێ',
                                         ar: 'متبقي $remainingDhikr ذكر لبلوغ هذه الرتبة',
                                         en: '$remainingDhikr dhikrs remaining for this rank'),
                                     style: TextStyle(
@@ -2566,7 +2663,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 ),
                 onPressed: () => Navigator.pop(ctx),
                 child: Text(
-                  _tr(lang, ku: 'داخستن', ar: 'إغلاق', en: 'Close'),
+                  _tr(lang, ku: 'داخستن', kmr: 'گرتن', ar: 'إغلاق', en: 'Close'),
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.darkBg),
                 ),
               ),
@@ -2735,8 +2832,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           Flexible(
                             child: Text(
                               isUnlocked
-                                  ? _tr(lang, ku: '🌟 بەدەستهاتوو', ar: '🌟 تم الإنجاز بنجاح', en: '🌟 Achieved!')
-                                  : _tr(lang, ku: '⏳ لە کاردایە', ar: '⏳ قيد التقدم', en: '⏳ In Progress'),
+                                  ? _tr(lang, ku: '🌟 بەدەستهاتوو', kmr: '🌟 هاتییە بدەستڤەئینان', ar: '🌟 تم الإنجاز بنجاح', en: '🌟 Achieved!')
+                                  : _tr(lang, ku: '⏳ لە کاردایە', kmr: '⏳ د کاردایە', ar: '⏳ قيد التقدم', en: '⏳ In Progress'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: isKurdish
@@ -2831,14 +2928,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          final shareText = isKurdish
-                              ? '🏆 دەستکەوتی ڕۆحی لە ئەپی (نەدا):\n\n'
+                          final shareText = lang == 'kmr'
+                              ? '🏆 دەستکەفتێ ڕۆحی د ئەپێ (نەدا) دا:\n\n'
                                   '✨ «$title» ($category)\n'
                                   '📜 $desc\n'
                                   '📖 $hadith\n\n'
-                                  'یاوەری ڕۆحی بۆ زیکر و دوعاکانی ڕۆژانە 🌟'
-                              : isArabic
-                                  ? '🏆 إنجاز إيماني في تطبيق (نَدَى):\n\n'
+                                  'یاوەرێ ڕۆحی بۆ زکر و دوعایێن ڕۆژانە 🌟'
+                              : isKurdish
+                                  ? '🏆 دەستکەوتی ڕۆحی لە ئەپی (نەدا):\n\n'
+                                      '✨ «$title» ($category)\n'
+                                      '📜 $desc\n'
+                                      '📖 $hadith\n\n'
+                                      'یاوەری ڕۆحی بۆ زیکر و دوعاکانی ڕۆژانە 🌟'
+                                  : isArabic
+                                      ? '🏆 إنجاز إيماني في تطبيق (نَدَى):\n\n'
                                       '✨ «$title» ($category)\n'
                                       '📜 $desc\n'
                                       '📖 $hadith\n\n'
@@ -2854,7 +2957,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         label: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            _tr(lang, ku: 'مشارکەکردن', ar: 'مشاركة الإنجاز', en: 'Share Milestone'),
+                            _tr(lang, ku: 'مشارکەکردن', kmr: 'پارڤەکرن', ar: 'مشاركة الإنجاز', en: 'Share Milestone'),
                             style: isKurdish
                                 ? AppTheme.kurdishText(fontSize: 12, color: AppColors.gold, fontWeight: FontWeight.bold)
                                 : AppTheme.englishText(fontSize: 12, color: AppColors.gold, fontWeight: FontWeight.bold),
@@ -2881,7 +2984,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            _tr(lang, ku: 'داخستن', ar: 'إغلاق', en: 'Close'),
+                            _tr(lang, ku: 'داخستن', kmr: 'گرتن', ar: 'إغلاق', en: 'Close'),
                             style: isKurdish
                                 ? AppTheme.kurdishText(fontSize: 13, color: AppColors.darkBg, fontWeight: FontWeight.bold)
                                 : AppTheme.englishText(fontSize: 13, color: AppColors.darkBg, fontWeight: FontWeight.bold),
@@ -3027,9 +3130,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 1,
       titleKu: 'ڕێبواری ڕووناکی',
+      titleKmr: 'ڕێڤینگێ ڕووناهییێ',
       titleAr: 'طالب النور',
       titleEn: 'Seeker of Divine Light',
       subtitleKu: 'دەستپێکی پیرۆزی گەشتی دڵ لە یادی خوادا',
+      subtitleKmr: 'دەستپێکا پیرۆز یا گەشتێ د بیرئینانا خودێ دا',
       subtitleAr: 'بداية المسير المبارك في رحاب ذكر الرحمن',
       subtitleEn: 'The blessed start of your spiritual remembrance journey',
       reqDhikr: 0,
@@ -3040,9 +3145,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 2,
       titleKu: 'پێشڕەوی چاکە',
+      titleKmr: 'پێشەنگێ چاکیێ',
       titleAr: 'الساعي بالخير',
       titleEn: 'Walker of Goodness',
       subtitleKu: 'هەنگاوی چەسپاو لەسەر ڕێگای گوێڕایەڵی و خێر',
+      subtitleKmr: 'پێنگاڤێن موکوم ل سەر ڕێکا گوهداری و خێرێ',
       subtitleAr: 'خطوات ثابتة ومباركة في دروب الطاعة والخير',
       subtitleEn: 'Steadfast steps in righteous devotion and remembrance',
       reqDhikr: 100,
@@ -3053,9 +3160,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 3,
       titleKu: 'هۆگری نزا و یاد',
+      titleKmr: 'هۆگرێ دوعا و زکران',
       titleAr: 'المواظب الأوّاب',
       titleEn: 'Mindful Devotee',
       subtitleKu: 'بەردەوامی لە پاڕانەوە، نزا و گەڕانەوە بۆ لای خودا',
+      subtitleKmr: 'بەردەوامی د پارانەڤە و زڤڕین بۆ لایێ خودێ',
       subtitleAr: 'مواظبة خاشعة ورجوع دائم إلى الله بالدعاء',
       subtitleEn: 'Humble persistence in tasbih and heartfelt prayer',
       reqDhikr: 300,
@@ -3066,9 +3175,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 4,
       titleKu: 'یادکەری دڵئارام',
+      titleKmr: 'زاکرێ دڵئارام',
       titleAr: 'الذاكر المطمئن',
       titleEn: 'Serene Remembrancer',
       subtitleKu: '«بە یادی خودا دڵەکان ئارام دەبن» — دڵێکی پڕ لە هێمنی',
+      subtitleKmr: '«ب زکرێ خودێ دل ئارام دبن» — دلەکێ تژی ئارامی',
       subtitleAr: 'ألا بذكر الله تطمئن القلوب — قلب مفعم بالطمأنينة',
       subtitleEn: 'A tranquil heart illuminated by remembrance',
       reqDhikr: 700,
@@ -3079,9 +3190,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 5,
       titleKu: 'شەیدای ستایش',
+      titleKmr: 'تەسبیحکەرێ دلسۆز',
       titleAr: 'المسبِّح الأوّاه',
       titleEn: 'Devout Glorifier',
       subtitleKu: 'زمانێک کە هەمیشە بە یادی خودا تەڕ و ڕازاوەیە',
+      subtitleKmr: 'ئەزمانەک کو هەر دەم ب زکرێ خودێ تەڕ و خەملاندییە',
       subtitleAr: 'لسان رطب بذكر الله وتسبيحه في كل حين',
       subtitleEn: 'A tongue perpetually moist with praises of Allah',
       reqDhikr: 1500,
@@ -3092,9 +3205,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 6,
       titleKu: 'پارێزەری پەیمان',
+      titleKmr: 'پارێزەرێ پەیمانێ',
       titleAr: 'حافظ العهد',
       titleEn: 'Guardian of the Covenant',
       subtitleKu: 'پابەندبوونێکی بێوچان لەسەر یادەکانی بەیانیان و ئێواران',
+      subtitleKmr: 'پێگرییەکا بێڕاوەستان ل سەر زکرێن سپێدە و ئێڤاران',
       subtitleAr: 'ثبات راسخ على أذكار الصباح والمساء والفرائض',
       subtitleEn: 'Unwavering commitment to daily morning and evening adhkar',
       reqDhikr: 3000,
@@ -3105,9 +3220,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 7,
       titleKu: 'پێشەنگی باوەڕی چەسپاو',
+      titleKmr: 'پێشەنگێ باوەریا چەسپاو',
       titleAr: 'رائد الاستقامة',
       titleEn: 'Vanguard of Steadfastness',
       subtitleKu: 'خاوەن هیممەتێکی بەرز و تەرازوویەکی پڕ لە چاکە',
+      subtitleKmr: 'خۆدان هیمەتەکا بلند و تەرازییەکا تژی ژ چاکیێ',
       subtitleAr: 'همة عالية وثبات عظيم في ميزان الحسنات',
       subtitleEn: 'High devotion and steadfastness in good deeds',
       reqDhikr: 6000,
@@ -3118,9 +3235,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     _RankDefinition(
       level: 8,
       titleKu: 'سەروەری یادی خودا',
+      titleKmr: 'سەروەرێ زکرێ خودێ',
       titleAr: 'خادم الأذكار المبارك',
       titleEn: 'Master of Divine Remembrance',
       subtitleKu: 'لوتکەی سەقامگیری، ئارامی دڵ و نزیکی لە پەروەردگار',
+      subtitleKmr: 'بلنداهییا جێگیری، ئارامییا دلی و نێزیکی ژ خودێ',
       subtitleAr: 'أعلى مراتب الأنس والمواظبة على ذكر الرحمن',
       subtitleEn: 'The highest pinnacle of divine peace and remembrance',
       reqDhikr: 10000,
@@ -3167,6 +3286,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       subtitle: def.getSubtitle(lang),
       tierBadge: _tr(lang,
           ku: 'ئاستی ${def.level} لە ٨',
+          kmr: 'ئاستێ ${def.level} ژ ٨',
           ar: 'المستوى ${def.level} من ٨',
           en: 'Level ${def.level} of 8'),
       requirementText: def.getRequirement(lang),
@@ -3206,9 +3326,11 @@ class _DetailedStats {
 class _RankDefinition {
   final int level;
   final String titleKu;
+  final String? titleKmr;
   final String titleAr;
   final String titleEn;
   final String subtitleKu;
+  final String? subtitleKmr;
   final String subtitleAr;
   final String subtitleEn;
   final int reqDhikr;
@@ -3219,9 +3341,11 @@ class _RankDefinition {
   const _RankDefinition({
     required this.level,
     required this.titleKu,
+    this.titleKmr,
     required this.titleAr,
     required this.titleEn,
     required this.subtitleKu,
+    this.subtitleKmr,
     required this.subtitleAr,
     required this.subtitleEn,
     required this.reqDhikr,
@@ -3231,12 +3355,14 @@ class _RankDefinition {
   });
 
   String getTitle(String lang) {
+    if (lang == 'kmr') return titleKmr ?? titleKu;
     if (lang == 'ku') return titleKu;
     if (lang == 'ar') return titleAr;
     return titleEn;
   }
 
   String getSubtitle(String lang) {
+    if (lang == 'kmr') return subtitleKmr ?? subtitleKu;
     if (lang == 'ku') return subtitleKu;
     if (lang == 'ar') return subtitleAr;
     return subtitleEn;
@@ -3244,10 +3370,12 @@ class _RankDefinition {
 
   String getRequirement(String lang) {
     if (level == 1) {
+      if (lang == 'kmr') return 'دەستپێکا گەشتێ (٠ زکر)';
       if (lang == 'ku') return 'سەرەتای گەشت (٠ یاد)';
       if (lang == 'ar') return '0 ذكر (بداية المسير)';
       return '0 dhikrs (Journey start)';
     }
+    if (lang == 'kmr') return '$reqDhikr زکر یان $reqSessions ڕوونشتن';
     if (lang == 'ku') return '$reqDhikr یاد یان $reqSessions دانیشتن';
     if (lang == 'ar') return '$reqDhikr ذكر أو $reqSessions جلسة';
     return '$reqDhikr dhikrs or $reqSessions sessions';
@@ -3292,15 +3420,19 @@ class _SpiritualAchievement {
   final String id;
   final String category;
   final String categoryKu;
+  final String? categoryKmr;
   final String categoryAr;
   final String categoryEn;
   final String titleKu;
+  final String? titleKmr;
   final String titleAr;
   final String titleEn;
   final String descKu;
+  final String? descKmr;
   final String descAr;
   final String descEn;
   final String hadithKu;
+  final String? hadithKmr;
   final String hadithAr;
   final String hadithEn;
   final IconData icon;
@@ -3314,15 +3446,19 @@ class _SpiritualAchievement {
     required this.id,
     required this.category,
     required this.categoryKu,
+    this.categoryKmr,
     required this.categoryAr,
     required this.categoryEn,
     required this.titleKu,
+    this.titleKmr,
     required this.titleAr,
     required this.titleEn,
     required this.descKu,
+    this.descKmr,
     required this.descAr,
     required this.descEn,
     required this.hadithKu,
+    this.hadithKmr,
     required this.hadithAr,
     required this.hadithEn,
     required this.icon,
@@ -3337,30 +3473,41 @@ class _SpiritualAchievement {
   double get progress => targetValue > 0 ? (currentValue / targetValue).clamp(0.0, 1.0) : 0.0;
 
   String getTitle(String lang) {
+    if (lang == 'kmr') return titleKmr ?? titleKu;
     if (lang == 'ku') return titleKu;
     if (lang == 'ar') return titleAr;
     return titleEn;
   }
 
   String getCategory(String lang) {
+    if (lang == 'kmr') return categoryKmr ?? categoryKu;
     if (lang == 'ku') return categoryKu;
     if (lang == 'ar') return categoryAr;
     return categoryEn;
   }
 
   String getDesc(String lang) {
+    if (lang == 'kmr') return descKmr ?? descKu;
     if (lang == 'ku') return descKu;
     if (lang == 'ar') return descAr;
     return descEn;
   }
 
   String getHadith(String lang) {
+    if (lang == 'kmr') return hadithKmr ?? hadithKu;
     if (lang == 'ku') return hadithKu;
     if (lang == 'ar') return hadithAr;
     return hadithEn;
   }
 
   String getUnit(String lang) {
+    if (lang == 'kmr') {
+      if (unitKu == 'ڕۆژ') return 'ڕۆژ';
+      if (unitKu == 'جار') return 'جار';
+      if (unitKu == 'دانیشتن') return 'ڕوونشتن';
+      if (unitKu == 'دوعا') return 'دوعا';
+      return unitKu;
+    }
     if (lang == 'ku') return unitKu;
     if (lang == 'ar') return unitAr;
     return unitEn;

@@ -94,6 +94,12 @@ class StorageService {
     return box.get(key, defaultValue: defaultValue);
   }
 
+  static dynamic readSettingSync(String key, {dynamic defaultValue}) {
+    if (!Hive.isBoxOpen(settingsBox)) return defaultValue;
+    final box = Hive.box(settingsBox);
+    return box.get(key, defaultValue: defaultValue);
+  }
+
   /// Resets tasbih session tap counters to 0 on cold app startup,
   /// preserving user target configurations and dhikr selections.
   static Future<void> resetTasbihSessionCounts() async {
@@ -269,6 +275,7 @@ class StorageService {
   }
 
   static const Set<String> _validAzanSoundIds = {
+    'kurdistan',
     'makkah',
     'haram_classic',
     'madinah',
@@ -284,11 +291,11 @@ class StorageService {
   };
 
   static String normalizeAzanSoundId(String? soundId) {
-    final normalized = soundId?.trim().toLowerCase() ?? 'makkah';
+    final normalized = soundId?.trim().toLowerCase() ?? 'kurdistan';
     if (_validAzanSoundIds.contains(normalized)) {
       return normalized;
     }
-    return 'makkah';
+    return 'kurdistan';
   }
 
   // Azan Sound Preference
@@ -300,7 +307,7 @@ class StorageService {
 
   static Future<String> getAzanSound() async {
     final box = Hive.box(settingsBox);
-    final storedValue = box.get('azan_sound', defaultValue: 'makkah');
+    final storedValue = box.get('azan_sound', defaultValue: 'kurdistan');
     return normalizeAzanSoundId(storedValue?.toString());
   }
 
@@ -317,7 +324,7 @@ class StorageService {
 
   static String getPrayerMethod() {
     return Hive.box(settingsBox)
-        .get(keyPrayerMethod, defaultValue: 'kurdistan_endowments');
+        .get(keyPrayerMethod, defaultValue: 'auto');
   }
 
   static Future<void> savePrayerMethod(String methodId) async {
@@ -644,57 +651,71 @@ class StorageService {
         ? const [
             {
               'nameKu': 'شەممە',
+              'nameKmr': 'شەمبی',
               'nameAr': 'السبت',
               'nameEn': 'Saturday',
               'shortKu': 'شەم',
+              'shortKmr': 'شەم',
               'shortAr': 'سبت',
               'shortEn': 'Sat',
             },
             {
               'nameKu': 'یەکشەممە',
+              'nameKmr': 'ئێکشەمب',
               'nameAr': 'الأحد',
               'nameEn': 'Sunday',
               'shortKu': 'یەک',
+              'shortKmr': 'ئێک',
               'shortAr': 'أحد',
               'shortEn': 'Sun',
             },
             {
               'nameKu': 'دووشەممە',
+              'nameKmr': 'دووشەمب',
               'nameAr': 'الإثنين',
               'nameEn': 'Monday',
               'shortKu': 'دوو',
+              'shortKmr': 'دوو',
               'shortAr': 'إثنين',
               'shortEn': 'Mon',
             },
             {
               'nameKu': 'سێشەممە',
+              'nameKmr': 'سێشەمب',
               'nameAr': 'الثلاثاء',
               'nameEn': 'Tuesday',
               'shortKu': 'سێ',
+              'shortKmr': 'سێ',
               'shortAr': 'ثلاثاء',
               'shortEn': 'Tue',
             },
             {
               'nameKu': 'چوارشەممە',
+              'nameKmr': 'چوارشەمب',
               'nameAr': 'الأربعاء',
               'nameEn': 'Wednesday',
               'shortKu': 'چوار',
+              'shortKmr': 'چوار',
               'shortAr': 'أربعاء',
               'shortEn': 'Wed',
             },
             {
               'nameKu': 'پێنجشەممە',
+              'nameKmr': 'پێنجشەمب',
               'nameAr': 'الخميس',
               'nameEn': 'Thursday',
               'shortKu': 'پێنج',
+              'shortKmr': 'پێنج',
               'shortAr': 'خميس',
               'shortEn': 'Thu',
             },
             {
               'nameKu': 'هەینی',
+              'nameKmr': 'ئەینی',
               'nameAr': 'الجمعة',
               'nameEn': 'Friday',
               'shortKu': 'هەینی',
+              'shortKmr': 'ئەینی',
               'shortAr': 'جمعة',
               'shortEn': 'Fri',
             },
@@ -702,57 +723,71 @@ class StorageService {
         : const [
             {
               'nameKu': 'دووشەممە',
+              'nameKmr': 'دووشەمب',
               'nameAr': 'الإثنين',
               'nameEn': 'Monday',
               'shortKu': 'دوو',
+              'shortKmr': 'دوو',
               'shortAr': 'إثنين',
               'shortEn': 'Mon',
             },
             {
               'nameKu': 'سێشەممە',
+              'nameKmr': 'سێشەمب',
               'nameAr': 'الثلاثاء',
               'nameEn': 'Tuesday',
               'shortKu': 'سێ',
+              'shortKmr': 'سێ',
               'shortAr': 'ثلاثاء',
               'shortEn': 'Tue',
             },
             {
               'nameKu': 'چوارشەممە',
+              'nameKmr': 'چوارشەمب',
               'nameAr': 'الأربعاء',
               'nameEn': 'Wednesday',
               'shortKu': 'چوار',
+              'shortKmr': 'چوار',
               'shortAr': 'أربعاء',
               'shortEn': 'Wed',
             },
             {
               'nameKu': 'پێنجشەممە',
+              'nameKmr': 'پێنجشەمب',
               'nameAr': 'الخميس',
               'nameEn': 'Thursday',
               'shortKu': 'پێنج',
+              'shortKmr': 'پێنج',
               'shortAr': 'خميس',
               'shortEn': 'Thu',
             },
             {
               'nameKu': 'هەینی',
+              'nameKmr': 'ئەینی',
               'nameAr': 'الجمعة',
               'nameEn': 'Friday',
               'shortKu': 'هەینی',
+              'shortKmr': 'ئەینی',
               'shortAr': 'جمعة',
               'shortEn': 'Fri',
             },
             {
               'nameKu': 'شەممە',
+              'nameKmr': 'شەمبی',
               'nameAr': 'السبت',
               'nameEn': 'Saturday',
               'shortKu': 'شەم',
+              'shortKmr': 'شەم',
               'shortAr': 'سبت',
               'shortEn': 'Sat',
             },
             {
               'nameKu': 'یەکشەممە',
+              'nameKmr': 'ئێکشەمب',
               'nameAr': 'الأحد',
               'nameEn': 'Sunday',
               'shortKu': 'یەک',
+              'shortKmr': 'ئێک',
               'shortAr': 'أحد',
               'shortEn': 'Sun',
             },
@@ -799,9 +834,11 @@ class StorageService {
       days.add(DailyActivitySummary(
         date: dayDate,
         dayNameKu: def['nameKu']!,
+        dayNameKmr: def['nameKmr'],
         dayNameAr: def['nameAr']!,
         dayNameEn: def['nameEn']!,
         dayShortKu: def['shortKu']!,
+        dayShortKmr: def['shortKmr'],
         dayShortAr: def['shortAr']!,
         dayShortEn: def['shortEn']!,
         totalCount: dayCount,
@@ -828,6 +865,7 @@ class StorageService {
       maxDayCount: maxDayCount,
       bestDayIndex: bestDayIndex,
       bestDayNameKu: bestDayDef['nameKu']!,
+      bestDayNameKmr: bestDayDef['nameKmr'],
       bestDayNameAr: bestDayDef['nameAr']!,
       bestDayNameEn: bestDayDef['nameEn']!,
       consistencyPercent: consistencyPercent,
